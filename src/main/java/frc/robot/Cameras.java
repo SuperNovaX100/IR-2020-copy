@@ -7,31 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.cscore.UsbCamera;
 
 /**
  * Add your docs here.
  */
-public class Autonomous {
-    private Timer autonTimer;
-
-    public Autonomous() {
-        autonTimer = new Timer();
-    }
-    public void autonomousInit(){
-        autonTimer.reset();
-        autonTimer.start();
-    }
-    
-    public void autonomousPeriodic(){
-        if (autonTimer.get() < 2.0) {
-            Robot.driveTrain.setMotorPower(0.5, 0.5);
-        }else{
-            Robot.driveTrain.setMotorPower(0, 0);
-        }
-
+public class Cameras {
+    private UsbCamera testCamera;
+    public Cameras() {
+        testCamera = CameraServer.getInstance().startAutomaticCapture();
     }
 }
-
-

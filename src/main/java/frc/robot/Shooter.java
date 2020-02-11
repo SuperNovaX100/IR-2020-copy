@@ -36,31 +36,22 @@ public class Shooter {
    
 
     public Shooter() {
-        targetDemand = 0;
-        useKVelocity = true;
         irMotor5 = new TalonSRX(Constants.IR_MOTOR_5);
         shootLeftMotor = new CANSparkMax(Constants.SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
         shootRightMotor = new CANSparkMax(Constants.SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
         irMotor5.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
-        shootRightMotor.setInverted(true);
 
         leftShootPidController = shootLeftMotor.getPIDController();
         rightShootPidController = shootRightMotor.getPIDController();
-
-        leftShootPidController.setReference(0, ControlType.kVelocity);
-        rightShootPidController.setReference(0, ControlType.kVelocity);
-        
-        shootLeftMotor.set(0);
-        shootRightMotor.set(0);
 
         SmartDashboard.putNumber("RPM Demand", 0);
 
        
 
-        double kP = 0.0003;
-        double kI = 0.000001;
+        double kP = 0.00027;
+        double kI = 0.0000015;
         double kD = 0;
-        double kIz = 100;
+        double kIz = 200;
         double kFF = 1.0 / 5400.0;
         double kMaxOutput = 1;
         double kMinOutput = -1;
@@ -95,6 +86,19 @@ public class Shooter {
         SmartDashboard.setPersistent("Right Shooter Motor Power");
     }
 
+    public void teleopInit() {
+        targetDemand = 0;
+        useKVelocity = true;
+
+        shootRightMotor.setInverted(true);
+
+        leftShootPidController.setReference(0, ControlType.kVelocity);
+        rightShootPidController.setReference(0, ControlType.kVelocity);
+        
+        shootLeftMotor.set(0);
+        shootRightMotor.set(0);
+    } 
+
     public int getShooterIntakeEncoderValue() {
         return irMotor5.getSelectedSensorPosition();
     }
@@ -113,7 +117,7 @@ public class Shooter {
         SmartDashboard.putNumber("RPM Error", rpmError);
         SmartDashboard.putNumber("RPM", shootLeftEncoder.getVelocity());
         SmartDashboard.putBoolean("Ball Ready to Shoot", Robot.blinky.ballReadyToShoot());
-        if (Robot.controllers.joystickTriggerHeld() && Robot.blinky.ballReadyToShoot() && rpmError < 70) {
+        if (Robot.controllers.joystickTriggerHeld() && Robot.blinky.ballReadyToShoot() && rpmError < 35) {
             Robot.blinky.setShooting(true);
         } else {
             Robot.blinky.setShooting(false);
@@ -126,17 +130,17 @@ public class Shooter {
        
         
         
-        if (Robot.controllers.joystickButton7()) {
-            targetDemand = demand;
+        if (Robot.controllers.joystickButton9()) {
+            targetDemand = -Constants.SHOOTER_AUTOLINE_SPEED;
             useKVelocity = true;
         } 
-        else if (Robot.controllers.joystickButton9()) {
-            targetDemand = demand;
+        else if (Robot.controllers.joystickButton11()) {
+            targetDemand = -Constants.SHOOTER_TRENCH_SPEED;
             useKVelocity = true;
             
         } 
-        else if (Robot.controllers.joystickButton11()) {
-            targetDemand = demand;
+        else if (Robot.controllers.joystickButton7()) {
+            targetDemand = -Constants.SHOOTER_CLOSE_SPEED;
             useKVelocity = true;
             
         } 

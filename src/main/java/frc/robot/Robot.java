@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Autonomous;
 import frc.robot.ColorSensor;
@@ -40,7 +41,17 @@ public class Robot extends TimedRobot {
     colorSensor = new ColorSensor();
     tacoTime = new TacoTime();
     autonomous = new Autonomous();
-   // CameraServer.getInstance().startAutomaticCapture();
+    CameraServer.getInstance().startAutomaticCapture();
+  }
+
+  @Override
+  public void teleopInit() {
+    driveTrain.teleopInit();
+    shooter.teleopInit();
+    vader.teleopInit();
+    blinky.teleopInit();
+    colorSensor.teleopInit();
+    tacoTime.teleopInit();
   }
 
   @Override
@@ -54,9 +65,6 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void autonomousPeriodic() {
-    autonomous.autonomousPeriodic();
-    // TODO Auto-generated method stub
-    super.autonomousPeriodic();
   }
 
   @Override

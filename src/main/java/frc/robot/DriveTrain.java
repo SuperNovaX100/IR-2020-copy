@@ -7,8 +7,8 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants;
 import frc.robot.DriveSignal;
@@ -19,27 +19,28 @@ import frc.robot.Robot;
  */
 public class DriveTrain {
     //Motors
-    private TalonSRX leftMotorFront;
-    private TalonSRX leftMotorBack;
-    private TalonSRX rightMotorFront;
-    private TalonSRX rightMotorBack;
+    private CANSparkMax leftMotorFront;
+    private CANSparkMax leftMotorBack;
+    private CANSparkMax rightMotorFront;
+    private CANSparkMax rightMotorBack;
 
     public DriveTrain() {
-        leftMotorFront = new TalonSRX(Constants.LEFT_DRIVE_MOTOR_FRONT);
-        leftMotorBack = new TalonSRX(Constants.LEFT_DRIVE_MOTOR_BACK);
-        rightMotorFront = new TalonSRX(Constants.RIGHT_DRIVE_MOTOR_FRONT);
-        rightMotorBack = new TalonSRX(Constants.RIGHT_DRIVE_MOTOR_BACK);
-        leftMotorFront.setInverted(true);
-        leftMotorBack.setInverted(true);
+        leftMotorFront = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
+        leftMotorBack = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
+        rightMotorFront = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
+        rightMotorBack = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
         
-       
-
         leftMotorBack.follow(leftMotorFront);
         rightMotorBack.follow(rightMotorFront);
     }
 
-    
-
+    public void teleopInit() {
+        rightMotorFront.setInverted(false);
+        rightMotorBack.setInverted(false);
+        leftMotorBack.setInverted(true);
+        leftMotorFront.setInverted(true);
+        setMotorPower(0,0);
+    }
     public void teleopPeriodic() {
         DriveSignal signal = Robot.controllers.arcadeDrive();
         setMotorPowerSignal(signal);
@@ -50,7 +51,7 @@ public class DriveTrain {
         setMotorPower(signal.getLeftPower(), signal.getRightPower());
     }
     public void setMotorPower(double leftPower, double rightPower) {
-        leftMotorFront.set(ControlMode.PercentOutput, leftPower);
-        rightMotorFront.set(ControlMode.PercentOutput, rightPower);
+        leftMotorFront.set(leftPower);
+        rightMotorFront.set(rightPower);
     }
 }

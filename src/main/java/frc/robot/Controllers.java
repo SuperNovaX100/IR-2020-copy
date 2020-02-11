@@ -49,10 +49,10 @@ public class Controllers {
         double xInput = joystick.getX();
 
         yInput = MathUtil.clamp(yInput, -1.0, 1.0);
-        yInput = applyDeadband(yInput, 0.02);
+        yInput = applyDeadband(yInput, 0.09);
     
         xInput = -MathUtil.clamp(xInput, -1.0, 1.0);
-        xInput = applyDeadband(xInput, 0.02);
+        xInput = applyDeadband(xInput, 0.09);
     
         double leftPower;
         double rightPower;
@@ -80,6 +80,8 @@ public class Controllers {
         leftPower = MathUtil.clamp(leftPower, -1.0, 1.0);
         rightPower = MathUtil.clamp(rightPower, -1.0, 1.0);
         DriveSignal driveSignal = new DriveSignal(leftPower, rightPower);
+        //System.out.println(leftPower);
+        //System.out.println(rightPower);
         return driveSignal;
       }
 
@@ -96,11 +98,14 @@ public class Controllers {
         return gamepad.getAButton();
       }
       public boolean xHeld() {
-        return gamepad.getXButton();
+        return gamepad.getXButtonPressed();
       }
 
       public double getGamepadY(Hand hand) {
         return gamepad.getY(hand);
+      }
+      public double getGamepadX (Hand hand){
+        return gamepad.getX(hand);
       }
       public boolean leftBumperHeld() {
         return gamepad.getBumper(Hand.kLeft);

@@ -8,10 +8,13 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -25,9 +28,15 @@ public class Blinky {
     private boolean shooting;
     private TalonSRX intakeMotor;
     private Timer intakeTimer;
+    private DoubleSolenoid intakeDeploy;
     private boolean wasIRTriggered;
 
     public Blinky() {
+        intakeTimer = new Timer();
+        //intake solenoids
+        intakeDeploy = new DoubleSolenoid(Constants.PCM, Constants.INTAKE_DOWN, Constants.INTAKE_UP);
+        
+
         //makes an array of all the IR sensors
         irSensors = new DigitalInput[5];
         irSensors[0] = new DigitalInput(Constants.IR_SENSOR_1);
@@ -45,13 +54,29 @@ public class Blinky {
         irMotors[4] = new TalonSRX(Constants.IR_MOTOR_5);
         irMotors[4].enableVoltageCompensation(true);
         irMotors[4].configVoltageCompSaturation(11);
+        for (TalonSRX motor : irMotors) {
+            motor.setNeutralMode(NeutralMode.Brake);
+        }
         intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR);
+    }
 
+    public void teleopInit() {
+        intakeTimer.stop();
+        intakeTimer.reset();
         shooting = false;
         wasIRTriggered = false;
     }
 
     public void teleopPeriodic() {
+        //deploy intake
+        if (Robot.controllers.leftTriggerHeld() >= 0.02){
+            intakeDeploy.set(Value.kForward);
+            intakeMotor.set(ControlMode.PercentOutput, 1.0);
+        } else{
+            intakeDeploy.set(Value.kReverse);
+            intakeMotor.set(ControlMode.PercentOutput, 0.0);
+        }
+
         if (!irSensors[0].get() && !wasIRTriggered){
             intakeTimer.start();
         } else if (irSensors[0].get() && wasIRTriggered) {
@@ -59,12 +84,12 @@ public class Blinky {
             intakeTimer.stop();
         }
         if (Robot.controllers.leftTriggerHeld()>= 0.02 && !intakeTimer.hasPeriodPassed(1.0)){
-            intakeMotor.set(ControlMode.PercentOutput, -1.0);
+            intakeMotor.set(ControlMode.PercentOutput, 1.0);
         }
         
         wasIRTriggered = !irSensors[0].get();
 
-        if (Robot.controllers.leftTriggerHeld()>= 0.02 || Robot.controllers.rightTriggerHeld()>= 0.02) {
+        if (Robot.controllers.leftTriggerHeld()>= 0.02 || Robot.controllers.joystickTriggerHeld()) {
             // Update intake motors 4 to 0 (5 to 1)
             SmartDashboard.putBoolean("Blinky/Ir Sensor 1", !irSensors[0].get());
             SmartDashboard.putBoolean("Ir Sensor 2", !irSensors[1].get());
@@ -77,12 +102,13 @@ public class Blinky {
             // loops from closest sensor to the farthest sensor
             for (int i = 4; i >= 0; i--) {
                 if (shooting && i == 4) {
-                    irMotors[i].set(ControlMode.PercentOutput, -1.0);
+                    irMotors[i].set(ControlMode.PercentOutput, -0.75);
                     continue;
                 }
                 if (canGo || irSensors[i].get()) {
                     canGo = true;
-                    irMotors[i].set(ControlMode.PercentOutput, -1.0);
+                    irMotors[i].set(ControlMode.PercentOutput, -0.75);
+                
                 } else {
                     irMotors[i].set(ControlMode.PercentOutput, 0);
                 }
