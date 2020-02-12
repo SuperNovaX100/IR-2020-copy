@@ -27,6 +27,7 @@ public class Vader {
     private DigitalInput hoodLimitSwitch;
     private Timer limitSwitchTimer;
     private boolean wasLimitSwitchPressed;
+    private boolean isManualMode;
 
     // private PID hoodPID;
 
@@ -34,11 +35,13 @@ public class Vader {
         vaderMotor = new TalonSRX(Constants.HOOD_MOTOR);
         hoodLimitSwitch = new DigitalInput(Constants.HOOD_LIMIT_SWITCH);
         limitSwitchTimer = new Timer();
+        isManualMode = false;
     }
 
     public void teleopInit() {
         limitSwitchTimer.stop();
         limitSwitchTimer.reset();
+        isManualMode = false;
 
         vaderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30); // finds type of
                                                                                                  // encoder, PID Index,
@@ -79,8 +82,6 @@ public class Vader {
             // this one resets the timer after we have stopped hitting the limit switch
         }
         if (limitSwitchTimer.hasPeriodPassed(0.1)) /* CHANGE TIME TO NOT 1 SECOND */ {
-            // System.out.println("resetting vader" + String.valueOf(resetCounter));
-            // resetCounter++;
             vaderMotor.configPeakOutputReverse(0);
             vaderMotor.setSelectedSensorPosition(0);
             // this one sets the encoder counts to zero and stops the motor from going past
@@ -97,13 +98,15 @@ public class Vader {
 
         if (Robot.controllers.joystickDPadUp()) {
             vaderMotor.set(ControlMode.PercentOutput, 0.25);
+            isManualMode = true;
         } else if (Robot.controllers.joystickDPadDown()) {
             vaderMotor.set(ControlMode.PercentOutput, -0.25);
-        } else {
+            isManualMode = true;
+        } else if (isManualMode) {
             vaderMotor.set(ControlMode.PercentOutput, 0);
         }
 
-        if (Robot.controllers.xHeld()){
+        if (Robot.controllers.dPadRight() || Robot.controllers.dPadLeft() || Robot.controllers.dPadUp() || Robot.controllers.dPadDown()){
             vaderMotor.set(ControlMode.PercentOutput, -0.50);
             if(wasLimitSwitchPressed){
                 vaderMotor.set(ControlMode.PercentOutput, 0);
@@ -112,13 +115,15 @@ public class Vader {
 
         else if (Robot.controllers.joystickButton7()) {
             vaderMotor.set(ControlMode.Position, Constants.VADER_LOW_POSITION);
+            isManualMode = false;
         } else if (Robot.controllers.joystickButton9()) {
             vaderMotor.set(ControlMode.Position, Constants.VADER_AUTONLINE_POSTION);
+            isManualMode = false;
         } else if (Robot.controllers.joystickButton11()) {
             vaderMotor.set(ControlMode.Position, Constants.VADER_TRENCH_POSITION);
-        } else {
+            isManualMode = false;
+        } else if (!isManualMode) {
             vaderMotor.set(ControlMode.PercentOutput, 0);
-            //hoodDemand = 0;
         }
         // writes encoder counts to dashboard
         SmartDashboard.putNumber("Vader Encoder Counts", encoderPosition);

@@ -61,11 +61,14 @@ public class TacoTime {
         
 
     if(Robot.controllers.getGamepadX(Hand.kLeft)>=0.02){
-        balanceMotor.set(0.5);
+        balanceMotor.set(-0.75);
+        Robot.colorSensor.colorSpinManualMode = true;
     }else if(Robot.controllers.getGamepadX(Hand.kLeft)<=-0.02){
-        balanceMotor.set(-0.5);
-    }else{
+        balanceMotor.set(0.75);
+        Robot.colorSensor.colorSpinManualMode = true;
+    }else if (Robot.colorSensor.colorSpinManualMode = true){
         balanceMotor.set(0);
+
     }
 
     }

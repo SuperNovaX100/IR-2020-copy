@@ -91,14 +91,20 @@ public class Controllers {
       public boolean yHeld() {
         return gamepad.getYButton();
       }
+      public boolean yPressed(){
+        return gamepad.getYButtonPressed();
+      }
       public boolean bHeld() {
         return gamepad.getBButton();
+      }
+      public boolean bPressed(){
+        return gamepad.getBButtonPressed();
       }
       public boolean aHeld() {
         return gamepad.getAButton();
       }
       public boolean xHeld() {
-        return gamepad.getXButtonPressed();
+        return gamepad.getXButton();
       }
 
       public double getGamepadY(Hand hand) {
@@ -152,5 +158,14 @@ public class Controllers {
         int pov = joystick.getPOV();
         return pov == 180 || pov == 225 || pov == 135;
       }
+      public boolean joystickDPadLeft(){
+        int pov = joystick.getPOV();   
+        return pov == 270;
+       }
+       public boolean joystickDPadRight(){
+         int pov = joystick.getPOV();
+         return pov == 90;
+       }
+
       
 }
