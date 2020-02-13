@@ -79,4 +79,8 @@ public class Constants {
         public static final int VISION_MAX_H = 90;
         public static final int VISION_MAX_S = 255;
         public static final int VISION_MAX_V = 255;
+
+        //PWM Ports
+        public static final int COLOR_SERVO = 0;
+
 }

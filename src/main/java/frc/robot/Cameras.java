@@ -14,8 +14,11 @@ import edu.wpi.cscore.UsbCamera;
  * Add your docs here.
  */
 public class Cameras {
-    private UsbCamera testCamera;
+    private UsbCamera shootCamera;
+    private UsbCamera fisheyeCamera;
+
     public Cameras() {
-        testCamera = CameraServer.getInstance().startAutomaticCapture();
+        shootCamera = CameraServer.getInstance().startAutomaticCapture();
+        fisheyeCamera = CameraServer.getInstance().startAutomaticCapture();
     }
 }

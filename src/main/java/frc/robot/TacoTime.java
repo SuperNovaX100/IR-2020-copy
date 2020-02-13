@@ -60,13 +60,13 @@ public class TacoTime {
         }
         
 
-    if(Robot.controllers.getGamepadX(Hand.kLeft)>=0.02){
-        balanceMotor.set(-0.75);
+    if(Robot.controllers.getGamepadX(Hand.kLeft)>=0.07){
+        balanceMotor.set(Robot.controllers.getGamepadX(Hand.kLeft));
         Robot.colorSensor.colorSpinManualMode = true;
-    }else if(Robot.controllers.getGamepadX(Hand.kLeft)<=-0.02){
-        balanceMotor.set(0.75);
+    }else if(Robot.controllers.getGamepadX(Hand.kLeft)<=-0.07){
+        balanceMotor.set(Robot.controllers.getGamepadX(Hand.kLeft));
         Robot.colorSensor.colorSpinManualMode = true;
-    }else if (Robot.colorSensor.colorSpinManualMode = true){
+    }else if (Robot.colorSensor.colorSpinManualMode){
         balanceMotor.set(0);
 
     }

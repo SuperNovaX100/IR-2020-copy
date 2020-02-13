@@ -11,6 +11,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -42,6 +43,7 @@ public class ColorSensor {
   private final Color pikachuTarget; //yellow
   private int changes;
   private char gameData;
+  private final Servo colorServo;
 
   private String lastColorString;
 
@@ -70,6 +72,7 @@ public class ColorSensor {
       colorMatcher.addColorMatch(charmanderTarget);
       colorMatcher.addColorMatch(bulbasaurTarget);
       colorMatcher.addColorMatch(pikachuTarget);
+      colorServo = new Servo(Constants.COLOR_SERVO);
       
 
       timer = new Timer();
@@ -87,7 +90,14 @@ public class ColorSensor {
       
 
       //Wheel Turn
-      colorWheelSolenoid.set(Robot.controllers.aHeld());
+      if (Robot.controllers.aHeld()){
+        colorServo.set(0.1);
+        colorWheelSolenoid.set(true);
+      }else if (colorServo.get() != 0.95){
+        colorServo.set(0.95);
+      }else if (colorServo.get() == 0.95){
+        colorWheelSolenoid.set(false);
+      }
 
       //Color Position Turn
       /*if(gameData.length() > 0){
@@ -134,7 +144,7 @@ public class ColorSensor {
         SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
         SmartDashboard.putString("Color Sensor/Detected Color", colorString);
 
-        int leftDistance = 0;
+        /*int leftDistance = 0;
         int rightDistance = 0;
         if (fieldColor != 'U') {
           int startPosition = 0;
@@ -167,7 +177,7 @@ public class ColorSensor {
               }
           }
           SmartDashboard.putBoolean("Color Sensor/Direction", rightDistance > leftDistance);
-      }
+      }*/
       SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
       SmartDashboard.putString("Color Sensor/Detected Color", colorString);
       if (timer.hasPeriodPassed(0.1)) {
@@ -193,17 +203,16 @@ public class ColorSensor {
       if (Robot.controllers.yHeld() && changes < 32){
         colorWheelMotor.set(1.0);
       }
-
       //this sees if the fieldColor(based off of our colorString) is equal to the color FMS is giving us
        else if (Robot.controllers.bHeld() && fieldColor != gameData ) {
-          colorWheelMotor.set(rightDistance > leftDistance ? 1 : -1);
-        } else {
+          colorWheelMotor.set(-0.5);
+        } else if (!colorSpinManualMode) {
           colorWheelMotor.set(0);
         }
-        if (Robot.controllers.getGamepadX(Hand.kRight) >= 0.02){
-          colorSpinManualMode = true;
-          colorWheelMotor.set(Robot.controllers.getGamepadX(Hand.kRight));
-        }
+        //if (Robot.controllers.getGamepadX(Hand.kRight) >= 0.02){
+          //colorSpinManualMode = true;
+          //colorWheelMotor.set(Robot.controllers.getGamepadX(Hand.kRight));
+        //}
   }
 }
 
