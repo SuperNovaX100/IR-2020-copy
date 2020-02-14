@@ -5,25 +5,29 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 /**
  * Add your docs here.
  */
-public class Autonomous {
+public class Autonomous extends Subsystem {
     private Timer autonTimer;
 
     public Autonomous() {
         autonTimer = new Timer();
     }
+
+    @Override
     public void autonomousInit(){
         autonTimer.reset();
         autonTimer.start();
     }
     
+    @Override
     public void autonomousPeriodic(){
         if (autonTimer.get() < 2.0) {
             Robot.driveTrain.setMotorPower(0.5, 0.5);

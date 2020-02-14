@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -18,11 +18,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 /**
  * Add your docs here..
  */
-public class Blinky {
+public class Blinky extends Subsystem {
     private DigitalInput[] irSensors;
     private TalonSRX[] irMotors;
     private boolean shooting;
@@ -60,6 +61,7 @@ public class Blinky {
         intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR);
     }
 
+    @Override
     public void teleopInit() {
         intakeTimer.stop();
         intakeTimer.reset();
@@ -67,6 +69,7 @@ public class Blinky {
         wasIRTriggered = false;
     }
 
+    @Override
     public void teleopPeriodic() {
         //deploy intake
         if (Robot.controllers.leftTriggerHeld() >= 0.02){

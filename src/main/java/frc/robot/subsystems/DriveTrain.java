@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -13,11 +13,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
 import frc.robot.DriveSignal;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 /**
  * Add your docs here.
  */
-public class DriveTrain {
+public class DriveTrain extends Subsystem {
     //Motors
     private CANSparkMax leftMotorFront;
     private CANSparkMax leftMotorBack;
@@ -34,6 +35,7 @@ public class DriveTrain {
         rightMotorBack.follow(rightMotorFront);
     }
 
+    @Override
     public void teleopInit() {
         rightMotorFront.setInverted(false);
         rightMotorBack.setInverted(false);
@@ -41,6 +43,7 @@ public class DriveTrain {
         leftMotorFront.setInverted(true);
         setMotorPower(0,0);
     }
+    @Override
     public void teleopPeriodic() {
         DriveSignal signal = Robot.controllers.arcadeDrive();
         setMotorPowerSignal(signal);

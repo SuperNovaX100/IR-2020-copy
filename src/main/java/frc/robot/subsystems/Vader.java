@@ -5,12 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANDigitalInput.LimitSwitch;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,11 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 //import frc.robot.PID;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 /**
  * Add your docs here.
  */
-public class Vader {
+public class Vader extends Subsystem {
     private TalonSRX vaderMotor;
     private DigitalInput hoodLimitSwitch;
     private Timer limitSwitchTimer;
@@ -38,6 +38,7 @@ public class Vader {
         isManualMode = false;
     }
 
+    @Override
     public void teleopInit() {
         limitSwitchTimer.stop();
         limitSwitchTimer.reset();
@@ -65,6 +66,7 @@ public class Vader {
 
     int resetCounter = 0;
 
+    @Override
     public void teleopPeriodic() {
         // int hoodDemand = (int) SmartDashboard.getNumber("Hood position", 0);
 

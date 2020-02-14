@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 import com.revrobotics.ColorMatchResult;
 
@@ -32,8 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 /**
  * Add your docs here.
  */
-public class ColorSensor {
-  private final char[] colors = new char[] {'R', 'G', 'B', 'Y'};
+public class ColorSensor extends Subsystem {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 colorSensor;
   private final ColorMatch colorMatcher;
@@ -45,7 +44,7 @@ public class ColorSensor {
   private char gameData;
   private final Servo colorServo;
 
-  private String lastColorString;
+  private char lastFieldColor;
 
   private Timer timer;
   public boolean colorSpinManualMode;
@@ -78,6 +77,7 @@ public class ColorSensor {
       timer = new Timer();
     }
 
+    @Override
     public void teleopInit() {
       colorSpinManualMode = false;
       changes = 0;
@@ -86,12 +86,46 @@ public class ColorSensor {
       timer.reset();
       colorWheelMotor.set(0);
     }
+    public char getColor(){
+      
+      Color detectedColor = colorSensor.getColor();
+      double IR = colorSensor.getIR();
+      SmartDashboard.putNumber("Color Sensor/Red", detectedColor.red);
+      SmartDashboard.putNumber("Color Sensor/Green", detectedColor.green);
+      SmartDashboard.putNumber("Color Sensor/Blue", detectedColor.blue);
+      SmartDashboard.putNumber("IR", IR);
+      String colorString;
+      char fieldColor = 'U';
+      ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+      //colorString is what our color sensor is seeing, fieldColor is what the field should be seeing if we are seeing a certain color
+      if (match.color == squirtleTarget) {
+        colorString = "Blue";
+        fieldColor = 'R';
+      }else if (match.color == charmanderTarget){
+        colorString = "Red";
+        fieldColor = 'B';
+
+      }else if (match.color == bulbasaurTarget){
+        colorString = "Green";
+        fieldColor = 'Y';
+      }else if (match.color == pikachuTarget){
+        colorString = "Yellow";
+        fieldColor = 'G';
+      }else{
+        colorString = "Unknown";
+      }
+        SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
+        SmartDashboard.putString("Color Sensor/Detected Color", colorString);
+        return fieldColor;
+    }
+
+    @Override
     public void teleopPeriodic() {
       
 
       //Wheel Turn
       if (Robot.controllers.aHeld()){
-        colorServo.set(0.1);
+        colorServo.set(0.15);
         colorWheelSolenoid.set(true);
       }else if (colorServo.get() != 0.95){
         colorServo.set(0.95);
@@ -115,34 +149,6 @@ public class ColorSensor {
         }
       } else{}*/
 
-        Color detectedColor = colorSensor.getColor();
-        double IR = colorSensor.getIR();
-        SmartDashboard.putNumber("Color Sensor/Red", detectedColor.red);
-        SmartDashboard.putNumber("Color Sensor/Green", detectedColor.green);
-        SmartDashboard.putNumber("Color Sensor/Blue", detectedColor.blue);
-        SmartDashboard.putNumber("IR", IR);
-        String colorString;
-        char fieldColor = 'U';
-        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
-        //colorString is what our color sensor is seeing, fieldColor is what the field should be seeing if we are seeing a certain color
-        if (match.color == squirtleTarget) {
-          colorString = "Blue";
-          fieldColor = 'R';
-        }else if (match.color == charmanderTarget){
-          colorString = "Red";
-          fieldColor = 'B';
-
-        }else if (match.color == bulbasaurTarget){
-          colorString = "Green";
-          fieldColor = 'Y';
-        }else if (match.color == pikachuTarget){
-          colorString = "Yellow";
-          fieldColor = 'G';
-        }else{
-          colorString = "Unknown";
-        }
-        SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
-        SmartDashboard.putString("Color Sensor/Detected Color", colorString);
 
         /*int leftDistance = 0;
         int rightDistance = 0;
@@ -178,18 +184,7 @@ public class ColorSensor {
           }
           SmartDashboard.putBoolean("Color Sensor/Direction", rightDistance > leftDistance);
       }*/
-      SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
-      SmartDashboard.putString("Color Sensor/Detected Color", colorString);
-      if (timer.hasPeriodPassed(0.1)) {
-          changes += 1;
-          timer.stop();
-          timer.reset();
-      }
-      if (lastColorString != colorString) {
-        timer.reset();
-        timer.start();
-        lastColorString = colorString;
-      }
+     
       SmartDashboard.putNumber("Color Sensor/Changes", changes);
 
       if (Robot.controllers.bPressed()){
@@ -202,9 +197,20 @@ public class ColorSensor {
       }
       if (Robot.controllers.yHeld() && changes < 32){
         colorWheelMotor.set(1.0);
+         char fieldColor = getColor();
+        if (timer.hasPeriodPassed(0.1)) {
+          changes += 1;
+          timer.stop();
+          timer.reset();
+      }
+      if (lastFieldColor != fieldColor) {
+        timer.reset();
+        timer.start();
+        lastFieldColor = fieldColor;
+      }
       }
       //this sees if the fieldColor(based off of our colorString) is equal to the color FMS is giving us
-       else if (Robot.controllers.bHeld() && fieldColor != gameData ) {
+       else if (Robot.controllers.bHeld() && getColor() != gameData ) {
           colorWheelMotor.set(-0.5);
         } else if (!colorSpinManualMode) {
           colorWheelMotor.set(0);

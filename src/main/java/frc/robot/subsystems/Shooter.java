@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -18,11 +18,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 /**
  * Add your docs here.
  */
-public class Shooter {
+public class Shooter extends Subsystem {
     private TalonSRX irMotor5;
     private CANSparkMax shootLeftMotor;
     private CANSparkMax shootRightMotor;
@@ -86,6 +87,7 @@ public class Shooter {
         SmartDashboard.setPersistent("Right Shooter Motor Power");
     }
 
+    @Override
     public void teleopInit() {
         targetDemand = 0;
         useKVelocity = true;
@@ -103,16 +105,8 @@ public class Shooter {
         return irMotor5.getSelectedSensorPosition();
     }
 
-    public void teleopPeriodic() {
-
-        int demand = (int) SmartDashboard.getNumber("RPM Demand", 0);
-        
-       /* if (Robot.controllers.joystickTriggerDown()) {
-            shootIntakeMotor.set(ControlMode.PercentOutput, -0.5);
-
-        } else {
-            shootIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-        }*/ 
+    @Override
+    public void teleopPeriodic() {        
         double rpmError = Math.abs(targetDemand - shootLeftEncoder.getVelocity());
         SmartDashboard.putNumber("RPM Error", rpmError);
         SmartDashboard.putNumber("RPM", shootLeftEncoder.getVelocity());
@@ -150,14 +144,6 @@ public class Shooter {
             shootLeftMotor.set(0);
             shootRightMotor.set(0);
         } 
-
-       /* double manualPower = Robot.controllers.getGamepadY(Hand.kRight);
-        SmartDashboard.putNumber("Manual Power", manualPower);
-        if (Math.abs(manualPower) > 0.05) {
-            useKVelocity = false;
-            setMotorPowers(0.5, 0.5);
-        }*/
-       
 
         SmartDashboard.putNumber("Left Shooter Encoder Velocity", shootLeftEncoder.getVelocity()/* Constants.SHOOTER_GEAR_RATIO */);
         SmartDashboard.putNumber("Right Shooter Encoder Velocity", shootRightEncoder.getVelocity()/* Constants.SHOOTER_GEAR_RATIO */);

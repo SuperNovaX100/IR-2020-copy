@@ -20,5 +20,10 @@ public class Cameras {
     public Cameras() {
         shootCamera = CameraServer.getInstance().startAutomaticCapture();
         fisheyeCamera = CameraServer.getInstance().startAutomaticCapture();
+        shootCamera.setResolution(320, 240);
+        shootCamera.setFPS(30);
+        shootCamera.setBrightness(45);
+        fisheyeCamera.setResolution(320, 240);
+        fisheyeCamera.setFPS(30);
     }
 }

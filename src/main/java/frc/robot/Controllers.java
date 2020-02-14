@@ -53,7 +53,11 @@ public class Controllers {
     
         xInput = -MathUtil.clamp(xInput, -1.0, 1.0);
         xInput = applyDeadband(xInput, 0.09);
-    
+
+        if (joystickButton7() || joystickButton9() || joystickButton11()) {
+          yInput /= 2;
+          xInput /= 2;
+        }  
         double leftPower;
         double rightPower;
     

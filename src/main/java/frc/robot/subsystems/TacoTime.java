@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -16,11 +16,12 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Subsystem;
 
 /**
  * Add your docs here.
  */
-public class TacoTime {
+public class TacoTime extends Subsystem {
     Solenoid climbSolenoid;
     TalonSRX winchMotor;
     TalonSRX climbHeightMotor;
@@ -33,10 +34,12 @@ public class TacoTime {
         balanceMotor = new CANSparkMax(Constants.COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
     }
 
+    @Override
     public void teleopInit() {
         climbSolenoid.set(false);
     }
 
+    @Override
     public void teleopPeriodic() {
         climbSolenoid.set(Robot.controllers.xHeld());
 
