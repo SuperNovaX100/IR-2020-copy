@@ -7,35 +7,38 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
+import frc.robot.Constants;
 import frc.robot.Subsystem;
 
 /**
  * Add your docs here.
  */
-public class Autonomous extends Subsystem {
+public class ShootFromAutonLine extends Subsystem{
     private Timer autonTimer;
+    private int targetDemand;
+    private TalonSRX vaderMotor;
 
-    public Autonomous() {
+    public ShootFromAutonLine(){
         autonTimer = new Timer();
-    }
 
+    }
     @Override
     public void autonomousInit(){
         autonTimer.reset();
         autonTimer.start();
+
     }
-    
     @Override
     public void autonomousPeriodic(){
-        if (autonTimer.get() < 2.0) {
-            Robot.driveTrain.setMotorPower(0.5, 0.5);
-        }else{
-            Robot.driveTrain.setMotorPower(0, 0);
-        }
+    targetDemand = -Constants.SHOOTER_AUTOLINE_SPEED;
+        
+    vaderMotor.set(ControlMode.Position, Constants.VADER_AUTONLINE_POSTION);
+
 
     }
+
 }
-
-

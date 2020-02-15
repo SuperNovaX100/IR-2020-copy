@@ -26,7 +26,6 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 
-
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -36,10 +35,10 @@ public class ColorSensor extends Subsystem {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 colorSensor;
   private final ColorMatch colorMatcher;
-  private final Color squirtleTarget; //blue
-  private final Color charmanderTarget; //red
-  private final Color bulbasaurTarget; //green
-  private final Color pikachuTarget; //yellow
+  private final Color squirtleTarget; // blue
+  private final Color charmanderTarget; // red
+  private final Color bulbasaurTarget; // green
+  private final Color pikachuTarget; // yellow
   private int changes;
   private char gameData;
   private final Servo colorServo;
@@ -49,176 +48,129 @@ public class ColorSensor extends Subsystem {
   private Timer timer;
   public boolean colorSpinManualMode;
 
-  //Spin Color Wheel
+  // Spin Color Wheel
   Solenoid colorWheelSolenoid;
   CANSparkMax colorWheelMotor;
   CANEncoder colorWheelEncoder;
-    
-  public ColorSensor(){
-      changes = 0;
-      //Wheel Turn
-      colorWheelSolenoid = new Solenoid(Constants.PCM, Constants.COLOR_SOLENOID);
-      colorWheelMotor = new CANSparkMax(Constants.COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
-      colorWheelEncoder = colorWheelMotor.getEncoder();
-      //Color Position Turn
-      colorSensor = new ColorSensorV3(i2cPort);
-      colorMatcher = new ColorMatch();
-      squirtleTarget = ColorMatch.makeColor(.15, .44, .39);
-      charmanderTarget = ColorMatch.makeColor(.48, .36, .15);
-      bulbasaurTarget = ColorMatch.makeColor(.18, .54, .25);
-      pikachuTarget = ColorMatch.makeColor(.31, .54, .13);
-      colorMatcher.addColorMatch(squirtleTarget);
-      colorMatcher.addColorMatch(charmanderTarget);
-      colorMatcher.addColorMatch(bulbasaurTarget);
-      colorMatcher.addColorMatch(pikachuTarget);
-      colorServo = new Servo(Constants.COLOR_SERVO);
-      
 
-      timer = new Timer();
+  public ColorSensor() {
+    changes = 0;
+    // Wheel Turn
+    colorWheelSolenoid = new Solenoid(Constants.PCM, Constants.COLOR_SOLENOID);
+    colorWheelMotor = new CANSparkMax(Constants.COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
+    colorWheelEncoder = colorWheelMotor.getEncoder();
+    // Color Position Turn
+    colorSensor = new ColorSensorV3(i2cPort);
+    colorMatcher = new ColorMatch();
+    squirtleTarget = ColorMatch.makeColor(.15, .44, .39);
+    charmanderTarget = ColorMatch.makeColor(.48, .36, .15);
+    bulbasaurTarget = ColorMatch.makeColor(.18, .54, .25);
+    pikachuTarget = ColorMatch.makeColor(.31, .54, .13);
+    colorMatcher.addColorMatch(squirtleTarget);
+    colorMatcher.addColorMatch(charmanderTarget);
+    colorMatcher.addColorMatch(bulbasaurTarget);
+    colorMatcher.addColorMatch(pikachuTarget);
+    colorServo = new Servo(Constants.COLOR_SERVO);
+
+    timer = new Timer();
+  }
+
+  @Override
+  public void teleopInit() {
+    colorSpinManualMode = false;
+    changes = 0;
+    colorWheelSolenoid.set(false);
+    timer.stop();
+    timer.reset();
+    colorWheelMotor.set(0);
+  }
+
+  public char getColor() {
+
+    Color detectedColor = colorSensor.getColor();
+    double IR = colorSensor.getIR();
+    SmartDashboard.putNumber("Color Sensor/Red", detectedColor.red);
+    SmartDashboard.putNumber("Color Sensor/Green", detectedColor.green);
+    SmartDashboard.putNumber("Color Sensor/Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+    String colorString;
+    char fieldColor = 'U';
+    ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+    // colorString is what our color sensor is seeing, fieldColor is what the field
+    // should be seeing if we are seeing a certain color
+    if (match.color == squirtleTarget) {
+      colorString = "Blue";
+      fieldColor = 'R';
+    } else if (match.color == charmanderTarget) {
+      colorString = "Red";
+      fieldColor = 'B';
+
+    } else if (match.color == bulbasaurTarget) {
+      colorString = "Green";
+      fieldColor = 'Y';
+    } else if (match.color == pikachuTarget) {
+      colorString = "Yellow";
+      fieldColor = 'G';
+    } else {
+      colorString = "Unknown";
+    }
+    SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
+    SmartDashboard.putString("Color Sensor/Detected Color", colorString);
+    return fieldColor;
+  }
+
+  @Override
+  public void teleopPeriodic() {
+
+    // Wheel Turn
+    if (Robot.controllers.aHeld()) {
+      colorServo.set(0.15);
+      colorWheelSolenoid.set(true);
+    } else if (colorServo.get() != 0.95) {
+      colorServo.set(0.95);
+    } else if (colorServo.get() == 0.95) {
+      colorWheelSolenoid.set(false);
     }
 
-    @Override
-    public void teleopInit() {
+    SmartDashboard.putNumber("Color Sensor/Changes", changes);
+
+    if (Robot.controllers.bPressed()) {
+      String gameSpecificMessage = DriverStation.getInstance().getGameSpecificMessage();
+      if (gameSpecificMessage.length() > 0) {
+        gameData = gameSpecificMessage.charAt(0);
+      } else {
+        gameData = 'U';
+      }
+      colorSpinManualMode = false;
+    }
+    if (Robot.controllers.yPressed()) {
       colorSpinManualMode = false;
       changes = 0;
-      colorWheelSolenoid.set(false);
-      timer.stop();
-      timer.reset();
-      colorWheelMotor.set(0);
     }
-    public char getColor(){
-      
-      Color detectedColor = colorSensor.getColor();
-      double IR = colorSensor.getIR();
-      SmartDashboard.putNumber("Color Sensor/Red", detectedColor.red);
-      SmartDashboard.putNumber("Color Sensor/Green", detectedColor.green);
-      SmartDashboard.putNumber("Color Sensor/Blue", detectedColor.blue);
-      SmartDashboard.putNumber("IR", IR);
-      String colorString;
-      char fieldColor = 'U';
-      ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
-      //colorString is what our color sensor is seeing, fieldColor is what the field should be seeing if we are seeing a certain color
-      if (match.color == squirtleTarget) {
-        colorString = "Blue";
-        fieldColor = 'R';
-      }else if (match.color == charmanderTarget){
-        colorString = "Red";
-        fieldColor = 'B';
-
-      }else if (match.color == bulbasaurTarget){
-        colorString = "Green";
-        fieldColor = 'Y';
-      }else if (match.color == pikachuTarget){
-        colorString = "Yellow";
-        fieldColor = 'G';
-      }else{
-        colorString = "Unknown";
-      }
-        SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
-        SmartDashboard.putString("Color Sensor/Detected Color", colorString);
-        return fieldColor;
-    }
-
-    @Override
-    public void teleopPeriodic() {
-      
-
-      //Wheel Turn
-      if (Robot.controllers.aHeld()){
-        colorServo.set(0.15);
-        colorWheelSolenoid.set(true);
-      }else if (colorServo.get() != 0.95){
-        colorServo.set(0.95);
-      }else if (colorServo.get() == 0.95){
-        colorWheelSolenoid.set(false);
-      }
-
-      //Color Position Turn
-      /*if(gameData.length() > 0){
-        switch (gameData.charAt(0)){
-          case 'B' :
-          break;
-          case 'G' :
-          break;
-          case 'R' :
-          break;
-          case 'Y' :
-          break;
-          default :
-          break;
-        }
-      } else{}*/
-
-
-        /*int leftDistance = 0;
-        int rightDistance = 0;
-        if (fieldColor != 'U') {
-          int startPosition = 0;
-          for (int i = 0; i < 4; i++) {
-              if (colors[i] == fieldColor) {
-                  startPosition = i;
-              }
-          }
-
-          int position = startPosition;
-          for (int i = 0; i < 4; i++) {
-              if (gameData == colors[position]) {
-                  break;
-              }
-              position += 1;
-              leftDistance += 1;
-              if (position > 3) {
-                  position = 0;
-              }
-          }
-          position = startPosition;
-          for (int i = 0; i < 4; i++) {
-              if (gameData == colors[position]) {
-                  break;
-              }
-              position -= 1;
-              rightDistance += 1;
-              if (position < 0) {
-                  position = 3;
-              }
-          }
-          SmartDashboard.putBoolean("Color Sensor/Direction", rightDistance > leftDistance);
-      }*/
-     
-      SmartDashboard.putNumber("Color Sensor/Changes", changes);
-
-      if (Robot.controllers.bPressed()){
-        gameData = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
-        colorSpinManualMode = false;
-      }
-      if(Robot.controllers.yPressed()){
-        colorSpinManualMode = false;
-        changes = 0;
-      }
-      if (Robot.controllers.yHeld() && changes < 32){
-        colorWheelMotor.set(1.0);
-         char fieldColor = getColor();
-        if (timer.hasPeriodPassed(0.1)) {
-          changes += 1;
-          timer.stop();
-          timer.reset();
+    if (Robot.controllers.yHeld() && changes < 32) {
+      colorWheelMotor.set(1.0);
+      char fieldColor = getColor();
+      if (timer.hasPeriodPassed(0.1)) {
+        changes += 1;
+        timer.stop();
+        timer.reset();
       }
       if (lastFieldColor != fieldColor) {
         timer.reset();
         timer.start();
         lastFieldColor = fieldColor;
       }
-      }
-      //this sees if the fieldColor(based off of our colorString) is equal to the color FMS is giving us
-       else if (Robot.controllers.bHeld() && getColor() != gameData ) {
-          colorWheelMotor.set(-0.5);
-        } else if (!colorSpinManualMode) {
-          colorWheelMotor.set(0);
-        }
-        //if (Robot.controllers.getGamepadX(Hand.kRight) >= 0.02){
-          //colorSpinManualMode = true;
-          //colorWheelMotor.set(Robot.controllers.getGamepadX(Hand.kRight));
-        //}
+    }
+    // this sees if the fieldColor(based off of our colorString) is equal to the
+    // color FMS is giving usgameData
+    else if (Robot.controllers.bHeld() && getColor() != gameData && gameData != 'U') {
+      colorWheelMotor.set(-0.5);
+    } else if (!colorSpinManualMode) {
+      colorWheelMotor.set(0);
+    }
+    // if (Robot.controllers.getGamepadX(Hand.kRight) >= 0.02){
+    // colorSpinManualMode = true;
+    // colorWheelMotor.set(Robot.controllers.getGamepadX(Hand.kRight));
+    // }
   }
 }
-

@@ -27,7 +27,8 @@ public class Vader extends Subsystem {
     private DigitalInput hoodLimitSwitch;
     private Timer limitSwitchTimer;
     private boolean wasLimitSwitchPressed;
-    private boolean isManualMode;
+    private DisturbingForce disturbingForce = new DisturbingForce(ControlMode.PercentOutput, 0);
+
 
     // private PID hoodPID;
 
@@ -35,14 +36,12 @@ public class Vader extends Subsystem {
         vaderMotor = new TalonSRX(Constants.HOOD_MOTOR);
         hoodLimitSwitch = new DigitalInput(Constants.HOOD_LIMIT_SWITCH);
         limitSwitchTimer = new Timer();
-        isManualMode = false;
     }
 
     @Override
     public void teleopInit() {
         limitSwitchTimer.stop();
         limitSwitchTimer.reset();
-        isManualMode = false;
 
         vaderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30); // finds type of
                                                                                                  // encoder, PID Index,
@@ -62,74 +61,58 @@ public class Vader extends Subsystem {
         wasLimitSwitchPressed = false;
 
         SmartDashboard.putNumber("Hood position", 0);
+        SmartDashboard.putNumber("VaderEncoderClose", 0);
     }
+    public void generalPeriodic(){
+        
 
-    int resetCounter = 0;
-
-    @Override
-    public void teleopPeriodic() {
-        // int hoodDemand = (int) SmartDashboard.getNumber("Hood position", 0);
-
-        // These three altogether make it so the hood motor resets its encoder counts
-        // when it holds the limit switch for a short amount of time
         if (hoodLimitSwitch.get() && !wasLimitSwitchPressed) {
             limitSwitchTimer.start();
-            // System.out.println(limitSwitchTimer.get());
             // This one makes it so the timer only starts one time per limit switch press
         } else if (!hoodLimitSwitch.get() && wasLimitSwitchPressed) {
             vaderMotor.configPeakOutputReverse(-1.0);
             limitSwitchTimer.reset();
-            // System.out.println("timer reset");
             limitSwitchTimer.stop();
             // this one resets the timer after we have stopped hitting the limit switch
         }
+
         if (limitSwitchTimer.hasPeriodPassed(0.1)) /* CHANGE TIME TO NOT 1 SECOND */ {
             vaderMotor.configPeakOutputReverse(0);
             vaderMotor.setSelectedSensorPosition(0);
             // this one sets the encoder counts to zero and stops the motor from going past
             // the limit switch if the switch has been held down long enough
         }
-        if (vaderMotor.getSelectedSensorPosition() >= 735000) {
+
+        if (vaderMotor.getSelectedSensorPosition() <= -735000) {
             vaderMotor.configPeakOutputForward(0);
         } else {
             vaderMotor.configPeakOutputForward(1.0);
         }
+        
+        vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
 
-        wasLimitSwitchPressed = hoodLimitSwitch.get();
-        int encoderPosition = -vaderMotor.getSelectedSensorPosition();
-
-        if (Robot.controllers.joystickDPadUp()) {
-            vaderMotor.set(ControlMode.PercentOutput, 0.25);
-            isManualMode = true;
-        } else if (Robot.controllers.joystickDPadDown()) {
-            vaderMotor.set(ControlMode.PercentOutput, -0.25);
-            isManualMode = true;
-        } else if (isManualMode) {
-            vaderMotor.set(ControlMode.PercentOutput, 0);
-        }
-
-        if (Robot.controllers.dPadRight() || Robot.controllers.dPadLeft() || Robot.controllers.dPadUp() || Robot.controllers.dPadDown()){
-            vaderMotor.set(ControlMode.PercentOutput, -0.50);
-            if(wasLimitSwitchPressed){
-                vaderMotor.set(ControlMode.PercentOutput, 0);
-            }
-        }
-
-        else if (Robot.controllers.joystickButton7()) {
-            vaderMotor.set(ControlMode.Position, Constants.VADER_LOW_POSITION);
-            isManualMode = false;
-        } else if (Robot.controllers.joystickButton9()) {
-            vaderMotor.set(ControlMode.Position, Constants.VADER_AUTONLINE_POSTION);
-            isManualMode = false;
-        } else if (Robot.controllers.joystickButton11()) {
-            vaderMotor.set(ControlMode.Position, Constants.VADER_TRENCH_POSITION);
-            isManualMode = false;
-        } else if (!isManualMode) {
-            vaderMotor.set(ControlMode.PercentOutput, 0);
-        }
         // writes encoder counts to dashboard
+        int encoderPosition = -vaderMotor.getSelectedSensorPosition();
         SmartDashboard.putNumber("Vader Encoder Counts", encoderPosition);
+        wasLimitSwitchPressed = hoodLimitSwitch.get();
+    }
 
+    @Override
+    public void teleopPeriodic() {
+        disturbingForce = Robot.controllers.getDisturbingForce(wasLimitSwitchPressed);
+        generalPeriodic();
+    }
+
+    @Override
+    public void autonomousPeriodic(){
+        generalPeriodic();
+    }
+
+    /**
+     * @param disturbingForce the disturbingForce to set
+     */
+    public void setDisturbingForce(DisturbingForce disturbingForce) {
+        this.disturbingForce = disturbingForce;
     }
 
 }

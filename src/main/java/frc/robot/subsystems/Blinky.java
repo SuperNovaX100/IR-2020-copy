@@ -28,17 +28,19 @@ public class Blinky extends Subsystem {
     private TalonSRX[] irMotors;
     private boolean shooting;
     private TalonSRX intakeMotor;
-    private Timer intakeTimer;
     private DoubleSolenoid intakeDeploy;
     private boolean wasIRTriggered;
+    private boolean wantToShoot;
+    private boolean wantToIntake;
+    private boolean blinkyBackwards;
+    private boolean intakeBackwards;
 
     public Blinky() {
-        intakeTimer = new Timer();
-        //intake solenoids
+        // intake solenoids
         intakeDeploy = new DoubleSolenoid(Constants.PCM, Constants.INTAKE_DOWN, Constants.INTAKE_UP);
-        
 
-        //makes an array of all the IR sensors
+
+        // makes an array of all the IR sensors
         irSensors = new DigitalInput[5];
         irSensors[0] = new DigitalInput(Constants.IR_SENSOR_1);
         irSensors[1] = new DigitalInput(Constants.IR_SENSOR_2);
@@ -47,7 +49,7 @@ public class Blinky extends Subsystem {
         irSensors[4] = new DigitalInput(Constants.IR_SENSOR_5);
 
         irMotors = new TalonSRX[5];
-        //makes an array of all the motors in Blinky
+        // makes an array of all the motors in Blinky
         irMotors[0] = new TalonSRX(Constants.IR_MOTOR_1);
         irMotors[1] = new TalonSRX(Constants.IR_MOTOR_2);
         irMotors[2] = new TalonSRX(Constants.IR_MOTOR_3);
@@ -60,39 +62,29 @@ public class Blinky extends Subsystem {
         }
         intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR);
     }
-
     @Override
-    public void teleopInit() {
-        intakeTimer.stop();
-        intakeTimer.reset();
-        shooting = false;
-        wasIRTriggered = false;
+    public void autonomousPeriodic(){
+
     }
 
-    @Override
-    public void teleopPeriodic() {
-        //deploy intake
-        if (Robot.controllers.leftTriggerHeld() >= 0.02){
+    public void generalPeriodic(){
+        if (wantToIntake) {
+            //System.out.println("Want To Intake");
             intakeDeploy.set(Value.kForward);
             intakeMotor.set(ControlMode.PercentOutput, 1.0);
-        } else{
+        } else if (intakeBackwards) {
+            System.out.println("Intake Backwards");
+            intakeDeploy.set(Value.kReverse);
+            intakeMotor.set(ControlMode.PercentOutput, -1.0);
+        } else {
+            System.out.println("Don't");
             intakeDeploy.set(Value.kReverse);
             intakeMotor.set(ControlMode.PercentOutput, 0.0);
-        }
-
-        if (!irSensors[0].get() && !wasIRTriggered){
-            intakeTimer.start();
-        } else if (irSensors[0].get() && wasIRTriggered) {
-            intakeTimer.reset();
-            intakeTimer.stop();
-        }
-        if (Robot.controllers.leftTriggerHeld()>= 0.02 && !intakeTimer.hasPeriodPassed(1.0)){
-            intakeMotor.set(ControlMode.PercentOutput, 1.0);
         }
         
         wasIRTriggered = !irSensors[0].get();
 
-        if (Robot.controllers.leftTriggerHeld()>= 0.02 || Robot.controllers.joystickTriggerHeld()) {
+        if (wantToIntake || wantToShoot) {
             // Update intake motors 4 to 0 (5 to 1)
             SmartDashboard.putBoolean("Blinky/Ir Sensor 1", !irSensors[0].get());
             SmartDashboard.putBoolean("Ir Sensor 2", !irSensors[1].get());
@@ -111,7 +103,10 @@ public class Blinky extends Subsystem {
                 if (canGo || irSensors[i].get()) {
                     canGo = true;
                     irMotors[i].set(ControlMode.PercentOutput, -0.75);
-                
+                    if (blinkyBackwards) {
+                        irMotors[i].set(ControlMode.PercentOutput, 0.75);
+                    }
+
                 } else {
                     irMotors[i].set(ControlMode.PercentOutput, 0);
                 }
@@ -123,12 +118,30 @@ public class Blinky extends Subsystem {
         }
     }
 
+    @Override
+    public void teleopInit() {
+        shooting = false;
+        wasIRTriggered = false;
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        // deploy intake
+        wantToIntake = Robot.controllers.leftTriggerHeld() >= 0.02;
+        blinkyBackwards = Robot.controllers.joystickButton2();
+        wantToShoot = Robot.controllers.joystickTriggerHeld();
+        intakeBackwards = Robot.controllers.backButton();
+        generalPeriodic();
+    }
+
     public boolean getShooting() {
         return shooting;
     }
+
     public void setShooting(boolean shooting) {
         this.shooting = shooting;
     }
+
     public boolean ballReadyToShoot() {
         return !irSensors[4].get();
     }

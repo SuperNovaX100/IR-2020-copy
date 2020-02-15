@@ -11,14 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.DriveOffLine;
 import frc.robot.subsystems.ColorSensor;
+import frc.robot.subsystems.DoNothing1;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ShootFromAutonLine;
 import frc.robot.subsystems.TacoTime;
 import frc.robot.subsystems.Vader;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.AutoShootOnly;
 import frc.robot.subsystems.Blinky;
 
 
@@ -33,8 +37,14 @@ public class Robot extends TimedRobot {
   public  static Blinky blinky;
   public static ColorSensor colorSensor;
   public static TacoTime tacoTime;
-  public static Autonomous autonomous;
+  //public static DriveOffLine driveOffLine;
   public static Cameras cameras;
+  private String autoSelected;
+  private final SendableChooser<String> chooser = new SendableChooser<>();
+  public static final String driveOffLineAuton = "Drive off line auton";
+  public static final String shootFromAutonLineAuton = "Shoot from auton line";
+  //public static ShootFromAutonLine shootFromAutonLine;
+  private AutonBase autoToRun = new DoNothing1();
  
   @Override
   public void robotInit() {
@@ -48,11 +58,17 @@ public class Robot extends TimedRobot {
     blinky = new Blinky();
     colorSensor = new ColorSensor();
     tacoTime = new TacoTime();
-    autonomous = new Autonomous();
+    //driveOffLine = new DriveOffLine();
+    //shootFromAutonLine = new ShootFromAutonLine();
+    chooser.setDefaultOption("Default Auto", "default");
+    chooser.addOption("My Auto", shootFromAutonLineAuton);
+    SmartDashboard.putData("Auto choices", chooser);
+
   }
 
   @Override
   public void teleopInit() {
+    autoToRun.done();
     for (Subsystem subsystem : subsystems) {
       long startTime = System.nanoTime();
       subsystem.teleopInit();
@@ -74,6 +90,18 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void autonomousInit() {
+    autoSelected = chooser.getSelected();
+    switch (autoSelected) {
+      case shootFromAutonLineAuton:
+        autoToRun = new AutoShootOnly();
+        break;
+      default:
+        // Put default auto code here
+        break;
+    }
+    autoToRun.init();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    System.out.println("Auto selected: " + autoSelected);
     for (Subsystem subsystem : subsystems) {
       long startTime = System.nanoTime();
       subsystem.autonomousInit();
@@ -84,9 +112,10 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void autonomousPeriodic() {
+    autoToRun.periodic();
     for (Subsystem subsystem : subsystems) {
       long startTime = System.nanoTime();
-      subsystem.autonomousPeriodic();
+      subsystem.teleopPeriodic();
       double timeTaken = System.nanoTime() - startTime;
       String name = subsystem.getClass().getName();
       SmartDashboard.putNumber("Performance/AutonomousPeriodic/" + name, timeTaken / 1000000);

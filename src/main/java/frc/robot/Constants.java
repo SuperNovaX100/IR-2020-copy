@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import frc.robot.subsystems.DisturbingForce;
+
 /**
  * Add your docs here.
  */
@@ -59,12 +63,16 @@ public class Constants {
         public static final int FULL_ANGLE_ENCODER_COUNT = 50;
     
         //Hood Positions(In encoder counts) and Shooter RPMs
-        public static final int VADER_LOW_POSITION = 2000;
+        public static final int VADER_VERY_CLOSE_POSITION = 185000;
+        public static final int VADER_CLOSE_POSITION = 235000;
         public static final int VADER_AUTONLINE_POSTION = 475571;
-        public static final int VADER_TRENCH_POSITION = 549027;
-        public static final int SHOOTER_CLOSE_SPEED = 5000; //TODO Adjust speed, this is for right next to target
-        public static final int SHOOTER_TRENCH_SPEED = 4500;
+        public static final int VADER_TRENCH_POSITION = 530000;
+        public static final int VADER_VERY_FAR_POSITION = 525000;
+        public static final int SHOOTER_VERY_CLOSE_SPEED = 2900;
+        public static final int SHOOTER_CLOSE_SPEED = 2570; //TODO Adjust speed, this is for right next to target
         public static final int SHOOTER_AUTOLINE_SPEED = 3500;
+        public static final int SHOOTER_TRENCH_SPEED = 4500;
+        public static final int SHOOTER_VERY_FAR_SPEED = 5300;
     
         //Encoder counts per revolution
         public static final int NEO_550 = 42;
@@ -82,5 +90,8 @@ public class Constants {
 
         //PWM Ports
         public static final int COLOR_SERVO = 0;
+
+        // Vader Setpoints
+        public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, VADER_AUTONLINE_POSTION);
 
 }
