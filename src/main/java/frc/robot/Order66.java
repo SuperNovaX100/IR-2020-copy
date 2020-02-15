@@ -5,14 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot;
 
+import com.revrobotics.ControlType;
 
 /**
  * Add your docs here.
  */
-public class DoNothing{
-    public DoNothing(){
+public class Order66 {
+    ControlType controlType;
+    double demand;
 
+    public Order66(ControlType controlType, double demand){
+        this.controlType = controlType;
+        this.demand = demand;
     }
+
+
 }

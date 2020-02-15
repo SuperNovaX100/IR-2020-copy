@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.ControlType;
 
 import frc.robot.subsystems.DisturbingForce;
 
@@ -16,17 +17,17 @@ import frc.robot.subsystems.DisturbingForce;
  */
 public class Constants {
         //CAN IDs
-        public static final int LEFT_DRIVE_MOTOR_FRONT = 17;
+        public static final int LEFT_DRIVE_MOTOR_FRONT = 17; 
         public static final int LEFT_DRIVE_MOTOR_BACK = 6;
         public static final int RIGHT_DRIVE_MOTOR_FRONT = 2;
         public static final int RIGHT_DRIVE_MOTOR_BACK = 5;
         public static final int SHOOTER_LEFT_MOTOR = 14;
         public static final int SHOOTER_RIGHT_MOTOR = 15; 
         public static final int HOOD_MOTOR = 8; 
-        public static final int IR_MOTOR_1 = 12;
-        public static final int IR_MOTOR_2 = 11;
-        public static final int IR_MOTOR_3 = 18;
-        public static final int IR_MOTOR_4 = 10;
+        public static final int IR_MOTOR_1 = 12; //PDP Port 6
+        public static final int IR_MOTOR_2 = 11; //PDP Port 8
+        public static final int IR_MOTOR_3 = 18; //PDP Port 9
+        public static final int IR_MOTOR_4 = 10; //
         public static final int IR_MOTOR_5 = 3;
         public static final int WINCH_MOTOR = 4;
         public static final int CLIMB_HEIGHT_MOTOR = 13;
@@ -62,21 +63,10 @@ public class Constants {
         //encoder experiment (Name / nightmare nightmare nightmare nightmare)
         public static final int FULL_ANGLE_ENCODER_COUNT = 50;
     
-        //Hood Positions(In encoder counts) and Shooter RPMs
-        public static final int VADER_VERY_CLOSE_POSITION = 185000;
-        public static final int VADER_CLOSE_POSITION = 235000;
-        public static final int VADER_AUTONLINE_POSTION = 475571;
-        public static final int VADER_TRENCH_POSITION = 530000;
-        public static final int VADER_VERY_FAR_POSITION = 525000;
-        public static final int SHOOTER_VERY_CLOSE_SPEED = 2900;
-        public static final int SHOOTER_CLOSE_SPEED = 2570; //TODO Adjust speed, this is for right next to target
-        public static final int SHOOTER_AUTOLINE_SPEED = 3500;
-        public static final int SHOOTER_TRENCH_SPEED = 4500;
-        public static final int SHOOTER_VERY_FAR_SPEED = 5300;
     
         //Encoder counts per revolution
-        public static final int NEO_550 = 42;
-        public static final int NEO = 42;
+        public static final int NEO_550_ENCODER = 42;
+        public static final int NEO_ENCODER = 42;
         public static final int BAG_MOTOR_ENCODER = 1024;
 
         //Vision Settings
@@ -92,6 +82,24 @@ public class Constants {
         public static final int COLOR_SERVO = 0;
 
         // Vader Setpoints
-        public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, VADER_AUTONLINE_POSTION);
+        public static final DisturbingForce STOP_DISTURBING_FORCE = new DisturbingForce(ControlMode.PercentOutput, 0);
+        public static final DisturbingForce ZEROING = new DisturbingForce(ControlMode.PercentOutput, 0.5);
+        public static final DisturbingForce MANUAL_MODE_UP = new DisturbingForce(ControlMode.PercentOutput, 0.25);
+        public static final DisturbingForce MANUAL_MODE_DOWN = new DisturbingForce(ControlMode.PercentOutput, -0.25);
+        public static final DisturbingForce VERY_CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 185000);
+        public static final DisturbingForce CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 235000);
+        public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, 475571);
+        public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, 530000);
+        public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, 525000);
+        //Death Star Speed
+        public static final Order66 VERY_CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, -2900);
+        public static final Order66 CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, -2570);
+        public static final Order66 AUTOLINE_ORDER_66 = new Order66(ControlType.kVelocity, -3500);
+        public static final Order66 TRENCH_ORDER_66 = new Order66(ControlType.kVelocity, -4500);
+        public static final Order66 VERY_FAR_ORDER_66 = new Order66(ControlType.kVelocity, -5300);
+        public static final Order66 DONT_EXECUTE_ORDER_66 = new Order66(ControlType.kDutyCycle, 0);
+        
+       
+
 
 }

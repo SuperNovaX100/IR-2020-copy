@@ -19,7 +19,6 @@ public class AutoShootOnly implements AutonBase{
     @Override
     public void init() {
 
-        // TODO Auto-generated method stub
 
     }
 
@@ -32,8 +31,6 @@ public class AutoShootOnly implements AutonBase{
     @Override
     public void done() {
         Robot.controllers.autoLineShoot = false;
-        // TODO Auto-generated method stub
-
     }
     
 }

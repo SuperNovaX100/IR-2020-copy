@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -24,12 +25,20 @@ public class DriveTrain extends Subsystem {
     private CANSparkMax leftMotorBack;
     private CANSparkMax rightMotorFront;
     private CANSparkMax rightMotorBack;
-
+    private CANEncoder leftEncoderFront;
+    private CANEncoder leftEncoderBack;
+    private CANEncoder rightEncoderFront;
+    private CANEncoder rightEncoderBack;
+    
     public DriveTrain() {
         leftMotorFront = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
         leftMotorBack = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
         rightMotorFront = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
         rightMotorBack = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
+        leftEncoderFront = new CANEncoder(leftMotorFront);
+        leftEncoderBack = new CANEncoder(leftMotorBack);
+        rightEncoderFront = new CANEncoder(rightMotorFront);
+        rightEncoderBack = new CANEncoder(rightMotorBack);      
         
         leftMotorBack.follow(leftMotorFront);
         rightMotorBack.follow(rightMotorFront);
@@ -57,4 +66,5 @@ public class DriveTrain extends Subsystem {
         leftMotorFront.set(leftPower);
         rightMotorFront.set(rightPower);
     }
+    
 }

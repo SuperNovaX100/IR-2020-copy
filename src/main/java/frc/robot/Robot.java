@@ -9,19 +9,16 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.DriveOffLine;
 import frc.robot.subsystems.ColorSensor;
+import frc.robot.subsystems.DeathStar;
 import frc.robot.subsystems.DoNothing1;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ShootFromAutonLine;
 import frc.robot.subsystems.TacoTime;
 import frc.robot.subsystems.Vader;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.AutoShootOnly;
 import frc.robot.subsystems.Blinky;
 
@@ -30,7 +27,7 @@ import frc.robot.subsystems.Blinky;
 
 public class Robot extends TimedRobot {
   public static List<Subsystem> subsystems;
-  public static Shooter shooter; 
+  public static DeathStar deathStar; 
   public static DriveTrain driveTrain;
   public static Controllers controllers;
   public static Vader vader;
@@ -45,7 +42,6 @@ public class Robot extends TimedRobot {
   public static final String shootFromAutonLineAuton = "Shoot from auton line";
   //public static ShootFromAutonLine shootFromAutonLine;
   private AutonBase autoToRun = new DoNothing1();
- 
   @Override
   public void robotInit() {
     subsystems = new ArrayList<Subsystem>();
@@ -53,7 +49,7 @@ public class Robot extends TimedRobot {
     //Subsystems
     controllers = new Controllers();
     driveTrain = new DriveTrain();
-    shooter = new Shooter();
+    deathStar = new DeathStar();
     vader = new Vader();
     blinky = new Blinky();
     colorSensor = new ColorSensor();
@@ -68,6 +64,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //blinky.generalInit();
     autoToRun.done();
     for (Subsystem subsystem : subsystems) {
       long startTime = System.nanoTime();

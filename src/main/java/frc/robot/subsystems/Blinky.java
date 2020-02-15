@@ -13,9 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Subsystem;
@@ -66,6 +64,12 @@ public class Blinky extends Subsystem {
     public void autonomousPeriodic(){
 
     }
+    public void generalInit(){
+        blinkyBackwards = false;
+        intakeBackwards = false;
+        wantToIntake = false;
+        wantToShoot = false;
+    }
 
     public void generalPeriodic(){
         if (wantToIntake) {
@@ -85,28 +89,17 @@ public class Blinky extends Subsystem {
         wasIRTriggered = !irSensors[0].get();
 
         if (wantToIntake || wantToShoot) {
-            // Update intake motors 4 to 0 (5 to 1)
-            SmartDashboard.putBoolean("Blinky/Ir Sensor 1", !irSensors[0].get());
-            SmartDashboard.putBoolean("Ir Sensor 2", !irSensors[1].get());
-            SmartDashboard.putBoolean("Ir Sensor 3", !irSensors[2].get());
-            SmartDashboard.putBoolean("Ir Sensor 4", !irSensors[3].get());
-            SmartDashboard.putBoolean("Ir Sensor 5", !irSensors[4].get());
-            SmartDashboard.putBoolean("Shooting", shooting);
             // Set to true once one of the sensors is empty
             boolean canGo = false;
             // loops from closest sensor to the farthest sensor
             for (int i = 4; i >= 0; i--) {
-                if (shooting && i == 4) {
+                if (blinkyBackwards){
+                    irMotors[i].set(ControlMode.PercentOutput, 0.75);
+                } else if (shooting && i == 4) {
                     irMotors[i].set(ControlMode.PercentOutput, -0.75);
-                    continue;
-                }
-                if (canGo || irSensors[i].get()) {
+                } else if (canGo || irSensors[i].get()) {
                     canGo = true;
                     irMotors[i].set(ControlMode.PercentOutput, -0.75);
-                    if (blinkyBackwards) {
-                        irMotors[i].set(ControlMode.PercentOutput, 0.75);
-                    }
-
                 } else {
                     irMotors[i].set(ControlMode.PercentOutput, 0);
                 }

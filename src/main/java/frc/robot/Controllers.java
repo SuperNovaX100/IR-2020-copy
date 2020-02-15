@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -218,27 +219,46 @@ public class Controllers {
     boolean zeroing = dPadLeft() || dPadRight() || dPadUp() || dPadDown();
     if (zeroing) {
       if (wasLimitSwitchPressed) {
-        return new DisturbingForce(ControlMode.PercentOutput, 0);
+        return Constants.STOP_DISTURBING_FORCE;
       } else {
-        return new DisturbingForce(ControlMode.PercentOutput, -0.50);
+        return Constants.ZEROING;
       }
     } else if (Robot.controllers.joystickDPadUp()) {
-      return new DisturbingForce(ControlMode.PercentOutput, 0.25);
+      return Constants.MANUAL_MODE_UP;
     } else if (Robot.controllers.joystickDPadDown()) {
-      return new DisturbingForce(ControlMode.PercentOutput, -0.25);
+      return Constants.MANUAL_MODE_DOWN;
     } else if (Robot.controllers.joystickButton8()) {
-      return new DisturbingForce(ControlMode.Position, Constants.VADER_VERY_CLOSE_POSITION);
+      return Constants.VERY_CLOSE_POSITION;
     } else if (Robot.controllers.joystickButton7()) {
-      return new DisturbingForce(ControlMode.Position, Constants.VADER_CLOSE_POSITION);
+      return Constants.CLOSE_POSITION;
     } else if (Robot.controllers.joystickButton9()) {
       return Constants.AUTOLINE_DISTURBING_FORCE;
     } else if (Robot.controllers.joystickButton11()) {
-      return new DisturbingForce(ControlMode.Position, Constants.VADER_TRENCH_POSITION);
+      return Constants.TRENCH_POSITION;
     } else if (Robot.controllers.joystickButton12()) {
-      return new DisturbingForce(ControlMode.Position, Constants.VADER_VERY_FAR_POSITION);
+      return Constants.VERY_FAR_POSITION;
     } else {
-      return new DisturbingForce(ControlMode.PercentOutput, 0);
+      return Constants.STOP_DISTURBING_FORCE;
     }
+  }
+
+  public Order66 getOrder66 (){
+   
+
+    if (Robot.controllers.joystickButton8()) {
+      return Constants.VERY_CLOSE_ORDER_66;
+  } else if (Robot.controllers.joystickButton7()) {
+      return Constants.CLOSE_ORDER_66;
+  } else if (Robot.controllers.joystickButton9()) {
+      return Constants.AUTOLINE_ORDER_66;
+  } else if (Robot.controllers.joystickButton11()) {
+      return Constants.TRENCH_ORDER_66;
+  } else if (Robot.controllers.joystickButton12()) {
+      return Constants.VERY_FAR_ORDER_66;
+  } else {
+     return Constants.DONT_EXECUTE_ORDER_66;
+  }
+
   }
 
 }
