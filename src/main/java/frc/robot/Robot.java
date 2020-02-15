@@ -14,15 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DeathStar;
-import frc.robot.subsystems.DoNothing1;
+import frc.robot.autons.DoNothing;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.TacoTime;
 import frc.robot.subsystems.Vader;
-import frc.robot.subsystems.AutoShootOnly;
+import frc.robot.autons.AutoShootOnly;
+import frc.robot.autons.AutonBase;
 import frc.robot.subsystems.Blinky;
-
-
 
 
 public class Robot extends TimedRobot {
@@ -41,7 +40,7 @@ public class Robot extends TimedRobot {
   public static final String driveOffLineAuton = "Drive off line auton";
   public static final String shootFromAutonLineAuton = "Shoot from auton line";
   //public static ShootFromAutonLine shootFromAutonLine;
-  private AutonBase autoToRun = new DoNothing1();
+  private AutonBase autoToRun = new DoNothing();
   @Override
   public void robotInit() {
     subsystems = new ArrayList<Subsystem>();

@@ -5,15 +5,36 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.autons;
+
+import frc.robot.autons.AutonBase;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public interface AutonBase {
+public class DoNothing implements AutonBase{
 
+    @Override
+    public void init() {
 
-    public void init();
-    public void periodic();
-    public void done();
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void periodic() {
+        Robot.controllers.autoLineShoot = true;
+
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void done() {
+        Robot.controllers.autoLineShoot = false;
+        // TODO Auto-generated method stub
+
+    }
+    
 }

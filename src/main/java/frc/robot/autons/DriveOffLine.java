@@ -5,36 +5,42 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.autons;
 
-import frc.robot.AutonBase;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DoNothing1 implements AutonBase{
+public class DriveOffLine implements AutonBase{
+    private Timer autonTimer;
 
-    @Override
-    public void init() {
-
-        // TODO Auto-generated method stub
-
+    public DriveOffLine() {
+        autonTimer = new Timer();
     }
 
     @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-
-        // TODO Auto-generated method stub
+    public void init(){
+        autonTimer.reset();
+        autonTimer.start();
+    }
+    
+    @Override
+    public void periodic(){
+        if (autonTimer.get() < 1.0) {
+            Robot.driveTrain.setMotorPower(0.25, 0.25);
+        }else{
+            Robot.driveTrain.setMotorPower(0, 0);
+        }
 
     }
 
     @Override
     public void done() {
-        Robot.controllers.autoLineShoot = false;
         // TODO Auto-generated method stub
 
     }
-    
 }
+
+

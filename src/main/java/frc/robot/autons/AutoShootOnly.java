@@ -5,14 +5,32 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.autons;
 
+import frc.robot.autons.AutonBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DoNothing{
-    public DoNothing(){
+public class AutoShootOnly implements AutonBase{
+
+    @Override
+    public void init() {
+
 
     }
+
+    @Override
+    public void periodic() {
+        Robot.controllers.autoLineShoot = true;
+        Robot.vader.setDisturbingForce(Constants.AUTOLINE_DISTURBING_FORCE);
+    }
+
+    @Override
+    public void done() {
+        Robot.controllers.autoLineShoot = false;
+    }
+    
 }
