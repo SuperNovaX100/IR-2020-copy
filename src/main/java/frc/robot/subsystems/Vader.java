@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,13 +28,27 @@ public class Vader extends Subsystem {
     private boolean wasLimitSwitchPressed;
     private DisturbingForce disturbingForce = new DisturbingForce(ControlMode.PercentOutput, 0);
 
-
     // private PID hoodPID;
 
     public Vader() {
         vaderMotor = new TalonSRX(Constants.HOOD_MOTOR);
         hoodLimitSwitch = new DigitalInput(Constants.HOOD_LIMIT_SWITCH);
         limitSwitchTimer = new Timer();
+        vaderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30); // finds type of
+        // encoder, PID Index,
+        // time we wait for
+        // encoder
+        vaderMotor.setSelectedSensorPosition(0);
+        setDisturbingForce(Constants.ZEROING);
+
+        vaderMotor.config_kP(0, 0.04, 30);
+        vaderMotor.config_kI(0, 0.00001, 30);
+        vaderMotor.config_kD(0, 0, 30);
+        vaderMotor.config_IntegralZone(0, 5000, 30);
+        vaderMotor.config_kF(0, 0, 30);
+        vaderMotor.setInverted(true);
+        vaderMotor.configPeakOutputForward(1.0);
+        vaderMotor.configPeakOutputReverse(-1.0);
     }
 
     @Override
@@ -43,28 +56,13 @@ public class Vader extends Subsystem {
         limitSwitchTimer.stop();
         limitSwitchTimer.reset();
 
-        vaderMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30); // finds type of
-                                                                                                 // encoder, PID Index,
-                                                                                                 // time we wait for
-                                                                                                 // encoder
-        vaderMotor.setSelectedSensorPosition(0);
-        vaderMotor.set(ControlMode.Position, 0);
-
-        vaderMotor.config_kP(0, 0.04, 30);
-        vaderMotor.config_kI(0, 0.00001, 30);
-        vaderMotor.config_kD(0, 0, 30);
-        vaderMotor.config_IntegralZone(0, 5000, 30);
-        vaderMotor.config_kF(0, 0, 30);
-        vaderMotor.setInverted(false);
-        vaderMotor.configPeakOutputForward(1.0);
-        vaderMotor.configPeakOutputReverse(-1.0);
         wasLimitSwitchPressed = false;
 
         SmartDashboard.putNumber("Hood position", 0);
         SmartDashboard.putNumber("VaderEncoderClose", 0);
     }
-    public void generalPeriodic(){
-        
+
+    public void generalPeriodic() {
 
         if (hoodLimitSwitch.get() && !wasLimitSwitchPressed) {
             limitSwitchTimer.start();
@@ -76,7 +74,7 @@ public class Vader extends Subsystem {
             // this one resets the timer after we have stopped hitting the limit switch
         }
 
-        if (limitSwitchTimer.hasPeriodPassed(0.1)) /* CHANGE TIME TO NOT 1 SECOND */ {
+        if (limitSwitchTimer.hasPeriodPassed(0.1)){
             vaderMotor.configPeakOutputReverse(0);
             vaderMotor.setSelectedSensorPosition(0);
             // this one sets the encoder counts to zero and stops the motor from going past
@@ -88,11 +86,11 @@ public class Vader extends Subsystem {
         } else {
             vaderMotor.configPeakOutputForward(1.0);
         }
-        
+
         vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
 
         // writes encoder counts to dashboard
-        int encoderPosition = -vaderMotor.getSelectedSensorPosition();
+        int encoderPosition = vaderMotor.getSelectedSensorPosition();
         SmartDashboard.putNumber("Vader Encoder Counts", encoderPosition);
         wasLimitSwitchPressed = hoodLimitSwitch.get();
     }
@@ -104,7 +102,7 @@ public class Vader extends Subsystem {
     }
 
     @Override
-    public void autonomousPeriodic(){
+    public void autonomousPeriodic() {
         generalPeriodic();
     }
 

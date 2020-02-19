@@ -7,34 +7,18 @@
 
 package frc.robot.autons;
 
-import frc.robot.autons.OldAutonBase;
-import frc.robot.Robot;
+import frc.robot.tasks.MoveOffLine;
+import frc.robot.tasks.ShootFromAutonLine;
+import frc.robot.tasks.TaskBase;
 
 /**
  * Add your docs here.
  */
-public class DoNothing implements OldAutonBase{
-
-    @Override
-    public void init() {
-
-        // TODO Auto-generated method stub
-
+public class ExampleAuton extends AutonBase {
+    public ExampleAuton() {
+        super("exampleAuton", new TaskBase[] {
+            new ShootFromAutonLine(),
+            new MoveOffLine()
+        });
     }
-
-    @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void done() {
-        Robot.controllers.autoLineShoot = false;
-        // TODO Auto-generated method stub
-
-    }
-    
 }

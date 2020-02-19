@@ -13,7 +13,7 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class DriveOffLine implements AutonBase{
+public class DriveOffLine implements OldAutonBase{
     private Timer autonTimer;
 
     public DriveOffLine() {

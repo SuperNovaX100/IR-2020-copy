@@ -14,33 +14,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DeathStar;
-import frc.robot.autons.DoNothing;
+import frc.robot.autons.ExampleAuton;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.TacoTime;
 import frc.robot.subsystems.Vader;
-import frc.robot.autons.AutoShootOnly;
 import frc.robot.autons.AutonBase;
 import frc.robot.subsystems.Blinky;
 
 
 public class Robot extends TimedRobot {
   public static List<Subsystem> subsystems;
+  public static List<AutonBase> autons;
+  //Chooser
+  private final SendableChooser<String> chooser = new SendableChooser<>();
+  public AutonBase autonToRun;
+  //Subsystems
   public static DeathStar deathStar; 
   public static DriveTrain driveTrain;
   public static Controllers controllers;
   public static Vader vader;
-  public  static Blinky blinky;
+  public static Blinky blinky;
   public static ColorSensor colorSensor;
   public static TacoTime tacoTime;
-  //public static DriveOffLine driveOffLine;
   public static Cameras cameras;
   private String autoSelected;
-  private final SendableChooser<String> chooser = new SendableChooser<>();
-  public static final String driveOffLineAuton = "Drive off line auton";
-  public static final String shootFromAutonLineAuton = "Shoot from auton line";
+  //Autons
+  public static ExampleAuton exampleAuton;
+
   //public static ShootFromAutonLine shootFromAutonLine;
-  private AutonBase autoToRun = new DoNothing();
+  //private OldAutonBase autoToRun = new DoNothing();
   @Override
   public void robotInit() {
     subsystems = new ArrayList<Subsystem>();
@@ -53,10 +56,10 @@ public class Robot extends TimedRobot {
     blinky = new Blinky();
     colorSensor = new ColorSensor();
     tacoTime = new TacoTime();
-    //driveOffLine = new DriveOffLine();
-    //shootFromAutonLine = new ShootFromAutonLine();
+    //Autons
+    exampleAuton = new ExampleAuton();
     chooser.setDefaultOption("Default Auto", "default");
-    chooser.addOption("My Auto", shootFromAutonLineAuton);
+    chooser.addOption("Example", exampleAuton.getName());
     SmartDashboard.putData("Auto choices", chooser);
 
   }
@@ -64,7 +67,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     //blinky.generalInit();
-    autoToRun.done();
+    //autoToRun.done();
+    if (autonToRun != null) autonToRun.done();
     for (Subsystem subsystem : subsystems) {
       long startTime = System.nanoTime();
       subsystem.teleopInit();
@@ -87,15 +91,23 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autoSelected = chooser.getSelected();
-    switch (autoSelected) {
+    for (AutonBase auton : autons) {
+      if (auton.getName() == autoSelected) {
+        autonToRun = auton;
+        auton.start();
+      }
+    }
+    /*switch (autoSelected) {
       case shootFromAutonLineAuton:
-        autoToRun = new AutoShootOnly();
+        autoToRun = new AutonShootOnly();
         break;
+      case autonShootDrive:
+        autoToRun = new AutonShoot();
       default:
         // Put default auto code here
         break;
     }
-    autoToRun.init();
+    autoToRun.init();*/
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + autoSelected);
     for (Subsystem subsystem : subsystems) {
@@ -108,10 +120,10 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void autonomousPeriodic() {
-    autoToRun.periodic();
+    if (autonToRun != null) autonToRun.periodic();
     for (Subsystem subsystem : subsystems) {
       long startTime = System.nanoTime();
-      subsystem.teleopPeriodic();
+      subsystem.autonomousPeriodic();
       double timeTaken = System.nanoTime() - startTime;
       String name = subsystem.getClass().getName();
       SmartDashboard.putNumber("Performance/AutonomousPeriodic/" + name, timeTaken / 1000000);

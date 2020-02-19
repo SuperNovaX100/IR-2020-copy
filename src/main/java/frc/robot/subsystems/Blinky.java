@@ -77,11 +77,9 @@ public class Blinky extends Subsystem {
             intakeDeploy.set(Value.kForward);
             intakeMotor.set(ControlMode.PercentOutput, 1.0);
         } else if (intakeBackwards) {
-            System.out.println("Intake Backwards");
             intakeDeploy.set(Value.kReverse);
             intakeMotor.set(ControlMode.PercentOutput, -1.0);
         } else {
-            System.out.println("Don't");
             intakeDeploy.set(Value.kReverse);
             intakeMotor.set(ControlMode.PercentOutput, 0.0);
         }
@@ -93,9 +91,7 @@ public class Blinky extends Subsystem {
             boolean canGo = false;
             // loops from closest sensor to the farthest sensor
             for (int i = 4; i >= 0; i--) {
-                if (blinkyBackwards){
-                    irMotors[i].set(ControlMode.PercentOutput, 0.75);
-                } else if (shooting && i == 4) {
+                 if (shooting && i == 4) {
                     irMotors[i].set(ControlMode.PercentOutput, -0.75);
                 } else if (canGo || irSensors[i].get()) {
                     canGo = true;
@@ -107,6 +103,11 @@ public class Blinky extends Subsystem {
         } else {
             for (TalonSRX motor : irMotors) {
                 motor.set(ControlMode.PercentOutput, 0);
+            }
+        }
+        if (blinkyBackwards){
+            for (TalonSRX irMotor : irMotors) {
+                irMotor.set(ControlMode.PercentOutput, 0.75);
             }
         }
     }
@@ -137,5 +138,16 @@ public class Blinky extends Subsystem {
 
     public boolean ballReadyToShoot() {
         return !irSensors[4].get();
+    }
+
+    public boolean blinkyEmpty() {
+        boolean activeSensor = false;
+        for (DigitalInput irSensor : irSensors) {
+            if (!irSensor.get()) {
+                 activeSensor = true;
+                 break;
+            }
+        }
+        return !activeSensor;
     }
 }

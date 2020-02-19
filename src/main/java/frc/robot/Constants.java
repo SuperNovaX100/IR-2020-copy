@@ -52,6 +52,8 @@ public class Constants {
         public static final int JOYSTICK_TRIGGER = 1;
         //Gearing in shooter  (Name / ratio (numerator/denominator) )
         public static final double SHOOTER_GEAR_RATIO = 42/18; //numerator is big gear, denominator is smaller gear
+        //Drive base gear ratio
+        public static final double DRIVE_BASE_GEAR_RATIO = 10.71;
         //Digital Input ports (Name / DIO port)
         public static final int HOOD_LIMIT_SWITCH = 0; 
         public static final int IR_SENSOR_1 = 1;
@@ -62,12 +64,18 @@ public class Constants {
     
         //encoder experiment (Name / nightmare nightmare nightmare nightmare)
         public static final int FULL_ANGLE_ENCODER_COUNT = 50;
-    
+        
+       
     
         //Encoder counts per revolution
         public static final int NEO_550_ENCODER = 42;
         public static final int NEO_ENCODER = 42;
         public static final int BAG_MOTOR_ENCODER = 1024;
+
+        public static final double CIRCUMFERENCE_OF_WHEEL = (6 * 25.4) * Math.PI;
+        public static final double DISTANCE_PER_COUNT_MILLIMETERS = (CIRCUMFERENCE_OF_WHEEL / NEO_ENCODER) / DRIVE_BASE_GEAR_RATIO;
+        
+
 
         //Vision Settings
         public static final int VISION_MIN_H = 50;
@@ -92,11 +100,11 @@ public class Constants {
         public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, 530000);
         public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, 525000);
         //Death Star Speed
-        public static final Order66 VERY_CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, -2900);
-        public static final Order66 CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, -2570);
-        public static final Order66 AUTOLINE_ORDER_66 = new Order66(ControlType.kVelocity, -3500);
-        public static final Order66 TRENCH_ORDER_66 = new Order66(ControlType.kVelocity, -4500);
-        public static final Order66 VERY_FAR_ORDER_66 = new Order66(ControlType.kVelocity, -5300);
+        public static final Order66 VERY_CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2900);
+        public static final Order66 CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2570);
+        public static final Order66 AUTOLINE_ORDER_66 = new Order66(ControlType.kVelocity, 3500);
+        public static final Order66 TRENCH_ORDER_66 = new Order66(ControlType.kVelocity, 4500);
+        public static final Order66 VERY_FAR_ORDER_66 = new Order66(ControlType.kVelocity, 5300);
         public static final Order66 DONT_EXECUTE_ORDER_66 = new Order66(ControlType.kDutyCycle, 0);
         
        

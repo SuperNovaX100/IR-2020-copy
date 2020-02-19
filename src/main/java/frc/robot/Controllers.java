@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.revrobotics.ControlType;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -259,6 +256,16 @@ public class Controllers {
      return Constants.DONT_EXECUTE_ORDER_66;
   }
 
+  }
+
+  public boolean joystickButton3Pressed(){
+    return joystick.getRawButtonPressed(3);
+  }
+  public boolean joystickButton4Pressed(){
+    return joystick.getRawButtonPressed(4);
+  }
+  public boolean joystickButton6Pressesd(){
+    return joystick.getRawButtonPressed(6);
   }
 
 }

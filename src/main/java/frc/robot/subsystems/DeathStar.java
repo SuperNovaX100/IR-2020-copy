@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Order66;
 import frc.robot.Robot;
 import frc.robot.Subsystem;
 
@@ -31,12 +32,11 @@ public class DeathStar extends Subsystem {
     private CANEncoder shootRightEncoder;
     private CANPIDController leftShootPidController;
     private CANPIDController rightShootPidController;
-    private boolean wantToShoot = false;
-    private int targetDemand;
-    private boolean useKVelocity;
     private double rpmError = 0;
+    private Order66 order66;
 
     public DeathStar() {
+        order66 = Constants.DONT_EXECUTE_ORDER_66;
         irMotor5 = new TalonSRX(Constants.IR_MOTOR_5);
         shootLeftMotor = new CANSparkMax(Constants.SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
         shootRightMotor = new CANSparkMax(Constants.SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
@@ -75,16 +75,11 @@ public class DeathStar extends Subsystem {
     @Override
     public void teleopInit() {
         SmartDashboard.putNumber("ShooterDesiredRPM", 0);
-        targetDemand = 0;
-        useKVelocity = true;
-
-        shootRightMotor.setInverted(true);
-
+        setOrder66(Constants.DONT_EXECUTE_ORDER_66);
+        shootRightMotor.setInverted(false);
+        shootLeftMotor.setInverted(true);
         leftShootPidController.setReference(0, ControlType.kVelocity);
         rightShootPidController.setReference(0, ControlType.kVelocity);
-
-        shootLeftMotor.set(0);
-        shootRightMotor.set(0);
     }
 
     public int getShooterIntakeEncoderValue() {
@@ -93,24 +88,20 @@ public class DeathStar extends Subsystem {
 
     @Override
     public void autonomousPeriodic() {
-
+        generalPeriodic();
     }
 
     public void generalPeriodic() {
-        rpmError = Math.abs(targetDemand - shootLeftEncoder.getVelocity());
+        rpmError = Math.abs(order66.demand - shootLeftEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter/RPM Error", rpmError);
         SmartDashboard.putNumber("Left RPM", shootLeftEncoder.getVelocity());
         SmartDashboard.putNumber("Right RPM", shootRightEncoder.getVelocity());
         // Sets PID values based on the dashboard
         SmartDashboard.putNumber("Left Shooter Motor Power", shootLeftMotor.get());
         SmartDashboard.putNumber("Right Shooter Motor Power", shootRightMotor.get());
-        if (useKVelocity) {
-            leftShootPidController.setReference(targetDemand, ControlType.kVelocity);
-            rightShootPidController.setReference(targetDemand, ControlType.kVelocity);
-        } else {
-            setMotorPowers(0, 0);
-        }
-        if (wantToShoot && Robot.blinky.ballReadyToShoot() && rpmError < 35) {
+        leftShootPidController.setReference(order66.demand, order66.controlType);
+        rightShootPidController.setReference(order66.demand, order66.controlType);
+        if (order66.controlType == ControlType.kVelocity && Robot.blinky.ballReadyToShoot() && rpmError < 35) {
             Robot.blinky.setShooting(true);
         } else {
             Robot.blinky.setShooting(false);
@@ -120,16 +111,21 @@ public class DeathStar extends Subsystem {
 
     @Override
     public void teleopPeriodic() {
-        wantToShoot = Robot.controllers.joystickTriggerHeld();
+        order66 = Robot.controllers.getOrder66();
         generalPeriodic();
-        if (Math.abs(targetDemand) >= 5000) {
-            leftShootPidController.setIZone(350);
-            rightShootPidController.setIZone(350);
-        } else {
-            leftShootPidController.setIZone(200);
-            rightShootPidController.setIZone(200);
+    }
+
+    public void setOrder66(Order66 order66) {
+        this.order66 = order66;
+        if (order66.controlType == ControlType.kVelocity) {
+            if (Math.abs(order66.demand) >= 5000) {
+                leftShootPidController.setIZone(350);
+                rightShootPidController.setIZone(350);
+            } else {
+                leftShootPidController.setIZone(200);
+                rightShootPidController.setIZone(200);
+            }
         }
-        useKVelocity = true;
     }
 
     public void setMotorPowers(double leftPower, double rightPower) {

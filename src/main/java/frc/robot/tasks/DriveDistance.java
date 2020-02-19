@@ -5,36 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.autons;
+package frc.robot.tasks;
 
-import frc.robot.autons.OldAutonBase;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DoNothing implements OldAutonBase{
-
+public class DriveDistance implements TaskBase {
+    private double distance;
+    public DriveDistance(double distance) {
+        this.distance = distance;
+    }
     @Override
-    public void init() {
-
-        // TODO Auto-generated method stub
-
+    public void start() {
+        Robot.driveTrain.setPIDValue(0.01, 0, 0, 0, 0); //TODO DO NOT USE THESE I REPEAT DO NOT USE THESE
     }
 
     @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-
-        // TODO Auto-generated method stub
-
+    public boolean periodic() {
+        return false;
     }
 
     @Override
     public void done() {
-        Robot.controllers.autoLineShoot = false;
-        // TODO Auto-generated method stub
 
     }
-    
 }

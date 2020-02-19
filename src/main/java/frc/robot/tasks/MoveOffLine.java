@@ -5,36 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.autons;
+package frc.robot.tasks;
 
-import frc.robot.autons.OldAutonBase;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DoNothing implements OldAutonBase{
+public class MoveOffLine implements TaskBase {
+    Timer timer;
 
     @Override
-    public void init() {
-
-        // TODO Auto-generated method stub
-
+    public void start() {
+        Robot.driveTrain.setMotorPower(0.25, 0.25);
+        timer.reset();
+        timer.start();
     }
 
     @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-
-        // TODO Auto-generated method stub
-
+    public boolean periodic() {
+        return timer.get() >= 1;
     }
 
     @Override
     public void done() {
-        Robot.controllers.autoLineShoot = false;
-        // TODO Auto-generated method stub
-
+        Robot.driveTrain.setMotorPower(0, 0);
     }
-    
 }

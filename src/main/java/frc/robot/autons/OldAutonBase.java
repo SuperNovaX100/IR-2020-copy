@@ -7,34 +7,13 @@
 
 package frc.robot.autons;
 
-import frc.robot.autons.OldAutonBase;
-import frc.robot.Robot;
-
 /**
  * Add your docs here.
  */
-public class DoNothing implements OldAutonBase{
+public interface OldAutonBase {
 
-    @Override
-    public void init() {
 
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void done() {
-        Robot.controllers.autoLineShoot = false;
-        // TODO Auto-generated method stub
-
-    }
-    
+    public void init();
+    public void periodic();
+    public void done();
 }

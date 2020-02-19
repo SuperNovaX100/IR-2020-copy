@@ -7,13 +7,39 @@
 
 package frc.robot.autons;
 
+import frc.robot.Robot;
+import frc.robot.tasks.TaskBase;
+
 /**
  * Add your docs here.
  */
-public interface AutonBase {
+public class AutonBase {
+    protected TaskBase[] tasks;
+    protected String name;
+    protected int currentTask;
 
+    public AutonBase(String name, TaskBase[] tasks) {
+        this.name = name;
+        this.tasks = tasks;
+        Robot.autons.add(this);
+    }
 
-    public void init();
-    public void periodic();
-    public void done();
+    public void start() {
+        currentTask = 0;
+    }
+
+    public void periodic() {
+        if (currentTask < tasks.length - 1 && tasks[currentTask].periodic()) {
+            tasks[currentTask].done();
+            currentTask += 1;
+        }
+    }
+
+    public void done() {
+        tasks[currentTask].done();
+    }
+
+    public String getName() {
+        return name;
+    }
 }

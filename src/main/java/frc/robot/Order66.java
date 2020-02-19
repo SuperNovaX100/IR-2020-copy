@@ -13,8 +13,8 @@ import com.revrobotics.ControlType;
  * Add your docs here.
  */
 public class Order66 {
-    ControlType controlType;
-    double demand;
+    public ControlType controlType;
+    public double demand;
 
     public Order66(ControlType controlType, double demand){
         this.controlType = controlType;
