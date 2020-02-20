@@ -7,6 +7,9 @@
 
 package frc.robot.tasks;
 
+import com.revrobotics.ControlType;
+
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 /**
@@ -19,7 +22,8 @@ public class DriveDistance implements TaskBase {
     }
     @Override
     public void start() {
-        Robot.driveTrain.setPIDValue(0.01, 0, 0, 0, 0); //TODO DO NOT USE THESE I REPEAT DO NOT USE THESE
+        Robot.driveTrain.setPIDValue(0.0001, 0, 0, 0, 0); //TODO DO NOT USE THESE I REPEAT DO NOT USE THESE
+        Robot.driveTrain.setReference((distance * Constants.DRIVE_BASE_GEAR_RATIO) / Constants.CIRCUMFERENCE_OF_WHEEL, ControlType.kPosition);
     }
 
     @Override
@@ -29,6 +33,6 @@ public class DriveDistance implements TaskBase {
 
     @Override
     public void done() {
-
+        Robot.driveTrain.setMotorPower(0, 0);
     }
 }

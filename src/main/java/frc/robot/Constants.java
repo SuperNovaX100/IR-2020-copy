@@ -92,13 +92,13 @@ public class Constants {
         // Vader Setpoints
         public static final DisturbingForce STOP_DISTURBING_FORCE = new DisturbingForce(ControlMode.PercentOutput, 0);
         public static final DisturbingForce ZEROING = new DisturbingForce(ControlMode.PercentOutput, 0.5);
-        public static final DisturbingForce MANUAL_MODE_UP = new DisturbingForce(ControlMode.PercentOutput, 0.25);
-        public static final DisturbingForce MANUAL_MODE_DOWN = new DisturbingForce(ControlMode.PercentOutput, -0.25);
-        public static final DisturbingForce VERY_CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 185000);
-        public static final DisturbingForce CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 235000);
-        public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, 475571);
-        public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, 530000);
-        public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, 525000);
+        public static final DisturbingForce MANUAL_MODE_UP = new DisturbingForce(ControlMode.PercentOutput, -0.25);
+        public static final DisturbingForce MANUAL_MODE_DOWN = new DisturbingForce(ControlMode.PercentOutput, 0.25);
+        public static final DisturbingForce VERY_CLOSE_POSITION = new DisturbingForce(ControlMode.Position, -185000);
+        public static final DisturbingForce CLOSE_POSITION = new DisturbingForce(ControlMode.Position, -235000);
+        public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, -475571);
+        public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, -530000);
+        public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, -525000);
         //Death Star Speed
         public static final Order66 VERY_CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2900);
         public static final Order66 CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2570);
@@ -106,6 +106,8 @@ public class Constants {
         public static final Order66 TRENCH_ORDER_66 = new Order66(ControlType.kVelocity, 4500);
         public static final Order66 VERY_FAR_ORDER_66 = new Order66(ControlType.kVelocity, 5300);
         public static final Order66 DONT_EXECUTE_ORDER_66 = new Order66(ControlType.kDutyCycle, 0);
+
+        //Hood Motor Protection at 10 amps
         
        
 

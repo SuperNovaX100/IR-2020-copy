@@ -10,14 +10,17 @@ package frc.robot.autons;
 import frc.robot.tasks.MoveOffLine;
 import frc.robot.tasks.ShootFromAutonLine;
 import frc.robot.tasks.TaskBase;
+import frc.robot.tasks.ZeroHoodMotor;
 
 /**
  * Add your docs here.
  */
-public class ExampleAuton extends AutonBase {
-    public ExampleAuton() {
-        super("exampleAuton", new TaskBase[] {
+public class ShootAndMoveOffLine extends AutonBase {
+    public ShootAndMoveOffLine() {
+        super("shootAndMoveOffLine", new TaskBase[] {
+            new ZeroHoodMotor(),
             new ShootFromAutonLine(),
+            new ZeroHoodMotor(),
             new MoveOffLine()
         });
     }

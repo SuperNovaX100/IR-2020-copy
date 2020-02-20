@@ -7,30 +7,27 @@
 
 package frc.robot.tasks;
 
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class MoveOffLine implements TaskBase {
-    Timer timer;
+public class ZeroHoodMotor implements TaskBase{
 
     @Override
     public void start() {
-        Robot.driveTrain.setMotorPower(0.25, 0.25);
-        timer = new Timer();
-        timer.reset();
-        timer.start();
+        Robot.vader.setDisturbingForce(Constants.ZEROING);
     }
 
     @Override
     public boolean periodic() {
-        return timer.get() >= 1;
+        
+        return Robot.vader.wasLimitSwitchPressed;
     }
 
     @Override
     public void done() {
-        Robot.driveTrain.setMotorPower(0, 0);
+        Robot.vader.setDisturbingForce(Constants.STOP_DISTURBING_FORCE);
     }
 }

@@ -25,7 +25,7 @@ public class Vader extends Subsystem {
     private TalonSRX vaderMotor;
     private DigitalInput hoodLimitSwitch;
     private Timer limitSwitchTimer;
-    private boolean wasLimitSwitchPressed;
+    public boolean wasLimitSwitchPressed;
     private DisturbingForce disturbingForce = new DisturbingForce(ControlMode.PercentOutput, 0);
 
     // private PID hoodPID;
@@ -51,8 +51,7 @@ public class Vader extends Subsystem {
         vaderMotor.configPeakOutputReverse(-1.0);
     }
 
-    @Override
-    public void teleopInit() {
+    public void generalInit(){
         limitSwitchTimer.stop();
         limitSwitchTimer.reset();
 
@@ -62,32 +61,44 @@ public class Vader extends Subsystem {
         SmartDashboard.putNumber("VaderEncoderClose", 0);
     }
 
+    @Override
+    public void teleopInit() {
+        generalInit();
+    }
+
+    @Override
+    public void autonomousInit(){
+        generalInit();
+    }
+
     public void generalPeriodic() {
 
         if (hoodLimitSwitch.get() && !wasLimitSwitchPressed) {
             limitSwitchTimer.start();
             // This one makes it so the timer only starts one time per limit switch press
         } else if (!hoodLimitSwitch.get() && wasLimitSwitchPressed) {
-            vaderMotor.configPeakOutputReverse(-1.0);
+            vaderMotor.configPeakOutputForward(1.0);
             limitSwitchTimer.reset();
             limitSwitchTimer.stop();
             // this one resets the timer after we have stopped hitting the limit switch
         }
 
-        if (limitSwitchTimer.hasPeriodPassed(0.1)){
-            vaderMotor.configPeakOutputReverse(0);
+        if (limitSwitchTimer.hasPeriodPassed(0.05)){
+            vaderMotor.configPeakOutputForward(0);
             vaderMotor.setSelectedSensorPosition(0);
             // this one sets the encoder counts to zero and stops the motor from going past
             // the limit switch if the switch has been held down long enough
         }
 
         if (vaderMotor.getSelectedSensorPosition() <= -735000) {
-            vaderMotor.configPeakOutputForward(0);
+            vaderMotor.configPeakOutputReverse(0);
         } else {
-            vaderMotor.configPeakOutputForward(1.0);
+            vaderMotor.configPeakOutputReverse(-1.0);
         }
 
         vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
+
+        SmartDashboard.putBoolean("Hood Limit Switch", wasLimitSwitchPressed);
 
         // writes encoder counts to dashboard
         int encoderPosition = vaderMotor.getSelectedSensorPosition();

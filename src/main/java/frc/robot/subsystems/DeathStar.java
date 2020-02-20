@@ -94,8 +94,8 @@ public class DeathStar extends Subsystem {
     public void generalPeriodic() {
         rpmError = Math.abs(order66.demand - shootLeftEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter/RPM Error", rpmError);
-        SmartDashboard.putNumber("Left RPM", shootLeftEncoder.getVelocity());
-        SmartDashboard.putNumber("Right RPM", shootRightEncoder.getVelocity());
+        SmartDashboard.putNumber("Shooter/Left RPM", shootLeftEncoder.getVelocity());
+        SmartDashboard.putNumber("Shooter/Right RPM", shootRightEncoder.getVelocity());
         // Sets PID values based on the dashboard
         SmartDashboard.putNumber("Left Shooter Motor Power", shootLeftMotor.get());
         SmartDashboard.putNumber("Right Shooter Motor Power", shootRightMotor.get());

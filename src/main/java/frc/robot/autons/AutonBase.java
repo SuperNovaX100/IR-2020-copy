@@ -26,12 +26,14 @@ public class AutonBase {
 
     public void start() {
         currentTask = 0;
+        tasks[0].start();
     }
 
     public void periodic() {
         if (currentTask < tasks.length - 1 && tasks[currentTask].periodic()) {
             tasks[currentTask].done();
             currentTask += 1;
+            if (currentTask < tasks.length - 1) tasks[currentTask].start();
         }
     }
 

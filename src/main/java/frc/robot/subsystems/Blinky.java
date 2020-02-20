@@ -28,7 +28,7 @@ public class Blinky extends Subsystem {
     private TalonSRX intakeMotor;
     private DoubleSolenoid intakeDeploy;
     private boolean wasIRTriggered;
-    private boolean wantToShoot;
+    public boolean wantToShoot;
     private boolean wantToIntake;
     private boolean blinkyBackwards;
     private boolean intakeBackwards;
@@ -62,7 +62,7 @@ public class Blinky extends Subsystem {
     }
     @Override
     public void autonomousPeriodic(){
-
+        generalPeriodic();
     }
     public void generalInit(){
         blinkyBackwards = false;

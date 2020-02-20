@@ -95,6 +95,9 @@ public class DriveTrain extends Subsystem {
         }
     public void setReference(double value, ControlType type) {
         leftMotorFrontPID.setReference(value, type);
+        leftMotorBackPID.setReference(value, type);
+        rightMotorFrontPID.setReference(value, type);
+        rightMotorBackPID.setReference(value, type);
     }
     @Override
     public void teleopInit() {

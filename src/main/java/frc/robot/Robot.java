@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DeathStar;
-import frc.robot.autons.ExampleAuton;
+import frc.robot.autons.ShootAndMoveOffLine;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.TacoTime;
@@ -40,13 +40,14 @@ public class Robot extends TimedRobot {
   public static Cameras cameras;
   private String autoSelected;
   //Autons
-  public static ExampleAuton exampleAuton;
+  public static ShootAndMoveOffLine exampleAuton;
 
   //public static ShootFromAutonLine shootFromAutonLine;
   //private OldAutonBase autoToRun = new DoNothing();
   @Override
   public void robotInit() {
-    subsystems = new ArrayList<Subsystem>();
+    subsystems = new ArrayList<>();
+    autons = new ArrayList<>();
     cameras = new Cameras();
     //Subsystems
     controllers = new Controllers();
@@ -57,9 +58,9 @@ public class Robot extends TimedRobot {
     colorSensor = new ColorSensor();
     tacoTime = new TacoTime();
     //Autons
-    exampleAuton = new ExampleAuton();
+    exampleAuton = new ShootAndMoveOffLine();
     chooser.setDefaultOption("Default Auto", "default");
-    chooser.addOption("Example", exampleAuton.getName());
+    chooser.addOption("Shoot and move off line", exampleAuton.getName());
     SmartDashboard.putData("Auto choices", chooser);
 
   }
