@@ -30,15 +30,15 @@ public class AutonBase {
     }
 
     public void periodic() {
-        if (currentTask < tasks.length - 1 && tasks[currentTask].periodic()) {
+        if (currentTask < tasks.length && tasks[currentTask].periodic()) {
             tasks[currentTask].done();
             currentTask += 1;
-            if (currentTask < tasks.length - 1) tasks[currentTask].start();
+            if (currentTask < tasks.length) tasks[currentTask].start();
         }
     }
 
     public void done() {
-        tasks[currentTask].done();
+        if (currentTask < tasks.length) tasks[currentTask].done();
     }
 
     public String getName() {

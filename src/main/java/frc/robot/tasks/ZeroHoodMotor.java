@@ -22,12 +22,12 @@ public class ZeroHoodMotor implements TaskBase{
 
     @Override
     public boolean periodic() {
-        
         return Robot.vader.wasLimitSwitchPressed;
     }
 
     @Override
     public void done() {
+        System.out.println("Finished Zeroing");
         Robot.vader.setDisturbingForce(Constants.STOP_DISTURBING_FORCE);
     }
 }

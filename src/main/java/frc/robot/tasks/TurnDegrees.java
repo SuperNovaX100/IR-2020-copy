@@ -7,37 +7,37 @@
 
 package frc.robot.tasks;
 
-import com.revrobotics.ControlType;
-import com.revrobotics.CANPIDController.AccelStrategy;
-
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DriveDistance implements TaskBase {
-    private double distance;
-    private double demand;
-    public DriveDistance(double distance) {
-        this.distance = distance;
+public class TurnDegrees implements TaskBase {
+    private double startAngle;
+    private double targetAngle;
+    private double degrees;
+
+    public TurnDegrees(double degrees) {
+        this.degrees = Math.abs(degrees / 360) * 34.25;
     }
+
     @Override
     public void start() {
-        demand = distance / 46.3;
-        Robot.driveTrain.resetEncoders();
-        double power = 0.25;
-        Robot.driveTrain.setMotorPower(power, power * 1.03);
+        if (degrees >= 0) {
+            Robot.driveTrain.setMotorPower(-0.25, 0.25);
+        } else {
+            Robot.driveTrain.setMotorPower(0.25, -0.25);
+        }
     }
 
     @Override
     public boolean periodic() {
-        return Math.abs(Robot.driveTrain.leftEncoderFront.getPosition() - (demand)) < 0.5;
+        return Robot.driveTrain.leftEncoderFront.getPosition() >= 25;
     }
 
     @Override
     public void done() {
-        System.out.println("DONE");
+        System.out.println(Robot.driveTrain.getAngle());
         Robot.driveTrain.setMotorPower(0, 0);
     }
 }

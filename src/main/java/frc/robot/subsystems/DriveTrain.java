@@ -14,6 +14,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANPIDController.AccelStrategy;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -99,13 +100,50 @@ public class DriveTrain extends Subsystem {
         rightMotorFrontPID.setReference(value, type);
         rightMotorBackPID.setReference(value, type);
     }
+    public void setSmartMotionParameters(double minVel, double maxVel, double maxAccel, double allowedErr, AccelStrategy accelStrategy) {
+        leftMotorFrontPID.setSmartMotionMinOutputVelocity(minVel, 0);
+        leftMotorFrontPID.setSmartMotionMaxVelocity(maxVel, 0);
+        leftMotorFrontPID.setSmartMotionMaxAccel(maxAccel, 0);
+        leftMotorFrontPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
+        leftMotorFrontPID.setSmartMotionAccelStrategy(accelStrategy, 0);
+
+        rightMotorFrontPID.setSmartMotionMinOutputVelocity(minVel, 0);
+        rightMotorFrontPID.setSmartMotionMaxVelocity(maxVel, 0);
+        rightMotorFrontPID.setSmartMotionMaxAccel(maxAccel, 0);
+        rightMotorFrontPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
+        rightMotorFrontPID.setSmartMotionAccelStrategy(accelStrategy, 0);
+
+        leftMotorBackPID.setSmartMotionMinOutputVelocity(minVel, 0);
+        leftMotorBackPID.setSmartMotionMaxVelocity(maxVel, 0);
+        leftMotorBackPID.setSmartMotionMaxAccel(maxAccel, 0);
+        leftMotorBackPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
+        leftMotorBackPID.setSmartMotionAccelStrategy(accelStrategy, 0);
+
+        rightMotorBackPID.setSmartMotionMinOutputVelocity(minVel, 0);
+        rightMotorBackPID.setSmartMotionMaxVelocity(maxVel, 0);
+        rightMotorBackPID.setSmartMotionMaxAccel(maxAccel, 0);
+        rightMotorBackPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
+        rightMotorBackPID.setSmartMotionAccelStrategy(accelStrategy, 0);
+    }
+    public double getAngle() {
+        return gyro.getYaw();
+    }
     @Override
     public void teleopInit() {
+        generalInit();
+    }
+
+    @Override
+    public void autonomousInit() {
+        generalInit();
+    }
+
+    public void generalInit() {
         rightMotorFront.setInverted(false);
         rightMotorBack.setInverted(false);
         leftMotorBack.setInverted(true);
         leftMotorFront.setInverted(true);
-        setMotorPower(0,0);
+        //setMotorPower(0,0);
 
         SmartDashboard.putNumber("DriveTrain P Values", 0);
         SmartDashboard.putNumber("DriveTrain I Values", 0);

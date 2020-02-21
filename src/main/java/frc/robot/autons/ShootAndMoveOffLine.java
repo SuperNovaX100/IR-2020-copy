@@ -7,9 +7,11 @@
 
 package frc.robot.autons;
 
+import frc.robot.tasks.DriveDistance;
 import frc.robot.tasks.MoveOffLine;
 import frc.robot.tasks.ShootFromAutonLine;
 import frc.robot.tasks.TaskBase;
+import frc.robot.tasks.TurnDegrees;
 import frc.robot.tasks.ZeroHoodMotor;
 
 /**
@@ -18,10 +20,11 @@ import frc.robot.tasks.ZeroHoodMotor;
 public class ShootAndMoveOffLine extends AutonBase {
     public ShootAndMoveOffLine() {
         super("shootAndMoveOffLine", new TaskBase[] {
-            new ZeroHoodMotor(),
+            new TurnDegrees(90)
+            /*new ZeroHoodMotor(),
             new ShootFromAutonLine(),
             new ZeroHoodMotor(),
-            new MoveOffLine()
+            new MoveOffLine()*/
         });
     }
 }

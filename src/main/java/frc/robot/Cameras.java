@@ -21,14 +21,14 @@ public class Cameras {
         teleopInit();
     }
     public void teleopInit(){
-        shootCamera = CameraServer.getInstance().startAutomaticCapture();
+        /*shootCamera = CameraServer.getInstance().startAutomaticCapture();
         fisheyeCamera = CameraServer.getInstance().startAutomaticCapture();
         
         shootCamera.setResolution(160, 120);
         shootCamera.setFPS(15);
         shootCamera.setBrightness(45);
         fisheyeCamera.setResolution(320, 240);
-        fisheyeCamera.setFPS(120);
+        fisheyeCamera.setFPS(120);*/
 
     }
 }
