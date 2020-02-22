@@ -10,13 +10,27 @@ package frc.robot.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Add your docs here.
- */
-public class RunTasksInParallel implements TaskBase {
+public class ParallelTask implements TaskBase {
     private List<TaskBase> unfinishedTasks;
-    public RunTasksInParallel(TaskBase ... tasks) {
+    private List<TaskBase> secondaryTasks;
+    /**
+     * Runs multiple tasks at the same time, and finishes when all tasks are done
+     * @param tasks tasks you want to run in parallel
+     */
+    public ParallelTask(TaskBase[] tasks, TaskBase[] secondaryTasks) { 
         unfinishedTasks = new ArrayList<TaskBase>();
+        for (TaskBase task : tasks) {
+            unfinishedTasks.add(task);
+        }
+        this.secondaryTasks = new ArrayList<TaskBase>();
+        for (TaskBase task : secondaryTasks) {
+            this.secondaryTasks.add(task);
+        }
+    }
+
+    public ParallelTask(TaskBase ... tasks) {
+        unfinishedTasks = new ArrayList<TaskBase>();
+        secondaryTasks = new ArrayList<TaskBase>();
         for (TaskBase task : tasks) {
             unfinishedTasks.add(task);
         }
@@ -24,7 +38,11 @@ public class RunTasksInParallel implements TaskBase {
 
     @Override
     public void start() {
+        //Starts all of the tasks
         for (TaskBase task : unfinishedTasks) {
+            task.start();
+        }
+        for (TaskBase task : secondaryTasks) {
             task.start();
         }
     }
@@ -37,9 +55,16 @@ public class RunTasksInParallel implements TaskBase {
                 unfinishedTasks.remove(task);
             }
         }
+        for (TaskBase task : secondaryTasks) {
+            task.periodic();
+        }
         return unfinishedTasks.isEmpty();
     }
 
     @Override
-    public void done() {}
+    public void done() {
+        for (TaskBase task : secondaryTasks) {
+            task.done();
+        }
+    }
 }

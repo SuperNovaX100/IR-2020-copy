@@ -57,7 +57,7 @@ public class Controllers {
     xInput = -MathUtil.clamp(xInput, -1.0, 1.0);
     xInput = applyDeadband(xInput, 0.09);
 
-    if (joystickButton7() || joystickButton9() || joystickButton11()) {
+    if (closePosition() || autolineDisturbingForce() || trenchPosition()) {
       yInput /= 2;
       xInput /= 2;
     }
@@ -164,15 +164,15 @@ public class Controllers {
     return pov == 270 || pov == 300 || pov == 240;
   }
 
-  public boolean joystickButton7() {
+  public boolean closePosition() {
     return joystick.getRawButton(7);
   }
 
-  public boolean joystickButton9() {
+  public boolean autolineDisturbingForce() {
     return joystick.getRawButton(9) || autoLineShoot;
   }
 
-  public boolean joystickButton11() {
+  public boolean trenchPosition() {
     return joystick.getRawButton(11);
   }
 
@@ -204,11 +204,11 @@ public class Controllers {
     return joystick.getRawButton(2);
   }
 
-  public boolean joystickButton8() {
+  public boolean veryClosePosition() {
     return joystick.getRawButton(8);
   }
 
-  public boolean joystickButton12() {
+  public boolean veryFarPosition() {
     return joystick.getRawButton(12);
   }
 
@@ -224,15 +224,15 @@ public class Controllers {
       return Constants.MANUAL_MODE_UP;
     } else if (Robot.controllers.joystickDPadDown()) {
       return Constants.MANUAL_MODE_DOWN;
-    } else if (Robot.controllers.joystickButton8()) {
+    } else if (Robot.controllers.veryClosePosition()) {
       return Constants.VERY_CLOSE_POSITION;
-    } else if (Robot.controllers.joystickButton7()) {
+    } else if (Robot.controllers.closePosition()) {
       return Constants.CLOSE_POSITION;
-    } else if (Robot.controllers.joystickButton9()) {
+    } else if (Robot.controllers.autolineDisturbingForce()) {
       return Constants.AUTOLINE_DISTURBING_FORCE;
-    } else if (Robot.controllers.joystickButton11()) {
+    } else if (Robot.controllers.trenchPosition()) {
       return Constants.TRENCH_POSITION;
-    } else if (Robot.controllers.joystickButton12()) {
+    } else if (Robot.controllers.veryFarPosition()) {
       return Constants.VERY_FAR_POSITION;
     } else {
       return Constants.STOP_DISTURBING_FORCE;
@@ -242,15 +242,15 @@ public class Controllers {
   public Order66 getOrder66 (){
    
 
-    if (Robot.controllers.joystickButton8()) {
+    if (Robot.controllers.veryClosePosition()) {
       return Constants.VERY_CLOSE_ORDER_66;
-  } else if (Robot.controllers.joystickButton7()) {
+  } else if (Robot.controllers.closePosition()) {
       return Constants.CLOSE_ORDER_66;
-  } else if (Robot.controllers.joystickButton9()) {
+  } else if (Robot.controllers.autolineDisturbingForce()) {
       return Constants.AUTOLINE_ORDER_66;
-  } else if (Robot.controllers.joystickButton11()) {
+  } else if (Robot.controllers.trenchPosition()) {
       return Constants.TRENCH_ORDER_66;
-  } else if (Robot.controllers.joystickButton12()) {
+  } else if (Robot.controllers.veryFarPosition()) {
       return Constants.VERY_FAR_ORDER_66;
   } else {
      return Constants.DONT_EXECUTE_ORDER_66;

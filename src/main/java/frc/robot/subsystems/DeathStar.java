@@ -74,12 +74,19 @@ public class DeathStar extends Subsystem {
 
     @Override
     public void teleopInit() {
+        generalInit();
+        leftShootPidController.setReference(0, ControlType.kVelocity);
+        rightShootPidController.setReference(0, ControlType.kVelocity);
+    }
+    public void generalInit(){
         SmartDashboard.putNumber("ShooterDesiredRPM", 0);
         setOrder66(Constants.DONT_EXECUTE_ORDER_66);
         shootRightMotor.setInverted(false);
         shootLeftMotor.setInverted(true);
-        leftShootPidController.setReference(0, ControlType.kVelocity);
-        rightShootPidController.setReference(0, ControlType.kVelocity);
+    }
+    @Override
+    public void autonomousInit(){
+        generalInit();
     }
 
     public int getShooterIntakeEncoderValue() {

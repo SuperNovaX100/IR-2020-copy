@@ -26,6 +26,7 @@ public class Vader extends Subsystem {
     private DigitalInput hoodLimitSwitch;
     private Timer limitSwitchTimer;
     public boolean wasLimitSwitchPressed;
+    public boolean hasZeroed;
     private DisturbingForce disturbingForce = new DisturbingForce(ControlMode.PercentOutput, 0);
 
     // private PID hoodPID;
@@ -54,6 +55,7 @@ public class Vader extends Subsystem {
     public void generalInit(){
         limitSwitchTimer.stop();
         limitSwitchTimer.reset();
+        hasZeroed = false;
 
         wasLimitSwitchPressed = false;
 
@@ -80,25 +82,32 @@ public class Vader extends Subsystem {
             vaderMotor.configPeakOutputForward(1.0);
             limitSwitchTimer.reset();
             limitSwitchTimer.stop();
+            hasZeroed = false;
             // this one resets the timer after we have stopped hitting the limit switch
         }
 
         if (limitSwitchTimer.hasPeriodPassed(0.05)){
             vaderMotor.configPeakOutputForward(0);
             vaderMotor.setSelectedSensorPosition(0);
+            hasZeroed = true;
+
             // this one sets the encoder counts to zero and stops the motor from going past
             // the limit switch if the switch has been held down long enough
         }
+        if (vaderMotor.getStatorCurrent() >= 10){
+            setDisturbingForce(Constants.STOP_DISTURBING_FORCE);
+        }
 
-        if (vaderMotor.getSelectedSensorPosition() <= -735000) {
+        /*if (vaderMotor.getSelectedSensorPosition() <= -735000) {
             vaderMotor.configPeakOutputReverse(0);
         } else {
             vaderMotor.configPeakOutputReverse(-1.0);
-        }
+        }*/
 
         vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
 
         SmartDashboard.putBoolean("Hood Limit Switch", wasLimitSwitchPressed);
+        SmartDashboard.putBoolean("Has Hood Zeroed", hasZeroed);
 
         // writes encoder counts to dashboard
         int encoderPosition = vaderMotor.getSelectedSensorPosition();

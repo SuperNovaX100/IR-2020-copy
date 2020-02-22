@@ -5,35 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.autons;
+package frc.robot.tasks;
 
-import frc.robot.autons.OldAutonBase;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class AutonShootOnly implements OldAutonBase{
+public class DeployIntakeTrench implements TaskBase {
 
     @Override
-    public void init() {
-
-
+    public void start() {
+        Robot.blinky.wantToIntake = true;
     }
 
     @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-        Robot.vader.setDisturbingForce(Constants.AUTOLINE_DISTURBING_FORCE);
-        Robot.deathStar.setOrder66(Constants.AUTOLINE_ORDER_66);
+    public boolean periodic() {
+        return true;
     }
 
     @Override
     public void done() {
-        Robot.controllers.autoLineShoot = false;
-        Robot.vader.setDisturbingForce(Constants.STOP_DISTURBING_FORCE);
-        Robot.deathStar.setOrder66(Constants.DONT_EXECUTE_ORDER_66);
+        
     }
-    
 }

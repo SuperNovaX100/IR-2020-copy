@@ -20,6 +20,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.TacoTime;
 import frc.robot.subsystems.Vader;
 import frc.robot.autons.AutonBase;
+import frc.robot.autons.ShootAndDriveToTrench;
 import frc.robot.subsystems.Blinky;
 
 
@@ -39,8 +40,6 @@ public class Robot extends TimedRobot {
   public static TacoTime tacoTime;
   public static Cameras cameras;
   private String autoSelected;
-  //Autons
-  public static ShootAndMoveOffLine exampleAuton;
 
   //public static ShootFromAutonLine shootFromAutonLine;
   //private OldAutonBase autoToRun = new DoNothing();
@@ -58,9 +57,9 @@ public class Robot extends TimedRobot {
     colorSensor = new ColorSensor();
     tacoTime = new TacoTime();
     //Autons
-    exampleAuton = new ShootAndMoveOffLine();
     chooser.setDefaultOption("Default Auto", "default");
-    chooser.addOption("Shoot and move off line", exampleAuton.getName());
+    chooser.addOption("Shoot and move off line", new ShootAndMoveOffLine().getName());
+    chooser.addOption("Shoot and drive to trench", new ShootAndDriveToTrench().getName());
     SmartDashboard.putData("Auto choices", chooser);
 
   }

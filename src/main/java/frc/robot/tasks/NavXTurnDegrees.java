@@ -7,33 +7,39 @@
 
 package frc.robot.tasks;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DriveDistance implements TaskBase {
-    private double distance;
-    private double demand;
-    public DriveDistance(double distance) {
-        this.distance = distance;
+public class NavXTurnDegrees implements TaskBase {
+    private PIDController pidController;
+    private double targetDegrees;
+
+    public NavXTurnDegrees(double targetDegrees) {
+        this.targetDegrees = targetDegrees;
     }
+
     @Override
     public void start() {
-        demand = distance / 46.3;
-        Robot.driveTrain.resetEncoders();
-        double power = 0.25;
-        Robot.driveTrain.setMotorPower(power, power * 1.03);
+        pidController = new PIDController(0.01, 0.0, 0.0);
+        pidController.setIntegratorRange(0.0, 0.0);
+        pidController.setSetpoint(targetDegrees);
+        pidController.enableContinuousInput(-180.0, 180.0);
     }
 
     @Override
     public boolean periodic() {
-        return Math.abs(Robot.driveTrain.leftEncoderFront.getPosition() - (demand)) < 0.5;
+       double currentDegrees = Robot.driveTrain.getAngle();
+       double output = pidController.calculate(currentDegrees) / 180;
+       Robot.driveTrain.setMotorPower(-output, output);
+       return Math.abs(targetDegrees - currentDegrees) <= 2;
     }
 
     @Override
     public void done() {
-        System.out.println("DONE");
         Robot.driveTrain.setMotorPower(0, 0);
     }
+
 }

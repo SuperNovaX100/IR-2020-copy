@@ -29,7 +29,7 @@ public class Blinky extends Subsystem {
     private DoubleSolenoid intakeDeploy;
     private boolean wasIRTriggered;
     public boolean wantToShoot;
-    private boolean wantToIntake;
+    public boolean wantToIntake;
     private boolean blinkyBackwards;
     private boolean intakeBackwards;
 
@@ -69,6 +69,10 @@ public class Blinky extends Subsystem {
         intakeBackwards = false;
         wantToIntake = false;
         wantToShoot = false;
+    }
+    @Override
+    public void autonomousInit(){
+        generalInit();
     }
 
     public void generalPeriodic(){
@@ -114,6 +118,7 @@ public class Blinky extends Subsystem {
 
     @Override
     public void teleopInit() {
+        generalInit();
         shooting = false;
         wasIRTriggered = false;
     }

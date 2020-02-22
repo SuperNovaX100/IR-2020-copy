@@ -22,7 +22,7 @@ public class ZeroHoodMotor implements TaskBase{
 
     @Override
     public boolean periodic() {
-        return Robot.vader.wasLimitSwitchPressed;
+        return Robot.vader.hasZeroed;
     }
 
     @Override

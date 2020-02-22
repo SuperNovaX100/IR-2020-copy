@@ -41,7 +41,7 @@ public class DriveTrain extends Subsystem {
     private CANPIDController leftMotorBackPID;
     private CANPIDController rightMotorFrontPID;
     private CANPIDController rightMotorBackPID;
-    private AHRS gyro;
+    public AHRS gyro;
     private double degreesOfTolerance = 2.0;
 
     public DriveTrain() {
@@ -90,9 +90,6 @@ public class DriveTrain extends Subsystem {
             rightMotorBackPID.setD(d);
             rightMotorBackPID.setFF(ff);
             rightMotorBackPID.setIZone(iz);
-        }
-        public void setGyroPIDValues(double p, double i, double d, double ff, double iz){
-            double gyroP = 0;
         }
     public void setReference(double value, ControlType type) {
         leftMotorFrontPID.setReference(value, type);
@@ -161,9 +158,7 @@ public class DriveTrain extends Subsystem {
     0.2,970.786,909.829
     0.3,1460.02,1386.026
     */
-
-    @Override
-    public void teleopPeriodic() {
+    public void generalPeriodic(){
         SmartDashboard.putNumber("DriveTrain/Left Front Encoder Value", leftEncoderFront.getPosition());
         SmartDashboard.putNumber("DriveTrain/Left Back Encoder Value", leftEncoderBack.getPosition());
         SmartDashboard.putNumber("DriveTrain/Right Front Encoder Value", rightEncoderFront.getPosition());
@@ -172,6 +167,15 @@ public class DriveTrain extends Subsystem {
         SmartDashboard.putNumber("DriveTrain/Left Back Velocity Value", leftEncoderBack.getVelocity());
         SmartDashboard.putNumber("DriveTrain/Right Front Velocity Value", rightEncoderFront.getVelocity());
         SmartDashboard.putNumber("DriveTrain/Right Back Velocity Value", rightEncoderBack.getVelocity());
+    }
+    @Override
+    public void autonomousPeriodic(){
+        generalPeriodic();
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        generalPeriodic();
         DriveSignal signal = Robot.controllers.arcadeDrive();
         //double weight = 0.7;
         //double currentLeftValue = leftEncoderFront.getVelocity();

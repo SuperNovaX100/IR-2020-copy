@@ -5,36 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.autons;
+package frc.robot.tasks;
 
-import frc.robot.autons.OldAutonBase;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DoNothing implements OldAutonBase{
+public class IntakeComeBack implements TaskBase {
 
     @Override
-    public void init() {
-
-        // TODO Auto-generated method stub
-
+    public void start() {
+        Robot.blinky.wantToIntake = false;
     }
 
     @Override
-    public void periodic() {
-        Robot.controllers.autoLineShoot = true;
-
-        // TODO Auto-generated method stub
-
+    public boolean periodic() {
+        return true;
     }
 
     @Override
     public void done() {
-        Robot.controllers.autoLineShoot = false;
-        // TODO Auto-generated method stub
-
     }
     
 }
