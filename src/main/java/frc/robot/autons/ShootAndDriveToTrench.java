@@ -25,12 +25,12 @@ public class ShootAndDriveToTrench extends AutonBase {
         super("shootAndDriveToTrench", new TaskBase[] {
             new ZeroHoodMotor(),
             new ShootFromAutonLine(),
-            new NavXTurnDegrees(-10),
-            new DriveDistance(-84 * 25.4),
+           // new NavXTurnDegrees(-10),
+            new DriveDistance(-120 * 25.4),
             new DeployIntakeTrench(),
-            new DriveDistance(-24 * 25.4),
+            /*new DriveDistance(-24 * 25.4),
             new NavXTurnDegrees(19),
-            new DriveDistance(-72 * 25.4),
+            new DriveDistance(-72 * 25.4),*/
             new IntakeComeBack()
         });
     }

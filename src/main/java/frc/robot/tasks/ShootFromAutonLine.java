@@ -21,7 +21,7 @@ public class ShootFromAutonLine implements TaskBase {
     @Override
     public void start() {
         Robot.deathStar.setOrder66(Constants.AUTOLINE_ORDER_66);
-        Robot.vader.setDisturbingForce(Constants.AUTOLINE_DISTURBING_FORCE);
+        Robot.vader.setVaderControlMode(Constants.AUTOLINE_DISTURBING_FORCE);
         timer = new Timer();
         Robot.blinky.wantToShoot = true;
     }

@@ -74,19 +74,15 @@ public class DeathStar extends Subsystem {
 
     @Override
     public void teleopInit() {
-        generalInit();
-        leftShootPidController.setReference(0, ControlType.kVelocity);
-        rightShootPidController.setReference(0, ControlType.kVelocity);
+        leftShootPidController.setReference(0, ControlType.kDutyCycle);
+        rightShootPidController.setReference(0, ControlType.kDutyCycle);
     }
+    @Override
     public void generalInit(){
         SmartDashboard.putNumber("ShooterDesiredRPM", 0);
         setOrder66(Constants.DONT_EXECUTE_ORDER_66);
         shootRightMotor.setInverted(false);
         shootLeftMotor.setInverted(true);
-    }
-    @Override
-    public void autonomousInit(){
-        generalInit();
     }
 
     public int getShooterIntakeEncoderValue() {
@@ -94,10 +90,6 @@ public class DeathStar extends Subsystem {
     }
 
     @Override
-    public void autonomousPeriodic() {
-        generalPeriodic();
-    }
-
     public void generalPeriodic() {
         rpmError = Math.abs(order66.demand - shootLeftEncoder.getVelocity());
         SmartDashboard.putNumber("Shooter/RPM Error", rpmError);
@@ -119,7 +111,6 @@ public class DeathStar extends Subsystem {
     @Override
     public void teleopPeriodic() {
         order66 = Robot.controllers.getOrder66();
-        generalPeriodic();
     }
 
     public void setOrder66(Order66 order66) {

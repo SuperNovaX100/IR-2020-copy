@@ -17,17 +17,17 @@ public class ZeroHoodMotor implements TaskBase{
 
     @Override
     public void start() {
-        Robot.vader.setDisturbingForce(Constants.ZEROING);
+        Robot.vader.setVaderControlMode(Constants.ZEROING);
     }
 
     @Override
     public boolean periodic() {
-        return Robot.vader.hasZeroed;
+        return Robot.vader.isZeroed();
     }
 
     @Override
     public void done() {
         System.out.println("Finished Zeroing");
-        Robot.vader.setDisturbingForce(Constants.STOP_DISTURBING_FORCE);
+        Robot.vader.setVaderControlMode(Constants.STOP_DISTURBING_FORCE);
     }
 }

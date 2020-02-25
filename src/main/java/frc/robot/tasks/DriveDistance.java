@@ -7,6 +7,7 @@
 
 package frc.robot.tasks;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 /**
@@ -20,7 +21,7 @@ public class DriveDistance implements TaskBase {
     }
     @Override
     public void start() {
-        demand = distance / 46.3;
+        demand = (-distance / 44.7) * 1.0434;
         Robot.driveTrain.resetEncoders();
         double power = 0.25;
         Robot.driveTrain.setMotorPower(power, power * 1.03);
@@ -28,7 +29,11 @@ public class DriveDistance implements TaskBase {
 
     @Override
     public boolean periodic() {
-        return Math.abs(Robot.driveTrain.leftEncoderFront.getPosition() - (demand)) < 0.5;
+        SmartDashboard.putNumber("Auton Testing/Left Drive Encoder", Robot.driveTrain.leftEncoderFront.getPosition());
+        SmartDashboard.putNumber("Auton Testing/Drive Demand" , demand);
+        return Math.abs(Robot.driveTrain.leftEncoderFront.getPosition() - (demand)) < 5;
+
+      
     }
 
     @Override

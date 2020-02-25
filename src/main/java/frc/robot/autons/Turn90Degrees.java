@@ -5,20 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.autons;
+
+import frc.robot.tasks.NavXTurnDegrees;
+import frc.robot.tasks.TaskBase;
 
 /**
  * Add your docs here.
  */
-public class Subsystem {
-    public Subsystem() {
-        Robot.subsystems.add(this);
-    }
+public class Turn90Degrees extends AutonBase {
 
-    public void teleopInit() {}
-    public void teleopPeriodic() {}
-    public void autonomousInit() {}
-    public void autonomousPeriodic() {}
-    public void generalPeriodic() {}
-    public void generalInit() {}
+    public Turn90Degrees(String name, TaskBase[] tasks) {
+        super("Turn 90 Degrees", new TaskBase[] {
+            new NavXTurnDegrees (90)
+     
+    });
+
+}
 }

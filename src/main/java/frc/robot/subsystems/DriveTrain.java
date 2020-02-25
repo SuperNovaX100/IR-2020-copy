@@ -15,6 +15,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANPIDController.AccelStrategy;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -63,8 +64,18 @@ public class DriveTrain extends Subsystem {
         rightMotorBack.follow(rightMotorFront);
         resetEncoders();
         setPIDValue(0, 0, 0, 0, 0);
-        
+
+
+
     }
+
+    public void setMotorMode(IdleMode mode){
+        leftMotorFront.setIdleMode(mode);
+        leftMotorBack.setIdleMode(mode);
+        rightMotorFront.setIdleMode(mode);
+        rightMotorBack.setIdleMode(mode);
+    }
+
     public void setPIDValue(double p, double i, double d, double ff, double iz){
 
             leftMotorFrontPID.setP(p);
@@ -125,16 +136,8 @@ public class DriveTrain extends Subsystem {
     public double getAngle() {
         return gyro.getYaw();
     }
-    @Override
-    public void teleopInit() {
-        generalInit();
-    }
 
     @Override
-    public void autonomousInit() {
-        generalInit();
-    }
-
     public void generalInit() {
         rightMotorFront.setInverted(false);
         rightMotorBack.setInverted(false);
@@ -158,6 +161,7 @@ public class DriveTrain extends Subsystem {
     0.2,970.786,909.829
     0.3,1460.02,1386.026
     */
+    @Override
     public void generalPeriodic(){
         SmartDashboard.putNumber("DriveTrain/Left Front Encoder Value", leftEncoderFront.getPosition());
         SmartDashboard.putNumber("DriveTrain/Left Back Encoder Value", leftEncoderBack.getPosition());
@@ -168,14 +172,9 @@ public class DriveTrain extends Subsystem {
         SmartDashboard.putNumber("DriveTrain/Right Front Velocity Value", rightEncoderFront.getVelocity());
         SmartDashboard.putNumber("DriveTrain/Right Back Velocity Value", rightEncoderBack.getVelocity());
     }
-    @Override
-    public void autonomousPeriodic(){
-        generalPeriodic();
-    }
 
     @Override
     public void teleopPeriodic() {
-        generalPeriodic();
         DriveSignal signal = Robot.controllers.arcadeDrive();
         //double weight = 0.7;
         //double currentLeftValue = leftEncoderFront.getVelocity();

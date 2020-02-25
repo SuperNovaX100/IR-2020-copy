@@ -60,21 +60,16 @@ public class Blinky extends Subsystem {
         }
         intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR);
     }
+
     @Override
-    public void autonomousPeriodic(){
-        generalPeriodic();
-    }
     public void generalInit(){
         blinkyBackwards = false;
         intakeBackwards = false;
         wantToIntake = false;
         wantToShoot = false;
     }
-    @Override
-    public void autonomousInit(){
-        generalInit();
-    }
 
+    @Override
     public void generalPeriodic(){
         if (wantToIntake) {
             //System.out.println("Want To Intake");
@@ -118,7 +113,6 @@ public class Blinky extends Subsystem {
 
     @Override
     public void teleopInit() {
-        generalInit();
         shooting = false;
         wasIRTriggered = false;
     }
@@ -130,7 +124,6 @@ public class Blinky extends Subsystem {
         blinkyBackwards = Robot.controllers.joystickButton2();
         wantToShoot = Robot.controllers.joystickTriggerHeld();
         intakeBackwards = Robot.controllers.backButton();
-        generalPeriodic();
     }
 
     public boolean getShooting() {

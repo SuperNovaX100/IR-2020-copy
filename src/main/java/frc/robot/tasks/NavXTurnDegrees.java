@@ -8,6 +8,7 @@
 package frc.robot.tasks;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 /**
@@ -23,7 +24,7 @@ public class NavXTurnDegrees implements TaskBase {
 
     @Override
     public void start() {
-        pidController = new PIDController(0.01, 0.0, 0.0);
+        pidController = new PIDController(0.05, 0.0, 0.0);
         pidController.setIntegratorRange(0.0, 0.0);
         pidController.setSetpoint(targetDegrees);
         pidController.enableContinuousInput(-180.0, 180.0);
@@ -32,8 +33,11 @@ public class NavXTurnDegrees implements TaskBase {
     @Override
     public boolean periodic() {
        double currentDegrees = Robot.driveTrain.getAngle();
-       double output = pidController.calculate(currentDegrees) / 180;
+       double output = pidController.calculate(currentDegrees);
        Robot.driveTrain.setMotorPower(-output, output);
+
+       SmartDashboard.putNumber("Auton Test/Degrees Rotated", Robot.driveTrain.getAngle());
+
        return Math.abs(targetDegrees - currentDegrees) <= 2;
     }
 

@@ -5,20 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.subsystems;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * Add your docs here.
  */
-public class Subsystem {
-    public Subsystem() {
-        Robot.subsystems.add(this);
+public class StableSwitch {
+    private DigitalInput digitalInput;
+    private int counter = 0;
+    public StableSwitch(int portNumber) {
+        digitalInput = new DigitalInput(portNumber);
     }
 
-    public void teleopInit() {}
-    public void teleopPeriodic() {}
-    public void autonomousInit() {}
-    public void autonomousPeriodic() {}
-    public void generalPeriodic() {}
-    public void generalInit() {}
+    public void periodic() {
+        if (digitalInput.get()) {
+            counter += 1;
+        } else {
+            counter = 0;
+        }
+    }
+
+    public boolean get() {
+        return counter >= 3;
+    }
 }
+
+
