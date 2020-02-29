@@ -94,7 +94,7 @@ public class Blinky extends Subsystem {
                     irMotors[i].set(ControlMode.PercentOutput, -0.75);
                 } else if (canGo || irSensors[i].get()) {
                     canGo = true;
-                    irMotors[i].set(ControlMode.PercentOutput, -0.75);
+                    irMotors[i].set(ControlMode.PercentOutput, -0.7);
                 } else {
                     irMotors[i].set(ControlMode.PercentOutput, 0);
                 }
