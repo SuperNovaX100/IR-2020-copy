@@ -245,4 +245,8 @@ public class Controllers {
     return joystick.getRawButtonPressed(6);
   }
 
+  public boolean useVision(){
+    return joystick.getRawButton(10);
+  }
+
 }

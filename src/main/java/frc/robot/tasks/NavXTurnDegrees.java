@@ -24,7 +24,7 @@ public class NavXTurnDegrees implements TaskBase {
 
     @Override
     public void start() {
-        pidController = new PIDController(0.05, 0.0, 0.0);
+        pidController = new PIDController((1.0 / 90.0), 0.0, 0.0);
         pidController.setIntegratorRange(0.0, 0.0);
         pidController.setSetpoint(targetDegrees);
         pidController.enableContinuousInput(-180.0, 180.0);
@@ -38,7 +38,7 @@ public class NavXTurnDegrees implements TaskBase {
 
        SmartDashboard.putNumber("Auton Test/Degrees Rotated", Robot.driveTrain.getAngle());
 
-       return Math.abs(targetDegrees - currentDegrees) <= 2;
+       return Math.abs(targetDegrees - currentDegrees) <= 0.25;
     }
 
     @Override

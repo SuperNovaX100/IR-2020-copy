@@ -13,6 +13,7 @@ import java.util.List;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.DisturbingForce;
 import frc.robot.autons.ShootAndMoveOffLine;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.TacoTime;
 import frc.robot.subsystems.Vader;
 import frc.robot.autons.AutonBase;
@@ -33,6 +35,7 @@ import frc.robot.subsystems.Blinky;
 public class Robot extends TimedRobot {
   public static List<Subsystem> subsystems;
   public static List<AutonBase> autons;
+
   //Chooser
   private final SendableChooser<String> chooser = new SendableChooser<>();
   public AutonBase autonToRun;
@@ -47,7 +50,7 @@ public class Robot extends TimedRobot {
   public static Cameras cameras;
   private String autoSelected;
   private boolean joystickDpadPressed = false;
-
+  public static Limelight limelight;
   //public static ShootFromAutonLine shootFromAutonLine;
   //private OldAutonBase autoToRun = new DoNothing();
   @Override
@@ -63,6 +66,7 @@ public class Robot extends TimedRobot {
     blinky = new Blinky();
     colorSensor = new ColorSensor();
     tacoTime = new TacoTime();
+    limelight = Limelight.getInstance();
     //Autons
     chooser.setDefaultOption("Default Auto", "default");
     chooser.addOption("Drive Back Calibration", new DriveBackCalibration().getName());
@@ -93,7 +97,7 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() {    
     boolean zeroing = controllers.dPadLeft() || controllers.dPadRight() || controllers.dPadUp() || controllers.dPadDown();
 
     if (controllers.closePosition(true))  {
@@ -129,6 +133,7 @@ public class Robot extends TimedRobot {
       String name = subsystem.getClass().getName();
       SmartDashboard.putNumber("Performance/TeleopPeriodic/" + name, timeTaken / 1000000);
     }
+    Limelight.getInstance().getDistance();
   }
   @Override
   public void autonomousInit() {

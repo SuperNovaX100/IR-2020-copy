@@ -100,7 +100,7 @@ public class DeathStar extends Subsystem {
         SmartDashboard.putNumber("Right Shooter Motor Power", shootRightMotor.get());
         leftShootPidController.setReference(order66.demand, order66.controlType);
         rightShootPidController.setReference(order66.demand, order66.controlType);
-        if (order66.controlType == ControlType.kVelocity && Robot.blinky.ballReadyToShoot() && rpmError < 35) {
+        if (order66.controlType == ControlType.kVelocity && Robot.blinky.ballReadyToShoot() && rpmError < 35 && Robot.vader.isToPosition()) {
             Robot.blinky.setShooting(true);
         } else {
             Robot.blinky.setShooting(false);

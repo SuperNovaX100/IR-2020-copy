@@ -21,6 +21,7 @@ import frc.robot.Subsystem;
 public class Vader extends Subsystem {
     private TalonSRX vaderMotor = new TalonSRX(8);
     private StableSwitch vaderLimitSwitch = new StableSwitch(0);
+    private DisturbingForce pastDisturbingForce;
 
     public Vader(){
     
@@ -61,6 +62,7 @@ public class Vader extends Subsystem {
         vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
         System.out.println("New Demand : " + String.valueOf(disturbingForce.demand));
         SmartDashboard.putNumber("Vader Demand", disturbingForce.demand);
+        pastDisturbingForce = disturbingForce;
     }
 
     public boolean isZeroed() {
@@ -69,5 +71,12 @@ public class Vader extends Subsystem {
     
     public int getVaderEncoder(){
         return vaderMotor.getSelectedSensorPosition();
+    }
+
+    public boolean isToPosition(){
+      if (pastDisturbingForce.controlMode == ControlMode.Position){
+        return Math.abs(getVaderEncoder() - pastDisturbingForce.demand) <= 2500;
+      }
+      return true;
     }
 }

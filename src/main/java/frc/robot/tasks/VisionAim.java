@@ -5,25 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.autons;
+package frc.robot.tasks;
 
-import frc.robot.tasks.DriveDistance;
-import frc.robot.tasks.TaskBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class DriveBackCalibration extends AutonBase {
+public class VisionAim implements TaskBase{
 
-    public DriveBackCalibration() {
-        super("Drive Back Calibration", new TaskBase[]{
-            new DriveDistance(-120 * 25.4, 0.5)
+    @Override
+    public void start() {
+    }
 
-        
+    @Override
+    public boolean periodic() {
+        Robot.driveTrain.visionLoop();
+        return Robot.driveTrain.isAimedAtTarget();
+    }
 
-        
-        // TODO Auto-generated constructor stub
-    });
-    
-}
+    @Override
+    public void done() {
+    }
 }

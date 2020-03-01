@@ -98,7 +98,7 @@ public class Constants {
         public static final DisturbingForce CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 235000);
         public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, 450000);
         public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, 515000);
-        public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, 515000);
+        public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, 505000);
         //Death Star Speed
         public static final Order66 VERY_CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2900);
         public static final Order66 CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2570);
@@ -108,7 +108,13 @@ public class Constants {
         public static final Order66 DONT_EXECUTE_ORDER_66 = new Order66(ControlType.kDutyCycle, 0);
 
         //Hood Motor Protection at 10 amps
-        
+
+        //LIMELIGHT
+        public static final double H1 = 26 * 25.4; 
+        public static final double H2BOTTOM = 80.75 * 25.4; 
+        public static final double H2TOP = 97.75 * 25.4;
+        public static final double H2CENTER = ((H2BOTTOM + H2TOP) / 2.0);
+        public static final double A1 = 27.2;        
        
 
 

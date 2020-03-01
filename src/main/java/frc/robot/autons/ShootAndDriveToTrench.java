@@ -7,13 +7,16 @@
 
 package frc.robot.autons;
 
+import frc.robot.Constants;
 import frc.robot.tasks.DeployIntakeTrench;
 import frc.robot.tasks.DriveDistance;
 import frc.robot.tasks.IntakeComeBack;
 import frc.robot.tasks.NavXTurnDegrees;
 import frc.robot.tasks.ParallelTask;
+import frc.robot.tasks.Shoot;
 import frc.robot.tasks.ShootFromAutonLine;
 import frc.robot.tasks.TaskBase;
+import frc.robot.tasks.VisionAim;
 import frc.robot.tasks.ZeroHoodMotor;
 
 /**
@@ -25,13 +28,17 @@ public class ShootAndDriveToTrench extends AutonBase {
         super("shootAndDriveToTrench", new TaskBase[] {
             new ZeroHoodMotor(),
             new ShootFromAutonLine(),
-           // new NavXTurnDegrees(-10),
-            new DriveDistance(-120 * 25.4),
             new DeployIntakeTrench(),
-            /*new DriveDistance(-24 * 25.4),
-            new NavXTurnDegrees(19),
-            new DriveDistance(-72 * 25.4),*/
-            new IntakeComeBack()
+            new DriveDistance(-120 * 25.4, 0.5),
+            new NavXTurnDegrees(11.5),
+            new DriveDistance(-76 * 25.4, 0.4),
+            new IntakeComeBack(),
+            new NavXTurnDegrees(-2),
+            new DriveDistance(120 * 25.4, true, Constants.TRENCH_ORDER_66, Constants.TRENCH_POSITION, 0.6),
+            new VisionAim(),
+            new Shoot(),
+            //new DriveDistance(120 * 25.4, true),
+            //new DriveDistance(-72 * 25.4),
         });
     }
 }

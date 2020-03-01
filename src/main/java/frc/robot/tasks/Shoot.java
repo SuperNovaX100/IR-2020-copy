@@ -7,6 +7,7 @@
 
 package frc.robot.tasks;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -14,18 +15,17 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class ShootFromAutonLine implements TaskBase {
+public class Shoot implements TaskBase{
     private Timer timer;
-    private Timer totalTimer;
     private boolean wasBlinkyEmpty;
+
+    public Shoot() {
+
+    }
 
     @Override
     public void start() {
-        Robot.deathStar.setOrder66(Constants.AUTOLINE_ORDER_66);
-        Robot.vader.setVaderControlMode(Constants.AUTOLINE_DISTURBING_FORCE);
         timer = new Timer();
-        totalTimer = new Timer();
-        totalTimer.start();
         Robot.blinky.wantToShoot = true;
     }
 
@@ -39,7 +39,7 @@ public class ShootFromAutonLine implements TaskBase {
             timer.stop();
             wasBlinkyEmpty = false;
         }
-        return timer.get() >= 1 || totalTimer.get() >= 12;
+        return timer.get() >= 1.0;
     }
 
     @Override
@@ -47,7 +47,5 @@ public class ShootFromAutonLine implements TaskBase {
         timer.stop();
         Robot.deathStar.setOrder66(Constants.DONT_EXECUTE_ORDER_66);
         Robot.blinky.wantToShoot = false;
-
     }
-
 }
