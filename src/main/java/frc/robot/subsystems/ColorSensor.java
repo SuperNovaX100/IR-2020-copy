@@ -76,10 +76,11 @@ public class ColorSensor extends Subsystem {
   }
 
   @Override
-  public void teleopInit() {
+  public void generalInit() {
     colorSpinManualMode = false;
     changes = 0;
     colorWheelSolenoid.set(false);
+    colorServo.set(0.95);
     timer.stop();
     timer.reset();
     colorWheelMotor.set(0);

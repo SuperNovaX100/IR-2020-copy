@@ -31,7 +31,7 @@ public class AutonBase {
     }
 
     public void periodic() {
-        if (currentTask < tasks.length) System.out.println(tasks[currentTask].getClass().getName() + " periodic");
+        //if (currentTask < tasks.length) System.out.println(tasks[currentTask].getClass().getName() + " periodic");
         if (currentTask < tasks.length && tasks[currentTask].periodic()) {
             tasks[currentTask].done();
             System.out.println(tasks[currentTask].getClass().getName() + " finished");

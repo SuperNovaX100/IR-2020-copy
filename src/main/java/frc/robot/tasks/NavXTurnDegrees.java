@@ -24,10 +24,11 @@ public class NavXTurnDegrees implements TaskBase {
 
     @Override
     public void start() {
+        targetDegrees += Robot.driveTrain.getAngle();
         pidController = new PIDController((1.0 / 90.0), 0.0, 0.0);
         pidController.setIntegratorRange(0.0, 0.0);
         pidController.setSetpoint(targetDegrees);
-        pidController.enableContinuousInput(-180.0, 180.0);
+        //pidController.enableContinuousInput(-180.0, 180.0);
     }
 
     @Override

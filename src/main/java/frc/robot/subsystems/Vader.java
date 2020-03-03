@@ -60,7 +60,7 @@ public class Vader extends Subsystem {
 
     public void setVaderControlMode(DisturbingForce disturbingForce) {
         vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
-        System.out.println("New Demand : " + String.valueOf(disturbingForce.demand));
+        //System.out.println("New Demand : " + String.valueOf(disturbingForce.demand));
         SmartDashboard.putNumber("Vader Demand", disturbingForce.demand);
         pastDisturbingForce = disturbingForce;
     }

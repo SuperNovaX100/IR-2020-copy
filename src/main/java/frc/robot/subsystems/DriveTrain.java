@@ -47,10 +47,11 @@ public class DriveTrain extends Subsystem {
     private double change = 0.0;
     private Limelight limelight;
     private double angleToTarget;
+    private int counterForVision;
 
     public DriveTrain() {
         gyro = new AHRS(SPI.Port.kMXP);
-
+        counterForVision = 0;
         leftMotorFront = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
         leftMotorBack = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
         rightMotorFront = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
@@ -142,7 +143,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public double getAngle() {
-        return gyro.getYaw();
+        return gyro.getAngle();
     }
 
     public void resetGyro() {
@@ -174,6 +175,7 @@ public class DriveTrain extends Subsystem {
      */
     @Override
     public void generalPeriodic() {
+        System.out.println(gyro.getAngle());
         SmartDashboard.putNumber("DriveTrain/Left Front Encoder Value", leftEncoderFront.getPosition());
         SmartDashboard.putNumber("DriveTrain/Left Back Encoder Value", leftEncoderBack.getPosition());
         SmartDashboard.putNumber("DriveTrain/Right Front Encoder Value", rightEncoderFront.getPosition());
@@ -186,6 +188,7 @@ public class DriveTrain extends Subsystem {
 
     @Override
     public void teleopPeriodic() {
+        
         DriveSignal signal = Robot.controllers.arcadeDrive();
 
         if (Robot.controllers.useVision()) {
@@ -230,6 +233,9 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setMotorPower(double leftPower, double rightPower) {
+        /*System.out.print(leftPower);
+        System.out.print(", ");
+        System.out.println(rightPower);*/
         leftMotorFront.set(leftPower);
         rightMotorFront.set(rightPower);
     }
@@ -268,7 +274,21 @@ public class DriveTrain extends Subsystem {
     }
 
     public boolean isAimedAtTarget() {
-        return (Math.abs(angleToTarget) <= 1) && change < 0.01;
+       if ((Math.abs(angleToTarget) <= 1) && change < 0.01) {
+           counterForVision++;
+       } else {
+           counterForVision = 0;
+       }
+       return counterForVision >= 3;
+    }
+    public void straightLineLoop(double desiredAngle, double power) {
+            double currentAngle = gyro.getAngle();
+            double error = desiredAngle - currentAngle;
+            double p = 1.0 / 90.0;
+            double leftPower = -error * p + power;
+            double rightPower = error * p + power;
+            DriveSignal driveSignal = new DriveSignal(leftPower, rightPower * 1.03);
+            setMotorPowerSignal(driveSignal);
     }
 
 }

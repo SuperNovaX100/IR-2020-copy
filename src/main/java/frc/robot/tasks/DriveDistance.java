@@ -22,7 +22,8 @@ public class DriveDistance implements TaskBase {
     boolean revUp;
     Order66 order66;
     DisturbingForce disturbingForce;
-    private double power;
+    private final double power;
+    private double desiredAngle;
 
     public DriveDistance(double distance, double power) {
         this.distance = distance;
@@ -34,16 +35,24 @@ public class DriveDistance implements TaskBase {
         this.revUp = revUp;
         this.order66 = order66;
         this.disturbingForce = disturbingForce;
-        this.power = power;
+        this.power = (power);
     }
 
     @Override
     public void start() {
+        desiredAngle = Robot.driveTrain.getAngle();
         demand = (-distance / 44.7) * 1.0434;
+        System.out.print("Demand: ");
+        System.out.println(demand);
         Robot.driveTrain.resetEncoders();
         if (demand < 0) {
-            power *= -1;
+            //power = -power;
+            System.out.println("DriveDistance inverted");
+        } else {
+            System.out.println("DriveDistance NOT inverted");
         }
+        System.out.print("Power: ");
+        System.out.println(power);
         Robot.driveTrain.setMotorPower(power, power * 1.03);
         if (revUp) {
             Robot.deathStar.setOrder66(order66);
@@ -53,10 +62,10 @@ public class DriveDistance implements TaskBase {
 
     @Override
     public boolean periodic() {
+        Robot.driveTrain.straightLineLoop(desiredAngle, power);
         SmartDashboard.putNumber("Auton Testing/Left Drive Encoder", Robot.driveTrain.leftEncoderFront.getPosition());
         SmartDashboard.putNumber("Auton Testing/Drive Demand", demand);
         return Math.abs(Math.abs(Robot.driveTrain.leftEncoderFront.getPosition()) - Math.abs(demand)) < 5;
-
     }
 
     @Override
