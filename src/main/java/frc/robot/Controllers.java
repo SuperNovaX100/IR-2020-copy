@@ -7,16 +7,13 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Constants;
 import frc.robot.DriveSignal;
-import frc.robot.subsystems.DisturbingForce;
+
+import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
@@ -25,11 +22,10 @@ public class Controllers {
   private Joystick joystick;
   private XboxController gamepad;
   public boolean autoLineShoot = false;
-  private boolean joystickDpadPressed = false;
 
   public Controllers() {
-    joystick = new Joystick(Constants.DRIVER_JOYSTICK);
-    gamepad = new XboxController(Constants.OPERATOR_GAMEPAD);
+    joystick = new Joystick(DRIVER_JOYSTICK);
+    gamepad = new XboxController(OPERATOR_GAMEPAD);
   }
 
   /**
@@ -97,7 +93,7 @@ public class Controllers {
   }
 
   public boolean joystickTriggerHeld() {
-    return joystick.getRawButton(Constants.JOYSTICK_TRIGGER) || autoLineShoot;
+    return joystick.getRawButton(JOYSTICK_TRIGGER) || autoLineShoot;
   }
 
   public boolean yHeld() {
@@ -220,17 +216,17 @@ public class Controllers {
    
 
     if (Robot.controllers.veryClosePosition(false)) {
-      return Constants.VERY_CLOSE_ORDER_66;
+      return VERY_CLOSE_ORDER_66;
   } else if (Robot.controllers.closePosition(false)) {
-      return Constants.CLOSE_ORDER_66;
+      return CLOSE_ORDER_66;
   } else if (Robot.controllers.autoLinePosition(false)) {
-      return Constants.AUTOLINE_ORDER_66;
+      return AUTOLINE_ORDER_66;
   } else if (Robot.controllers.trenchPosition(false)) {
-      return Constants.TRENCH_ORDER_66;
+      return TRENCH_ORDER_66;
   } else if (Robot.controllers.veryFarPosition(false)) {
-      return Constants.VERY_FAR_ORDER_66;
+      return VERY_FAR_ORDER_66;
   } else {
-     return Constants.DONT_EXECUTE_ORDER_66;
+     return DONT_EXECUTE_ORDER_66;
   }
 
   }

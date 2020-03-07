@@ -13,7 +13,6 @@ import java.util.List;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,8 +50,9 @@ public class Robot extends TimedRobot {
   private String autoSelected;
   private boolean joystickDpadPressed = false;
   public static Limelight limelight;
-  //public static ShootFromAutonLine shootFromAutonLine;
-  //private OldAutonBase autoToRun = new DoNothing();
+  private static final String SHOOT_AND_DRIVE_TO_TRENCH = "ShootAndDriveToTrench";
+  private static final String SHOOT_AND_MOVE_OFF_LINE = "ShootAndMoveOffLine";
+  private static final String DRIVE_BACK_CALIBRATION = "DriveBackCalibration";
   @Override
   public void robotInit() {
     subsystems = new ArrayList<>();
@@ -69,9 +69,9 @@ public class Robot extends TimedRobot {
     limelight = Limelight.getInstance();
     //Autons
     chooser.setDefaultOption("Default Auto", "default");
-    chooser.addOption("Drive Back Calibration", new DriveBackCalibration().getName());
-    chooser.addOption("Shoot and move off line", new ShootAndMoveOffLine().getName());
-    chooser.addOption("Shoot and drive to trench", new ShootAndDriveToTrench().getName());
+    chooser.addOption("Drive Back Calibration", DRIVE_BACK_CALIBRATION);
+    chooser.addOption("Shoot and move off line", SHOOT_AND_MOVE_OFF_LINE);
+    chooser.addOption("Shoot and drive to trench", SHOOT_AND_DRIVE_TO_TRENCH);
     SmartDashboard.putData("Auto choices", chooser);
 
   }
@@ -141,23 +141,25 @@ public class Robot extends TimedRobot {
     driveTrain.setMotorMode(IdleMode.kBrake);
 
     autoSelected = chooser.getSelected();
-    for (AutonBase auton : autons) {
+    /*for (AutonBase auton : autons) {
       if (auton.getName() == autoSelected) {
         autonToRun = auton;
         auton.start();
       }
-    }
-    /*switch (autoSelected) {
-      case shootFromAutonLineAuton:
-        autoToRun = new AutonShootOnly();
+    }*/
+    switch (autoSelected) {
+      case SHOOT_AND_DRIVE_TO_TRENCH:
+        autonToRun = new ShootAndDriveToTrench();
         break;
-      case autonShootDrive:
-        autoToRun = new AutonShoot();
+      case SHOOT_AND_MOVE_OFF_LINE:
+        autonToRun = new ShootAndMoveOffLine();
+        break;
+      case DRIVE_BACK_CALIBRATION:
+        autonToRun = new DriveBackCalibration();
       default:
-        // Put default auto code here
         break;
     }
-    autoToRun.init();*/
+    if (autonToRun != null) autonToRun.start();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + autoSelected);
     for (Subsystem subsystem : subsystems) {

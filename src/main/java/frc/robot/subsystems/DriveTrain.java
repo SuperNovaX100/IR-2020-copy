@@ -7,23 +7,21 @@
 
 package frc.robot.subsystems;
 
-import java.util.ResourceBundle.Control;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
-import com.revrobotics.CANPIDController.AccelStrategy;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.SPI;
 import frc.robot.DriveSignal;
 import frc.robot.Robot;
 import frc.robot.Subsystem;
+
+
+import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
@@ -43,7 +41,6 @@ public class DriveTrain extends Subsystem {
     private CANPIDController rightMotorFrontPID;
     private CANPIDController rightMotorBackPID;
     public AHRS gyro;
-    private double degreesOfTolerance = 2.0;
     private double change = 0.0;
     private Limelight limelight;
     private double angleToTarget;
@@ -52,10 +49,10 @@ public class DriveTrain extends Subsystem {
     public DriveTrain() {
         gyro = new AHRS(SPI.Port.kMXP);
         counterForVision = 0;
-        leftMotorFront = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
-        leftMotorBack = new CANSparkMax(Constants.LEFT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
-        rightMotorFront = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
-        rightMotorBack = new CANSparkMax(Constants.RIGHT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
+        leftMotorFront = new CANSparkMax(LEFT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
+        leftMotorBack = new CANSparkMax(LEFT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
+        rightMotorFront = new CANSparkMax(RIGHT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
+        rightMotorBack = new CANSparkMax(RIGHT_DRIVE_MOTOR_BACK, MotorType.kBrushless);
         leftEncoderFront = new CANEncoder(leftMotorFront);
         leftEncoderBack = new CANEncoder(leftMotorBack);
         rightEncoderFront = new CANEncoder(rightMotorFront);
@@ -106,40 +103,6 @@ public class DriveTrain extends Subsystem {
         rightMotorBackPID.setD(d);
         rightMotorBackPID.setFF(ff);
         rightMotorBackPID.setIZone(iz);
-    }
-
-    private void setReference(double value, ControlType type) {
-        leftMotorFrontPID.setReference(value, type);
-        leftMotorBackPID.setReference(value, type);
-        rightMotorFrontPID.setReference(value, type);
-        rightMotorBackPID.setReference(value, type);
-    }
-
-    private void setSmartMotionParameters(double minVel, double maxVel, double maxAccel, double allowedErr,
-            AccelStrategy accelStrategy) {
-        leftMotorFrontPID.setSmartMotionMinOutputVelocity(minVel, 0);
-        leftMotorFrontPID.setSmartMotionMaxVelocity(maxVel, 0);
-        leftMotorFrontPID.setSmartMotionMaxAccel(maxAccel, 0);
-        leftMotorFrontPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
-        leftMotorFrontPID.setSmartMotionAccelStrategy(accelStrategy, 0);
-
-        rightMotorFrontPID.setSmartMotionMinOutputVelocity(minVel, 0);
-        rightMotorFrontPID.setSmartMotionMaxVelocity(maxVel, 0);
-        rightMotorFrontPID.setSmartMotionMaxAccel(maxAccel, 0);
-        rightMotorFrontPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
-        rightMotorFrontPID.setSmartMotionAccelStrategy(accelStrategy, 0);
-
-        leftMotorBackPID.setSmartMotionMinOutputVelocity(minVel, 0);
-        leftMotorBackPID.setSmartMotionMaxVelocity(maxVel, 0);
-        leftMotorBackPID.setSmartMotionMaxAccel(maxAccel, 0);
-        leftMotorBackPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
-        leftMotorBackPID.setSmartMotionAccelStrategy(accelStrategy, 0);
-
-        rightMotorBackPID.setSmartMotionMinOutputVelocity(minVel, 0);
-        rightMotorBackPID.setSmartMotionMaxVelocity(maxVel, 0);
-        rightMotorBackPID.setSmartMotionMaxAccel(maxAccel, 0);
-        rightMotorBackPID.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
-        rightMotorBackPID.setSmartMotionAccelStrategy(accelStrategy, 0);
     }
 
     public double getAngle() {
@@ -196,36 +159,6 @@ public class DriveTrain extends Subsystem {
         } else {
             setMotorPowerSignal(signal);
         }
-
-        // double weight = 0.7;
-        // double currentLeftValue = leftEncoderFront.getVelocity();
-        // double currentRightValue = rightEncoderFront.getVelocity();
-        // averageLeft = (weight * currentLeftValue) + (1 - weight) * averageLeft;
-        // averageRight = (weight * currentRightValue) + (1 - weight) * averageRight;
-        // double power = 0.4;
-        // signal = new DriveSignal(power, power);
-        // SmartDashboard.putNumber("DriveTrain/Left Power", signal.getLeftPower());
-        // SmartDashboard.putNumber("DriveTrain/Right Power", signal.getRightPower());
-        // SmartDashboard.putNumber("DriveTrain/Right Avg", averageRight);
-        // SmartDashboard.putNumber("DriveTrain/Left Avg", averageLeft);
-        // setMotorPowerSignal(signal);
-        /*
-         * boolean goForward = Robot.controllers.joystickButton3Pressed(); boolean stop
-         * = Robot.controllers.joystickButton6Pressesd(); if (goForward || stop){ double
-         * p = SmartDashboard.getNumber("DriveTrain P Values", 0); double i =
-         * SmartDashboard.getNumber("DriveTrain I Values", 0); double d =
-         * SmartDashboard.getNumber("DriveTrain D Values", 0); double ff =
-         * SmartDashboard.getNumber("DriveTrain FF Values", 0); double iz =
-         * SmartDashboard.getNumber("DriveTrain Iz Values", 0);
-         * 
-         * //resetEncoders();
-         * 
-         * setPIDValue(p, i, d, ff, iz);
-         * 
-         * double setPoint = goForward ? 240 : 0; ControlType controlType = goForward ?
-         * ControlType.kVelocity : ControlType.kDutyCycle;
-         */
-
     }
 
     public void setMotorPowerSignal(DriveSignal signal) {

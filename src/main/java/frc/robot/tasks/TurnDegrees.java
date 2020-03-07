@@ -13,8 +13,6 @@ import frc.robot.Robot;
  * Add your docs here.
  */
 public class TurnDegrees implements TaskBase {
-    private double startAngle;
-    private double targetAngle;
     private double degrees;
 
     public TurnDegrees(double degrees) {

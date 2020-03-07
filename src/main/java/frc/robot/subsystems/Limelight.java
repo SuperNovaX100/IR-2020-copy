@@ -10,8 +10,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Subsystem;
+
+import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
@@ -33,7 +34,7 @@ public class Limelight extends Subsystem {
     }
     public double getDistance(){
         double a2 = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
-        double distance = (Constants.H2CENTER - Constants.H1) / Math.tan((Constants.A1 + a2) * Math.PI/180);
+        double distance = (H2CENTER - H1) / Math.tan((A1 + a2) * Math.PI/180);
         SmartDashboard.putNumber("Horizontal Distance To Target", distance);
         return distance;
     }

@@ -10,13 +10,11 @@ package frc.robot.subsystems;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Subsystem;
 
@@ -28,17 +26,14 @@ import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
+import static frc.robot.Constants.*;
+
 /**
  * Add your docs here.
  */
 public class ColorSensor extends Subsystem {
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 colorSensor;
   private final ColorMatch colorMatcher;
-  private final Color squirtleTarget; // blue
-  private final Color charmanderTarget; // red
-  private final Color bulbasaurTarget; // green
-  private final Color pikachuTarget; // yellow
   private int changes;
   private char gameData;
   private final Servo colorServo;
@@ -56,21 +51,18 @@ public class ColorSensor extends Subsystem {
   public ColorSensor() {
     changes = 0;
     // Wheel Turn
-    colorWheelSolenoid = new Solenoid(Constants.PCM, Constants.COLOR_SOLENOID);
-    colorWheelMotor = new CANSparkMax(Constants.COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
+    colorWheelSolenoid = new Solenoid(PCM, COLOR_SOLENOID);
+    colorWheelMotor = new CANSparkMax(COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
     colorWheelEncoder = colorWheelMotor.getEncoder();
     // Color Position Turn
-    colorSensor = new ColorSensorV3(i2cPort);
+    colorSensor = new ColorSensorV3(COLOR_SENSOR_I2C_PORT);
     colorMatcher = new ColorMatch();
-    squirtleTarget = ColorMatch.makeColor(.15, .44, .39);
-    charmanderTarget = ColorMatch.makeColor(.48, .36, .15);
-    bulbasaurTarget = ColorMatch.makeColor(.18, .54, .25);
-    pikachuTarget = ColorMatch.makeColor(.31, .54, .13);
-    colorMatcher.addColorMatch(squirtleTarget);
-    colorMatcher.addColorMatch(charmanderTarget);
-    colorMatcher.addColorMatch(bulbasaurTarget);
-    colorMatcher.addColorMatch(pikachuTarget);
-    colorServo = new Servo(Constants.COLOR_SERVO);
+    
+    colorMatcher.addColorMatch(SQUIRTLE_TARGET_COLOR);
+    colorMatcher.addColorMatch(CHARMANDER_TARGET_COLOR);
+    colorMatcher.addColorMatch(BULBASAUR_TARGET_COLOR);
+    colorMatcher.addColorMatch(PIKACHU_TARGET_COLOR);
+    colorServo = new Servo(COLOR_SERVO);
 
     timer = new Timer();
   }
@@ -80,7 +72,7 @@ public class ColorSensor extends Subsystem {
     colorSpinManualMode = false;
     changes = 0;
     colorWheelSolenoid.set(false);
-    colorServo.set(0.95);
+    colorServo.set(COLOR_SERVO_DOWN);
     timer.stop();
     timer.reset();
     colorWheelMotor.set(0);
@@ -99,17 +91,17 @@ public class ColorSensor extends Subsystem {
     ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
     // colorString is what our color sensor is seeing, fieldColor is what the field
     // should be seeing if we are seeing a certain color
-    if (match.color == squirtleTarget) {
+    if (match.color == SQUIRTLE_TARGET_COLOR) {
       colorString = "Blue";
       fieldColor = 'R';
-    } else if (match.color == charmanderTarget) {
+    } else if (match.color == CHARMANDER_TARGET_COLOR) {
       colorString = "Red";
       fieldColor = 'B';
 
-    } else if (match.color == bulbasaurTarget) {
+    } else if (match.color == BULBASAUR_TARGET_COLOR) {
       colorString = "Green";
       fieldColor = 'Y';
-    } else if (match.color == pikachuTarget) {
+    } else if (match.color == PIKACHU_TARGET_COLOR) {
       colorString = "Yellow";
       fieldColor = 'G';
     } else {
@@ -125,11 +117,11 @@ public class ColorSensor extends Subsystem {
 
     // Wheel Turn
     if (Robot.controllers.aHeld()) {
-      colorServo.set(0.15);
+      colorServo.set(COLOR_SERVO_UP);
       colorWheelSolenoid.set(true);
-    } else if (colorServo.get() != 0.95) {
-      colorServo.set(0.95);
-    } else if (colorServo.get() == 0.95) {
+    } else if (colorServo.get() != COLOR_SERVO_DOWN) {
+      colorServo.set(COLOR_SERVO_DOWN);
+    } else if (colorServo.get() == COLOR_SERVO_DOWN) {
       colorWheelSolenoid.set(false);
     }
 

@@ -18,11 +18,6 @@ public class DriveBackCalibration extends AutonBase {
     public DriveBackCalibration() {
         super("Drive Back Calibration", new TaskBase[]{
             new DriveDistance(-120 * 25.4, 0.5)
-
-        
-
-        
-        // TODO Auto-generated constructor stub
     });
     
 }

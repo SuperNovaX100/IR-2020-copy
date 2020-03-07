@@ -14,9 +14,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Subsystem;
+
+import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
@@ -28,10 +29,10 @@ public class TacoTime extends Subsystem {
     CANSparkMax balanceMotor;
 
     public TacoTime() {
-        climbSolenoid = new Solenoid(Constants.PCM, Constants.CLIMB_SOLENOID);
-        winchMotor = new TalonSRX(Constants.WINCH_MOTOR);
-        climbHeightMotor = new TalonSRX(Constants.CLIMB_HEIGHT_MOTOR);
-        balanceMotor = new CANSparkMax(Constants.COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
+        climbSolenoid = new Solenoid(PCM, CLIMB_SOLENOID);
+        winchMotor = new TalonSRX(WINCH_MOTOR);
+        climbHeightMotor = new TalonSRX(CLIMB_HEIGHT_MOTOR);
+        balanceMotor = new CANSparkMax(COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
     }
 
     @Override

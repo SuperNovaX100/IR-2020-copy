@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -16,16 +14,16 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Order66;
 import frc.robot.Robot;
 import frc.robot.Subsystem;
+
+import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
  */
 public class DeathStar extends Subsystem {
-    private TalonSRX irMotor5;
     private CANSparkMax shootLeftMotor;
     private CANSparkMax shootRightMotor;
     private CANEncoder shootLeftEncoder;
@@ -36,11 +34,9 @@ public class DeathStar extends Subsystem {
     private Order66 order66;
 
     public DeathStar() {
-        order66 = Constants.DONT_EXECUTE_ORDER_66;
-        irMotor5 = new TalonSRX(Constants.IR_MOTOR_5);
-        shootLeftMotor = new CANSparkMax(Constants.SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
-        shootRightMotor = new CANSparkMax(Constants.SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
-        irMotor5.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+        order66 = DONT_EXECUTE_ORDER_66;
+        shootLeftMotor = new CANSparkMax(SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
+        shootRightMotor = new CANSparkMax(SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
 
         leftShootPidController = shootLeftMotor.getPIDController();
         rightShootPidController = shootRightMotor.getPIDController();
@@ -80,13 +76,9 @@ public class DeathStar extends Subsystem {
     @Override
     public void generalInit(){
         SmartDashboard.putNumber("ShooterDesiredRPM", 0);
-        setOrder66(Constants.DONT_EXECUTE_ORDER_66);
+        setOrder66(DONT_EXECUTE_ORDER_66);
         shootRightMotor.setInverted(false);
         shootLeftMotor.setInverted(true);
-    }
-
-    public int getShooterIntakeEncoderValue() {
-        return irMotor5.getSelectedSensorPosition();
     }
 
     @Override
@@ -105,7 +97,6 @@ public class DeathStar extends Subsystem {
         } else {
             Robot.blinky.setShooting(false);
         }
-
     }
 
     @Override
