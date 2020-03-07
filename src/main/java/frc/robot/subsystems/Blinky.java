@@ -28,7 +28,6 @@ import static frc.robot.Constants.*;
 public class Blinky extends Subsystem {
     private DigitalInput[] irSensors;
     private TalonSRX[] irMotors;
-    private double[] currentPowers = new double[5];
     private boolean shooting;
     private CANSparkMax intakeMotor;
     private DoubleSolenoid intakeDeploy;
@@ -68,17 +67,24 @@ public class Blinky extends Subsystem {
     }
 
     @Override
-    public void generalInit(){
+    public void generalInit() {
+        intakeMotor.setInverted(true);
         blinkyBackwards = false;
         intakeBackwards = false;
         wantToIntake = false;
         wantToShoot = false;
+
+        intakeMotor.set(0);
+        for (int i = 0; i < 4; i++) {
+            irMotors[i].set(ControlMode.PercentOutput, 0);
+        }
     }
 
     @Override
     public void generalPeriodic(){
         intakeDeploy.set(wantToIntake ? Value.kForward : Value.kReverse);
         
+        double[] currentPowers = new double[5];
         if (wantToIntake || wantToShoot) {
             // Set to true once one of the sensors is empty
             boolean canGo = false;

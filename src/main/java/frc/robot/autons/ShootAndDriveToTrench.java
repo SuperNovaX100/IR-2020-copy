@@ -7,16 +7,20 @@
 
 package frc.robot.autons;
 
-import frc.robot.Constants;
 import frc.robot.tasks.DeployIntakeTrench;
 import frc.robot.tasks.DriveDistance;
+import frc.robot.tasks.EmergencyAuton;
 import frc.robot.tasks.IntakeComeBack;
+import frc.robot.tasks.MoveOffLine;
 import frc.robot.tasks.NavXTurnDegrees;
+import frc.robot.tasks.ParallelTask;
+import frc.robot.tasks.RevUp;
 import frc.robot.tasks.Shoot;
-import frc.robot.tasks.ShootFromAutonLine;
 import frc.robot.tasks.TaskBase;
 import frc.robot.tasks.VisionAim;
 import frc.robot.tasks.ZeroHoodMotor;
+
+import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
@@ -26,16 +30,16 @@ public class ShootAndDriveToTrench extends AutonBase {
     public ShootAndDriveToTrench() {
         super("shootAndDriveToTrench", new TaskBase[] {
             new ZeroHoodMotor(),
-            new ShootFromAutonLine(),
+            new EmergencyAuton(new Shoot(AUTOLINE_ORDER_66, AUTOLINE_DISTURBING_FORCE), 5, new MoveOffLine()),
             new DeployIntakeTrench(),
-            new DriveDistance(-118 * 25.4, 0.5),
-            new NavXTurnDegrees(11.5),
-            new DriveDistance(-78 * 25.4, 0.4),
+            new DriveDistance(-112 * 25.4, 0.5),
+            new NavXTurnDegrees(15),
+            new ParallelTask(new DriveDistance(-72 * 25.4, 0.4), new ZeroHoodMotor()),
             new IntakeComeBack(),
-            new NavXTurnDegrees(-4),
-            new DriveDistance(120 * 25.4, true, Constants.TRENCH_ORDER_66, Constants.TRENCH_POSITION, -0.75),
+            new NavXTurnDegrees(3),
+            new ParallelTask(new DriveDistance(108 * 25.4, -0.75), new RevUp(TRENCH_ORDER_66, TRENCH_POSITION)),
             new VisionAim(),
-            new Shoot(),
+            new Shoot(TRENCH_ORDER_66, TRENCH_POSITION),
             //new DriveDistance(120 * 25.4, true),
             //new DriveDistance(-72 * 25.4),
         });

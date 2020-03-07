@@ -120,7 +120,7 @@ public class DriveTrain extends Subsystem {
         rightMotorBack.setInverted(false);
         leftMotorBack.setInverted(true);
         leftMotorFront.setInverted(true);
-        // setMotorPower(0,0);
+        setMotorPower(0,0);
 
         SmartDashboard.putNumber("DriveTrain P Values", 0);
         SmartDashboard.putNumber("DriveTrain I Values", 0);
@@ -138,7 +138,7 @@ public class DriveTrain extends Subsystem {
      */
     @Override
     public void generalPeriodic() {
-        System.out.println(gyro.getAngle());
+        //System.out.println(gyro.getAngle());
         SmartDashboard.putNumber("DriveTrain/Left Front Encoder Value", leftEncoderFront.getPosition());
         SmartDashboard.putNumber("DriveTrain/Left Back Encoder Value", leftEncoderBack.getPosition());
         SmartDashboard.putNumber("DriveTrain/Right Front Encoder Value", rightEncoderFront.getPosition());

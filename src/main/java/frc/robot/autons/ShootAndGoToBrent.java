@@ -7,8 +7,11 @@
 
 package frc.robot.autons;
 
-import frc.robot.tasks.EmergencyAuton;
-import frc.robot.tasks.MoveOffLine;
+import frc.robot.Constants;
+import frc.robot.tasks.DeployIntakeTrench;
+import frc.robot.tasks.DriveDistance;
+import frc.robot.tasks.IntakeComeBack;
+import frc.robot.tasks.NavXTurnDegrees;
 import frc.robot.tasks.ShootFromAutonLine;
 import frc.robot.tasks.TaskBase;
 import frc.robot.tasks.ZeroHoodMotor;
@@ -16,13 +19,20 @@ import frc.robot.tasks.ZeroHoodMotor;
 /**
  * Add your docs here.
  */
-public class ShootAndMoveOffLine extends AutonBase {
-    public ShootAndMoveOffLine() {
-        super("shootAndMoveOffLine", new TaskBase[] {
+public class ShootAndGoToBrent extends AutonBase {
+
+    public ShootAndGoToBrent() {
+        super("shootAndMoveLeft", new TaskBase[]{
             new ZeroHoodMotor(),
-            new EmergencyAuton(new ShootFromAutonLine(), 5, new MoveOffLine()),
-            new ZeroHoodMotor(),
-            new MoveOffLine()
+            new ShootFromAutonLine(),
+            new DeployIntakeTrench(),
+            new DriveDistance(-78 * 25.4, 0.5),
+            new NavXTurnDegrees(22.5),
+            new IntakeComeBack(),
+            //new DriveDistance(72 * 25.4, true, Constants.AUTOLINE_ORDER_66, Constants.AUTOLINE_DISTURBING_FORCE, -0.5),
+            //new DriveDistance(-, power)
+          
+            
         });
     }
 }

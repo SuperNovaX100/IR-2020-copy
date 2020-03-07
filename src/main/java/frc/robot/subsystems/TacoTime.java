@@ -36,8 +36,11 @@ public class TacoTime extends Subsystem {
     }
 
     @Override
-    public void teleopInit() {
+    public void generalInit() {
         climbSolenoid.set(false);
+        winchMotor.set(ControlMode.PercentOutput, 0);
+        climbHeightMotor.set(ControlMode.PercentOutput, 0);
+        balanceMotor.set(0);
     }
 
     @Override

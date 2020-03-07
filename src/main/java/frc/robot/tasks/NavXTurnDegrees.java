@@ -17,6 +17,9 @@ import frc.robot.Robot;
 public class NavXTurnDegrees implements TaskBase {
     private PIDController pidController;
     private double targetDegrees;
+    private int withinToleranceCounter;
+    private double currentDegrees;
+    private double lastDegrees;
 
     public NavXTurnDegrees(double targetDegrees) {
         this.targetDegrees = targetDegrees;
@@ -24,27 +27,35 @@ public class NavXTurnDegrees implements TaskBase {
 
     @Override
     public void start() {
-        targetDegrees += Robot.driveTrain.getAngle();
-        pidController = new PIDController((1.0 / 90.0), 0.0, 0.0);
-        pidController.setIntegratorRange(0.0, 0.0);
+        currentDegrees = Robot.driveTrain.getAngle();
+        withinToleranceCounter = 0;
+        pidController = new PIDController((1.5 / 90.0), 0.03, .001);
+        // pidController.setIntegratorRange(-0.2, 0.2);
         pidController.setSetpoint(targetDegrees);
-        //pidController.enableContinuousInput(-180.0, 180.0);
+        // pidController.enableContinuousInput(-180.0, 180.0);
     }
 
     @Override
     public boolean periodic() {
-       double currentDegrees = Robot.driveTrain.getAngle();
-       double output = pidController.calculate(currentDegrees);
-       Robot.driveTrain.setMotorPower(-output, output);
+        lastDegrees = currentDegrees;
+        currentDegrees = Robot.driveTrain.getAngle();
+        double output = pidController.calculate(currentDegrees);
+        Robot.driveTrain.setMotorPower(-output, output);
 
-       SmartDashboard.putNumber("Auton Test/Degrees Rotated", Robot.driveTrain.getAngle());
+        SmartDashboard.putNumber("Auton Test/Degrees Rotated", Robot.driveTrain.getAngle());
 
-       return Math.abs(targetDegrees - currentDegrees) <= 0.25;
+        if (Math.abs(lastDegrees - currentDegrees) <= 0.05) {
+            withinToleranceCounter++;
+        } else {
+            withinToleranceCounter = 0;
+        }
+        return withinToleranceCounter >= 3;
     }
 
     @Override
     public void done() {
         Robot.driveTrain.setMotorPower(0, 0);
+        System.out.println("done");
     }
 
 }

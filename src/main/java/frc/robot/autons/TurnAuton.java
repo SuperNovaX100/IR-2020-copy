@@ -7,22 +7,18 @@
 
 package frc.robot.autons;
 
-import frc.robot.tasks.EmergencyAuton;
-import frc.robot.tasks.MoveOffLine;
-import frc.robot.tasks.ShootFromAutonLine;
+import frc.robot.tasks.NavXTurnDegrees;
 import frc.robot.tasks.TaskBase;
-import frc.robot.tasks.ZeroHoodMotor;
 
 /**
  * Add your docs here.
  */
-public class ShootAndMoveOffLine extends AutonBase {
-    public ShootAndMoveOffLine() {
-        super("shootAndMoveOffLine", new TaskBase[] {
-            new ZeroHoodMotor(),
-            new EmergencyAuton(new ShootFromAutonLine(), 5, new MoveOffLine()),
-            new ZeroHoodMotor(),
-            new MoveOffLine()
+public class TurnAuton extends AutonBase {
+
+    public TurnAuton() {
+        super("TurnAuton", new TaskBase[] {
+            new NavXTurnDegrees(-20)
         });
+        
     }
 }

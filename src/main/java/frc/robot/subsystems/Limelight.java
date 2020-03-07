@@ -35,6 +35,7 @@ public class Limelight extends Subsystem {
     public double getDistance(){
         double a2 = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
         double distance = (H2CENTER - H1) / Math.tan((A1 + a2) * Math.PI/180);
+        System.out.println(distance);
         SmartDashboard.putNumber("Horizontal Distance To Target", distance);
         return distance;
     }

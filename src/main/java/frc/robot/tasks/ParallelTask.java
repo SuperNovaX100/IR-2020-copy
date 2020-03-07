@@ -12,25 +12,13 @@ import java.util.List;
 
 public class ParallelTask implements TaskBase {
     private List<TaskBase> unfinishedTasks;
-    private List<TaskBase> secondaryTasks;
     /**
      * Runs multiple tasks at the same time, and finishes when all tasks are done
      * @param tasks tasks you want to run in parallel
      */
-    public ParallelTask(TaskBase[] tasks, TaskBase[] secondaryTasks) { 
-        unfinishedTasks = new ArrayList<TaskBase>();
-        for (TaskBase task : tasks) {
-            unfinishedTasks.add(task);
-        }
-        this.secondaryTasks = new ArrayList<TaskBase>();
-        for (TaskBase task : secondaryTasks) {
-            this.secondaryTasks.add(task);
-        }
-    }
 
     public ParallelTask(TaskBase ... tasks) {
         unfinishedTasks = new ArrayList<TaskBase>();
-        secondaryTasks = new ArrayList<TaskBase>();
         for (TaskBase task : tasks) {
             unfinishedTasks.add(task);
         }
@@ -42,28 +30,24 @@ public class ParallelTask implements TaskBase {
         for (TaskBase task : unfinishedTasks) {
             task.start();
         }
-        for (TaskBase task : secondaryTasks) {
-            task.start();
-        }
     }
 
     @Override
     public boolean periodic() {
-        for (TaskBase task : unfinishedTasks) {
+        for (int i = 0; i < unfinishedTasks.size(); i++) {
+            TaskBase task = unfinishedTasks.get(i);
             if (task.periodic()) {
                 task.done();
-                unfinishedTasks.remove(task);
+                unfinishedTasks.remove(i);
+                i--;
             }
-        }
-        for (TaskBase task : secondaryTasks) {
-            task.periodic();
         }
         return unfinishedTasks.isEmpty();
     }
 
     @Override
     public void done() {
-        for (TaskBase task : secondaryTasks) {
+        for (TaskBase task : unfinishedTasks) {
             task.done();
         }
     }

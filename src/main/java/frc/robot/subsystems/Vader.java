@@ -39,6 +39,11 @@ public class Vader extends Subsystem {
   }
 
   @Override
+  public void generalInit() {
+    vaderMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  @Override
   public void generalPeriodic() {
     vaderLimitSwitch.periodic();
     if (vaderLimitSwitch.get()) {

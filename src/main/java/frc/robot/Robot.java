@@ -20,6 +20,7 @@ import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DeathStar;
 import frc.robot.subsystems.DisturbingForce;
 import frc.robot.autons.ShootAndMoveOffLine;
+import frc.robot.autons.TurnAuton;
 import frc.robot.Controllers;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Limelight;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.Vader;
 import frc.robot.autons.AutonBase;
 import frc.robot.autons.DriveBackCalibration;
 import frc.robot.autons.ShootAndDriveToTrench;
+import frc.robot.autons.ShootAndGoToBrent;
 import frc.robot.subsystems.Blinky;
 
 
@@ -53,6 +55,8 @@ public class Robot extends TimedRobot {
   private static final String SHOOT_AND_DRIVE_TO_TRENCH = "ShootAndDriveToTrench";
   private static final String SHOOT_AND_MOVE_OFF_LINE = "ShootAndMoveOffLine";
   private static final String DRIVE_BACK_CALIBRATION = "DriveBackCalibration";
+  private static final String SHOOT_AND_GO_TO_BRENT = "ShootAndGoToBrent";
+  private static final String TURN_AUTON = "TurnAuton";
   @Override
   public void robotInit() {
     subsystems = new ArrayList<>();
@@ -72,6 +76,8 @@ public class Robot extends TimedRobot {
     chooser.addOption("Drive Back Calibration", DRIVE_BACK_CALIBRATION);
     chooser.addOption("Shoot and move off line", SHOOT_AND_MOVE_OFF_LINE);
     chooser.addOption("Shoot and drive to trench", SHOOT_AND_DRIVE_TO_TRENCH);
+    chooser.addOption("Turn Auton", TURN_AUTON);
+    chooser.addOption("Shoot and go to Brent", SHOOT_AND_GO_TO_BRENT);
     SmartDashboard.putData("Auto choices", chooser);
 
   }
@@ -156,6 +162,13 @@ public class Robot extends TimedRobot {
         break;
       case DRIVE_BACK_CALIBRATION:
         autonToRun = new DriveBackCalibration();
+        break;
+      case TURN_AUTON:
+        autonToRun = new TurnAuton();
+        break;
+      case SHOOT_AND_GO_TO_BRENT:
+      autonToRun = new ShootAndGoToBrent();
+        break;
       default:
         break;
     }
