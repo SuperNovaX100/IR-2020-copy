@@ -55,6 +55,7 @@ public class Blinky extends Subsystem {
         intakeMotor.setInverted(true);
         intakeMotor.enableVoltageCompensation(11);
         intakeMotor.setIdleMode(IdleMode.kBrake);
+        intakeMotor.burnFlash();
         irMotors = new TalonSRX[4];
         irMotors[0] = new TalonSRX(IR_MOTOR_2);
         irMotors[1] = new TalonSRX(IR_MOTOR_3);
