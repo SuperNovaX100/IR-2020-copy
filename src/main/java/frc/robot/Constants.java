@@ -76,7 +76,7 @@ public class Constants {
     public static final DisturbingForce VERY_CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 185000);
     public static final DisturbingForce CLOSE_POSITION = new DisturbingForce(ControlMode.Position, 235000);
     public static final DisturbingForce AUTOLINE_DISTURBING_FORCE = new DisturbingForce(ControlMode.Position, 450000);
-    public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, 505000);
+    public static final DisturbingForce TRENCH_POSITION = new DisturbingForce(ControlMode.Position, 510000);
     public static final DisturbingForce VERY_FAR_POSITION = new DisturbingForce(ControlMode.Position, 505000);
     //Death Star Speed
     public static final Order66 VERY_CLOSE_ORDER_66 = new Order66(ControlType.kVelocity, 2900);
@@ -106,4 +106,7 @@ public class Constants {
     //Blinky
     public static final double[] INTAKE_POWER = new double[]{-1.0, -0.7, -0.7, -0.7, -0.7};
     public static final double[] INTAKE_REVERSE_POWER = new double[]{1.0, 0.75, 0.75, 0.75, 0.75};
+
+    //Death Star Misc
+    public static final int DEATH_STAR_TOLERANCE = 500;
 }

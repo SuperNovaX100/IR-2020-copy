@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
 
 /**
  * Add your docs here.
@@ -18,15 +19,15 @@ public class Cameras {
     private UsbCamera fisheyeCamera;
 
     public Cameras() {
-        shootCamera = CameraServer.getInstance().startAutomaticCapture();
-        fisheyeCamera = CameraServer.getInstance().startAutomaticCapture();
+        shootCamera = CameraServer.getInstance().startAutomaticCapture(0);
+        fisheyeCamera = CameraServer.getInstance().startAutomaticCapture(1);
         shootCamera.setResolution(160, 120);
         shootCamera.setFPS(15);
         //shootCamera.setWhiteBalanceAuto();
         shootCamera.setBrightness(45);
-        fisheyeCamera.setResolution(160, 120);
-        fisheyeCamera.setFPS(15);
-        fisheyeCamera.setWhiteBalanceAuto();
+        fisheyeCamera.setVideoMode(PixelFormat.kMJPEG, 320, 240, 60);
+        //fisheyeCamera.setFPS(15);
+        //fisheyeCamera.setWhiteBalanceAuto();
 
     }
 }

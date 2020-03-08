@@ -203,7 +203,7 @@ public class DriveTrain extends Subsystem {
     public void visionLoop() {
         if (limelight.seesTarget()) {
 
-            double currentAngle = limelight.getAngleToTarget();
+            double currentAngle = limelight.getAngleToTarget() - 1;
             change = Math.abs(currentAngle - angleToTarget);
             angleToTarget = currentAngle;
             double p = 1.0 / 90.0;

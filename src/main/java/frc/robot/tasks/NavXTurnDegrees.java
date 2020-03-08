@@ -43,6 +43,8 @@ public class NavXTurnDegrees implements TaskBase {
         double output = pidController.calculate(currentDegrees);
         driveTrain.setMotorPower(-output, output);
 
+        SmartDashboard.putNumber("Auton Test/Targeet Degrees", targetDegrees);
+
         SmartDashboard.putNumber("Auton Test/Degrees Rotated", driveTrain.getAngle());
 
         if (Math.abs(lastDegrees - currentDegrees) <= 0.05) {

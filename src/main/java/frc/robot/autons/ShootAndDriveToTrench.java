@@ -32,7 +32,7 @@ public class ShootAndDriveToTrench extends AutonBase {
                 new ZeroHoodMotor(),
                 new EmergencyAuton(new Shoot(AUTOLINE_ORDER_66, AUTOLINE_DISTURBING_FORCE), 5, new MoveOffLine()),
                 new DeployIntakeTrench(),
-                new DriveDistance(-112 * 25.4, 0.5),
+                new DriveDistance(-90 * 25.4, 0.5),
                 new NavXTurnDegrees(15),
                 new ParallelTask(new DriveDistance(-72 * 25.4, 0.4), new ZeroHoodMotor()),
                 new IntakeComeBack(),
