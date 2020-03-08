@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
                 autonToRun = new Default();
                 break;
         }
-        autonToRun.start();
+        
         // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
         System.out.println("Auto selected: " + autoSelected);
         for (Subsystem subsystem : subsystems) {
@@ -186,7 +186,11 @@ public class Robot extends TimedRobot {
             double timeTaken = System.nanoTime() - startTime;
             String name = subsystem.getClass().getName();
             SmartDashboard.putNumber("Performance/AutonomousInit/" + name, timeTaken / 1000000);
+
+
         }
+
+        autonToRun.start();
     }
 
     @Override
