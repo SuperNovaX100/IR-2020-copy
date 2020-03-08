@@ -9,19 +9,23 @@ package frc.robot.tasks;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Order66;
-import frc.robot.Robot;
+import frc.robot.subsystems.Blinky;
+import frc.robot.subsystems.DeathStar;
 import frc.robot.subsystems.DisturbingForce;
+import frc.robot.subsystems.Vader;
 
 import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
  */
-public class Shoot implements TaskBase{
+public class Shoot implements TaskBase {
     private Timer timer;
     private boolean wasBlinkyEmpty;
     private Order66 order66;
     private DisturbingForce disturbingForce;
+    private final Blinky blinky = Blinky.getInstance();
+    private final DeathStar deathStar = DeathStar.getInstance();
 
     public Shoot(Order66 order66, DisturbingForce disturbingForce) {
         this.order66 = order66;
@@ -31,18 +35,18 @@ public class Shoot implements TaskBase{
     @Override
     public void start() {
         timer = new Timer();
-        Robot.blinky.wantToShoot = true;
-        Robot.deathStar.setOrder66(order66);
-        Robot.vader.setVaderControlMode(disturbingForce);
+        blinky.wantToShoot = true;
+        deathStar.setOrder66(order66);
+        Vader.getInstance().setVaderControlMode(disturbingForce);
     }
 
     @Override
     public boolean periodic() {
-        if (Robot.blinky.blinkyEmpty() && !wasBlinkyEmpty) {
+        if (blinky.blinkyEmpty() && !wasBlinkyEmpty) {
             timer.reset();
             timer.start();
             wasBlinkyEmpty = true;
-        } else if (!Robot.blinky.blinkyEmpty() && wasBlinkyEmpty) {
+        } else if (!blinky.blinkyEmpty() && wasBlinkyEmpty) {
             timer.stop();
             wasBlinkyEmpty = false;
         }
@@ -52,7 +56,7 @@ public class Shoot implements TaskBase{
     @Override
     public void done() {
         timer.stop();
-        Robot.deathStar.setOrder66(DONT_EXECUTE_ORDER_66);
-        Robot.blinky.wantToShoot = false;
+        deathStar.setOrder66(DONT_EXECUTE_ORDER_66);
+        blinky.wantToShoot = false;
     }
 }

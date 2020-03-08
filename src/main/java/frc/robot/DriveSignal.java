@@ -16,45 +16,26 @@ public class DriveSignal {
     private double leftPower;
     private double rightPower;
     private ControlType controlType;
+
     public DriveSignal(double leftPower, double rightPower) {
         this(leftPower, rightPower, ControlType.kDutyCycle);
     }
-    public DriveSignal(double leftPower, double rightPower, ControlType controlType){
+
+    public DriveSignal(double leftPower, double rightPower, ControlType controlType) {
         this.leftPower = leftPower;
         this.rightPower = rightPower;
         this.controlType = controlType;
     }
+
     public double getLeftPower() {
         return leftPower;
     }
+
     public double getRightPower() {
         return rightPower;
     }
-    public ControlType getControlType(){
+
+    public ControlType getControlType() {
         return controlType;
-    }
-
-    public DriveSignal add(DriveSignal other) {
-        leftPower += other.getLeftPower();
-        rightPower += other.getRightPower();
-        return this;
-    }
-
-    public DriveSignal sub(DriveSignal other) {
-        leftPower -= other.getLeftPower();
-        rightPower -= other.getRightPower();
-        return this;
-    }
-
-    public DriveSignal mul(DriveSignal other) {
-        leftPower *= other.getLeftPower();
-        rightPower *= other.getRightPower();
-        return this;
-    }
-
-    public DriveSignal div(DriveSignal other) {
-        leftPower /= other.getLeftPower();
-        rightPower /= other.getRightPower();
-        return this;
     }
 }

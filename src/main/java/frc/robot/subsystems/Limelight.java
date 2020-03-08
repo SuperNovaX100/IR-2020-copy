@@ -32,21 +32,22 @@ public class Limelight extends Subsystem {
 
         return instance;
     }
-    public double getDistance(){
+
+    public double getDistance() {
         double a2 = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
-        double distance = (H2CENTER - H1) / Math.tan((A1 + a2) * Math.PI/180);
+        double distance = (H2CENTER - H1) / Math.tan((A1 + a2) * Math.PI / 180);
         System.out.println(distance);
         SmartDashboard.putNumber("Horizontal Distance To Target", distance);
         return distance;
     }
 
-    public double getAngleToTarget(){
+    public double getAngleToTarget() {
         return limelightNt.getEntry("tx").getDouble(0);
     }
-    public boolean seesTarget(){
+
+    public boolean seesTarget() {
         return limelightNt.getEntry("tv").getDouble(0) == 1.0;
     }
-
 
 
 }

@@ -7,7 +7,7 @@
 
 package frc.robot.tasks;
 
-import frc.robot.Robot;
+import frc.robot.subsystems.Blinky;
 
 /**
  * Add your docs here.
@@ -16,7 +16,7 @@ public class DeployIntakeTrench implements TaskBase {
 
     @Override
     public void start() {
-        Robot.blinky.wantToIntake = true;
+        Blinky.getInstance().wantToIntake = true;
     }
 
     @Override
@@ -26,6 +26,6 @@ public class DeployIntakeTrench implements TaskBase {
 
     @Override
     public void done() {
-        
+
     }
 }

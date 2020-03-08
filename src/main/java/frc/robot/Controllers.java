@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.DriveSignal;
 
 import static frc.robot.Constants.*;
 
@@ -22,18 +21,24 @@ public class Controllers {
   private Joystick joystick;
   private XboxController gamepad;
   public boolean autoLineShoot = false;
+  private static Controllers instance;
 
-  public Controllers() {
+  private Controllers() {
     joystick = new Joystick(DRIVER_JOYSTICK);
     gamepad = new XboxController(OPERATOR_GAMEPAD);
   }
 
+  public static final Controllers getInstance() {
+    if (instance == null) {
+      instance = new Controllers();
+    }
+    return instance;
+  }
+
   /**
-   * 
    * @param value
    * @param deadband
    * @return
-   * 
    */
   private double applyDeadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
@@ -211,37 +216,38 @@ public class Controllers {
   public boolean veryFarPosition(boolean getPressed) {
     return getPressed ? joystick.getRawButtonPressed(12) : joystick.getRawButton(12);
   }
-  
-  public Order66 getOrder66 (){
-   
 
-    if (Robot.controllers.veryClosePosition(false)) {
+  public Order66 getOrder66() {
+
+    if (veryClosePosition(false)) {
       return VERY_CLOSE_ORDER_66;
-  } else if (Robot.controllers.closePosition(false)) {
+    } else if (closePosition(false)) {
       return CLOSE_ORDER_66;
-  } else if (Robot.controllers.autoLinePosition(false)) {
+    } else if (autoLinePosition(false)) {
       return AUTOLINE_ORDER_66;
-  } else if (Robot.controllers.trenchPosition(false)) {
+    } else if (trenchPosition(false)) {
       return TRENCH_ORDER_66;
-  } else if (Robot.controllers.veryFarPosition(false)) {
+    } else if (veryFarPosition(false)) {
       return VERY_FAR_ORDER_66;
-  } else {
-     return DONT_EXECUTE_ORDER_66;
-  }
+    } else {
+      return DONT_EXECUTE_ORDER_66;
+    }
 
   }
 
-  public boolean joystickButton3Pressed(){
+  public boolean joystickButton3Pressed() {
     return joystick.getRawButtonPressed(3);
   }
-  public boolean joystickButton4Pressed(){
+
+  public boolean joystickButton4Pressed() {
     return joystick.getRawButtonPressed(4);
   }
-  public boolean joystickButton6Pressesd(){
+
+  public boolean joystickButton6Pressesd() {
     return joystick.getRawButtonPressed(6);
   }
 
-  public boolean useVision(){
+  public boolean useVision() {
     return joystick.getRawButton(10);
   }
 

@@ -15,10 +15,21 @@ public class Subsystem {
         Robot.subsystems.add(this);
     }
 
-    public void teleopInit() {}
-    public void teleopPeriodic() {}
-    public void autonomousInit() {}
-    public void autonomousPeriodic() {}
-    public void generalPeriodic() {}
-    public void generalInit() {}
+    public void teleopInit() {
+    }
+
+    public void teleopPeriodic() {
+    }
+
+    public void autonomousInit() {
+    }
+
+    public void autonomousPeriodic() {
+    }
+
+    public void generalPeriodic() {
+    }
+
+    public void generalInit() {
+    }
 }

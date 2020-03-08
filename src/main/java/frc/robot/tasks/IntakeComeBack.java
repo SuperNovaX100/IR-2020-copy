@@ -7,7 +7,7 @@
 
 package frc.robot.tasks;
 
-import frc.robot.Robot;
+import frc.robot.subsystems.Blinky;
 
 /**
  * Add your docs here.
@@ -16,7 +16,7 @@ public class IntakeComeBack implements TaskBase {
 
     @Override
     public void start() {
-        Robot.blinky.wantToIntake = false;
+        Blinky.getInstance().wantToIntake = false;
     }
 
     @Override
@@ -27,5 +27,5 @@ public class IntakeComeBack implements TaskBase {
     @Override
     public void done() {
     }
-    
+
 }

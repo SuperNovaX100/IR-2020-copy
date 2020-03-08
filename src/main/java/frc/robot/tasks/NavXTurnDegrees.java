@@ -9,7 +9,7 @@ package frc.robot.tasks;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * Add your docs here.
@@ -20,6 +20,7 @@ public class NavXTurnDegrees implements TaskBase {
     private int withinToleranceCounter;
     private double currentDegrees;
     private double lastDegrees;
+    private final DriveTrain driveTrain = DriveTrain.getInstance();
 
     public NavXTurnDegrees(double targetDegrees) {
         this.targetDegrees = targetDegrees;
@@ -27,7 +28,7 @@ public class NavXTurnDegrees implements TaskBase {
 
     @Override
     public void start() {
-        currentDegrees = Robot.driveTrain.getAngle();
+        currentDegrees = driveTrain.getAngle();
         withinToleranceCounter = 0;
         pidController = new PIDController((1.5 / 90.0), 0.03, .001);
         // pidController.setIntegratorRange(-0.2, 0.2);
@@ -38,11 +39,11 @@ public class NavXTurnDegrees implements TaskBase {
     @Override
     public boolean periodic() {
         lastDegrees = currentDegrees;
-        currentDegrees = Robot.driveTrain.getAngle();
+        currentDegrees = driveTrain.getAngle();
         double output = pidController.calculate(currentDegrees);
-        Robot.driveTrain.setMotorPower(-output, output);
+        driveTrain.setMotorPower(-output, output);
 
-        SmartDashboard.putNumber("Auton Test/Degrees Rotated", Robot.driveTrain.getAngle());
+        SmartDashboard.putNumber("Auton Test/Degrees Rotated", driveTrain.getAngle());
 
         if (Math.abs(lastDegrees - currentDegrees) <= 0.05) {
             withinToleranceCounter++;
@@ -54,7 +55,7 @@ public class NavXTurnDegrees implements TaskBase {
 
     @Override
     public void done() {
-        Robot.driveTrain.setMotorPower(0, 0);
+        driveTrain.setMotorPower(0, 0);
         System.out.println("done");
     }
 

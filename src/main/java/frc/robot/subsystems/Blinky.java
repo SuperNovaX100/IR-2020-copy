@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.robot.Robot;
+import frc.robot.Controllers;
 import frc.robot.Subsystem;
 
 import static frc.robot.Constants.*;
@@ -35,8 +35,9 @@ public class Blinky extends Subsystem {
     public boolean wantToIntake;
     private boolean blinkyBackwards;
     private boolean intakeBackwards;
-
-    public Blinky() {
+    private static Blinky instance;
+    private final Controllers controllers;
+    private Blinky() {
         // intake solenoids
         intakeDeploy = new DoubleSolenoid(PCM, INTAKE_DOWN, INTAKE_UP);
 
@@ -64,6 +65,15 @@ public class Blinky extends Subsystem {
             irMotors[i].configVoltageCompSaturation(11);
             irMotors[i].setNeutralMode(NeutralMode.Brake);
         }
+
+        controllers = Controllers.getInstance();
+    }
+
+    public static Blinky getInstance(){
+        if (instance == null){
+            instance = new Blinky();
+        }
+        return instance;
     }
 
     @Override
@@ -81,16 +91,16 @@ public class Blinky extends Subsystem {
     }
 
     @Override
-    public void generalPeriodic(){
+    public void generalPeriodic() {
         intakeDeploy.set(wantToIntake ? Value.kForward : Value.kReverse);
-        
+
         double[] currentPowers = new double[5];
         if (wantToIntake || wantToShoot) {
             // Set to true once one of the sensors is empty
             boolean canGo = false;
             // loops from closest sensor to the farthest sensor
             for (int i = 4; i >= 0; i--) {
-                 if (wantToShoot && shooting && i == 4) {
+                if (wantToShoot && shooting && i == 4) {
                     currentPowers[i] = -0.75;
                 } else if (canGo || irSensors[i].get()) {
                     canGo = true;
@@ -99,7 +109,7 @@ public class Blinky extends Subsystem {
                     currentPowers[i] = 0;
                 }
             }
-            
+
         } else {
             for (int i = 0; i < 5; i++) {
                 currentPowers[i] = 0;
@@ -128,10 +138,10 @@ public class Blinky extends Subsystem {
     @Override
     public void teleopPeriodic() {
         // deploy intake
-        wantToIntake = Robot.controllers.leftTriggerHeld() >= 0.02;
-        blinkyBackwards = Robot.controllers.joystickButton2();
-        wantToShoot = Robot.controllers.joystickTriggerHeld();
-        intakeBackwards = Robot.controllers.backButton();
+        wantToIntake = controllers.leftTriggerHeld() >= 0.02;
+        blinkyBackwards = controllers.joystickButton2();
+        wantToShoot = controllers.joystickTriggerHeld();
+        intakeBackwards = controllers.backButton();
     }
 
     public boolean getShooting() {
@@ -150,8 +160,8 @@ public class Blinky extends Subsystem {
         boolean activeSensor = false;
         for (DigitalInput irSensor : irSensors) {
             if (!irSensor.get()) {
-                 activeSensor = true;
-                 break;
+                activeSensor = true;
+                break;
             }
         }
         return !activeSensor;

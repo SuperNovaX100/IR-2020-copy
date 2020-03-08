@@ -18,11 +18,11 @@ import frc.robot.tasks.ZeroHoodMotor;
  */
 public class ShootAndMoveOffLine extends AutonBase {
     public ShootAndMoveOffLine() {
-        super("shootAndMoveOffLine", new TaskBase[] {
-            new ZeroHoodMotor(),
-            new EmergencyAuton(new ShootFromAutonLine(), 5, new MoveOffLine()),
-            new ZeroHoodMotor(),
-            new MoveOffLine()
+        super("shootAndMoveOffLine", new TaskBase[]{
+                new ZeroHoodMotor(),
+                new EmergencyAuton(new ShootFromAutonLine(), 5, new MoveOffLine()),
+                new ZeroHoodMotor(),
+                new MoveOffLine()
         });
     }
 }

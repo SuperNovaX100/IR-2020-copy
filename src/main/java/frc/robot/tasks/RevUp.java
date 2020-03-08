@@ -8,8 +8,9 @@
 package frc.robot.tasks;
 
 import frc.robot.Order66;
-import frc.robot.Robot;
+import frc.robot.subsystems.DeathStar;
 import frc.robot.subsystems.DisturbingForce;
+import frc.robot.subsystems.Vader;
 
 /**
  * Add your docs here.
@@ -25,8 +26,8 @@ public class RevUp implements TaskBase {
 
     @Override
     public void start() {
-        Robot.deathStar.setOrder66(order66);
-        Robot.vader.setVaderControlMode(disturbingForce);
+        DeathStar.getInstance().setOrder66(order66);
+        Vader.getInstance().setVaderControlMode(disturbingForce);
     }
 
     @Override

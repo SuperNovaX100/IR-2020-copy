@@ -12,7 +12,9 @@ package frc.robot.tasks;
  */
 public interface TaskBase {
     public void start();
+
     public boolean periodic();
+
     public void done();
 
 }

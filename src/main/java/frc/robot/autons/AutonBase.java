@@ -39,7 +39,7 @@ public class AutonBase {
             if (currentTask < tasks.length) {
                 tasks[currentTask].start();
                 System.out.println(tasks[currentTask].getClass().getName() + " started");
-            } 
+            }
         }
     }
 

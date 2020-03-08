@@ -5,31 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.tasks;
+package frc.robot.autons;
 
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.tasks.MoveOffLine;
+import frc.robot.tasks.TaskBase;
 
 /**
  * Add your docs here.
  */
-public class VisionAim implements TaskBase {
-    private final DriveTrain driveTrain;
+public class Default extends AutonBase {
 
-    public VisionAim(){
-        driveTrain = DriveTrain.getInstance();
-    }
-
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public boolean periodic() {
-        driveTrain.visionLoop();
-        return driveTrain.isAimedAtTarget();
-    }
-
-    @Override
-    public void done() {
+    public Default() {
+        super("Default", new TaskBase[]{
+                new MoveOffLine(),
+        });
     }
 }

@@ -7,13 +7,14 @@
 
 package frc.robot.tasks;
 
-import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * Add your docs here.
  */
 public class TurnDegrees implements TaskBase {
     private double degrees;
+    private final DriveTrain driveTrain = DriveTrain.getInstance();
 
     public TurnDegrees(double degrees) {
         this.degrees = Math.abs(degrees / 360) * 34.25;
@@ -22,20 +23,20 @@ public class TurnDegrees implements TaskBase {
     @Override
     public void start() {
         if (degrees >= 0) {
-            Robot.driveTrain.setMotorPower(-0.25, 0.25);
+            driveTrain.setMotorPower(-0.25, 0.25);
         } else {
-            Robot.driveTrain.setMotorPower(0.25, -0.25);
+            driveTrain.setMotorPower(0.25, -0.25);
         }
     }
 
     @Override
     public boolean periodic() {
-        return Robot.driveTrain.leftEncoderFront.getPosition() >= 25;
+        return driveTrain.leftEncoderFront.getPosition() >= 25;
     }
 
     @Override
     public void done() {
-        System.out.println(Robot.driveTrain.getAngle());
-        Robot.driveTrain.setMotorPower(0, 0);
+        System.out.println(driveTrain.getAngle());
+        driveTrain.setMotorPower(0, 0);
     }
 }

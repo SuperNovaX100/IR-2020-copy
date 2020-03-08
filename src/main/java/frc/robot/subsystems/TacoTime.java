@@ -14,7 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.Robot;
+import frc.robot.Controllers;
 import frc.robot.Subsystem;
 
 import static frc.robot.Constants.*;
@@ -27,12 +27,27 @@ public class TacoTime extends Subsystem {
     TalonSRX winchMotor;
     TalonSRX climbHeightMotor;
     CANSparkMax balanceMotor;
+    private static TacoTime instance;
+    private final Controllers controllers;
+    private final ColorSensor colorSensor;
 
-    public TacoTime() {
+    
+
+    private TacoTime() {
         climbSolenoid = new Solenoid(PCM, CLIMB_SOLENOID);
         winchMotor = new TalonSRX(WINCH_MOTOR);
         climbHeightMotor = new TalonSRX(CLIMB_HEIGHT_MOTOR);
         balanceMotor = new CANSparkMax(COLOR_WHEEL_BALANCE_MOTOR, MotorType.kBrushless);
+
+        controllers = Controllers.getInstance();
+        colorSensor = ColorSensor.getInstance();
+    }
+
+    public static TacoTime getInstance(){
+        if (instance == null){
+            instance = new TacoTime();
+        }
+        return instance;
     }
 
     @Override
@@ -45,38 +60,36 @@ public class TacoTime extends Subsystem {
 
     @Override
     public void teleopPeriodic() {
-        climbSolenoid.set(Robot.controllers.xHeld());
+        climbSolenoid.set(controllers.xHeld());
 
 
-        if (Robot.controllers.rightTriggerHeld() >= 0.02){
-            winchMotor.set(ControlMode.PercentOutput, Robot.controllers.rightTriggerHeld());
+        if (controllers.rightTriggerHeld() >= 0.02) {
+            winchMotor.set(ControlMode.PercentOutput, controllers.rightTriggerHeld());
             climbHeightMotor.set(ControlMode.PercentOutput, 0.5);
-        } else{
+        } else {
             winchMotor.set(ControlMode.PercentOutput, 0);
         }
-       
-        
-        if (Robot.controllers.leftBumperHeld()) {
+
+
+        if (controllers.leftBumperHeld()) {
             climbHeightMotor.set(ControlMode.PercentOutput, 1.0);
-        }
-        else if (Robot.controllers.rightBumperHeld()) {
+        } else if (controllers.rightBumperHeld()) {
             climbHeightMotor.set(ControlMode.PercentOutput, -1.0);
-        }
-        else {
+        } else {
             climbHeightMotor.set(ControlMode.PercentOutput, 0.0);
         }
-        
 
-    if(Robot.controllers.getGamepadX(Hand.kLeft)>=0.07){
-        balanceMotor.set(Robot.controllers.getGamepadX(Hand.kLeft));
-        Robot.colorSensor.colorSpinManualMode = true;
-    }else if(Robot.controllers.getGamepadX(Hand.kLeft)<=-0.07){
-        balanceMotor.set(Robot.controllers.getGamepadX(Hand.kLeft));
-        Robot.colorSensor.colorSpinManualMode = true;
-    }else if (Robot.colorSensor.colorSpinManualMode){
-        balanceMotor.set(0);
 
-    }
+        if (controllers.getGamepadX(Hand.kLeft) >= 0.07) {
+            balanceMotor.set(controllers.getGamepadX(Hand.kLeft));
+            colorSensor.colorSpinManualMode = true;
+        } else if (controllers.getGamepadX(Hand.kLeft) <= -0.07) {
+            balanceMotor.set(controllers.getGamepadX(Hand.kLeft));
+            colorSensor.colorSpinManualMode = true;
+        } else if (colorSensor.colorSpinManualMode) {
+            balanceMotor.set(0);
+
+        }
 
     }
 }

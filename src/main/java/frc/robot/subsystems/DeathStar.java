@@ -14,8 +14,8 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Controllers;
 import frc.robot.Order66;
-import frc.robot.Robot;
 import frc.robot.Subsystem;
 
 import static frc.robot.Constants.*;
@@ -32,8 +32,12 @@ public class DeathStar extends Subsystem {
     private CANPIDController rightShootPidController;
     private double rpmError = 0;
     private Order66 order66;
+    private static DeathStar instance;
+    private final Vader vader = Vader.getInstance();
+    private final Controllers controllers  = Controllers.getInstance();
+    private final Blinky blinky = Blinky.getInstance();
 
-    public DeathStar() {
+    private DeathStar() {
         order66 = DONT_EXECUTE_ORDER_66;
         shootLeftMotor = new CANSparkMax(SHOOTER_LEFT_MOTOR, MotorType.kBrushless);
         shootRightMotor = new CANSparkMax(SHOOTER_RIGHT_MOTOR, MotorType.kBrushless);
@@ -68,8 +72,15 @@ public class DeathStar extends Subsystem {
 
     }
 
+    public static DeathStar getInstance(){
+        if (instance == null){
+            instance = new DeathStar();
+        }
+        return instance;
+    }
+
     @Override
-    public void generalInit(){
+    public void generalInit() {
         SmartDashboard.putNumber("ShooterDesiredRPM", 0);
         setOrder66(DONT_EXECUTE_ORDER_66);
         setMotorPowers(0, 0);
@@ -79,6 +90,8 @@ public class DeathStar extends Subsystem {
         leftShootPidController.setReference(0, ControlType.kDutyCycle);
         rightShootPidController.setReference(0, ControlType.kDutyCycle);
     }
+
+    
 
     @Override
     public void generalPeriodic() {
@@ -91,16 +104,16 @@ public class DeathStar extends Subsystem {
         SmartDashboard.putNumber("Right Shooter Motor Power", shootRightMotor.get());
         leftShootPidController.setReference(order66.demand, order66.controlType);
         rightShootPidController.setReference(order66.demand, order66.controlType);
-        if (order66.controlType == ControlType.kVelocity && Robot.blinky.ballReadyToShoot() && rpmError < 35 && Robot.vader.isToPosition()) {
-            Robot.blinky.setShooting(true);
+        if (order66.controlType == ControlType.kVelocity && blinky.ballReadyToShoot() && rpmError < 35 && vader.isToPosition()) {
+            blinky.setShooting(true);
         } else {
-            Robot.blinky.setShooting(false);
+            blinky.setShooting(false);
         }
     }
 
     @Override
     public void teleopPeriodic() {
-        order66 = Robot.controllers.getOrder66();
+        order66 = controllers.getOrder66();
     }
 
     public void setOrder66(Order66 order66) {

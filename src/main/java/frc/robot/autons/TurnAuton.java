@@ -16,9 +16,9 @@ import frc.robot.tasks.TaskBase;
 public class TurnAuton extends AutonBase {
 
     public TurnAuton() {
-        super("TurnAuton", new TaskBase[] {
-            new NavXTurnDegrees(-20)
+        super("TurnAuton", new TaskBase[]{
+                new NavXTurnDegrees(-20)
         });
-        
+
     }
 }

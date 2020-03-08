@@ -16,7 +16,7 @@ public class DisturbingForce {
     ControlMode controlMode;
     double demand;
 
-    public DisturbingForce(ControlMode controlMode, double demand){
+    public DisturbingForce(ControlMode controlMode, double demand) {
         this.controlMode = controlMode;
         this.demand = demand;
     }

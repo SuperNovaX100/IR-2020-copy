@@ -16,10 +16,10 @@ import frc.robot.tasks.TaskBase;
 public class Turn90Degrees extends AutonBase {
 
     public Turn90Degrees(String name, TaskBase[] tasks) {
-        super("Turn 90 Degrees", new TaskBase[] {
-            new NavXTurnDegrees (90)
-     
-    });
+        super("Turn 90 Degrees", new TaskBase[]{
+                new NavXTurnDegrees(90)
 
-}
+        });
+
+    }
 }

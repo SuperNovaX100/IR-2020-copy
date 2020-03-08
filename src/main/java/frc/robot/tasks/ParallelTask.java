@@ -12,12 +12,14 @@ import java.util.List;
 
 public class ParallelTask implements TaskBase {
     private List<TaskBase> unfinishedTasks;
+
     /**
      * Runs multiple tasks at the same time, and finishes when all tasks are done
+     *
      * @param tasks tasks you want to run in parallel
      */
 
-    public ParallelTask(TaskBase ... tasks) {
+    public ParallelTask(TaskBase... tasks) {
         unfinishedTasks = new ArrayList<TaskBase>();
         for (TaskBase task : tasks) {
             unfinishedTasks.add(task);

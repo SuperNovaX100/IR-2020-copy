@@ -16,8 +16,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.Controllers;
 import frc.robot.DriveSignal;
-import frc.robot.Robot;
 import frc.robot.Subsystem;
 
 
@@ -45,8 +45,10 @@ public class DriveTrain extends Subsystem {
     private Limelight limelight;
     private double angleToTarget;
     private int counterForVision;
+    private static DriveTrain instance;
+    private final Controllers controllers = Controllers.getInstance();
 
-    public DriveTrain() {
+    private DriveTrain() {
         gyro = new AHRS(SPI.Port.kMXP);
         counterForVision = 0;
         leftMotorFront = new CANSparkMax(LEFT_DRIVE_MOTOR_FRONT, MotorType.kBrushless);
@@ -69,6 +71,15 @@ public class DriveTrain extends Subsystem {
 
         limelight = Limelight.getInstance();
 
+
+
+    }
+
+    public static DriveTrain getInstance(){
+        if (instance == null){
+            instance = new DriveTrain();
+        }
+        return instance;
     }
 
     public void setMotorMode(IdleMode mode) {
@@ -120,7 +131,7 @@ public class DriveTrain extends Subsystem {
         rightMotorBack.setInverted(false);
         leftMotorBack.setInverted(true);
         leftMotorFront.setInverted(true);
-        setMotorPower(0,0);
+        setMotorPower(0, 0);
 
         SmartDashboard.putNumber("DriveTrain P Values", 0);
         SmartDashboard.putNumber("DriveTrain I Values", 0);
@@ -151,10 +162,10 @@ public class DriveTrain extends Subsystem {
 
     @Override
     public void teleopPeriodic() {
-        
-        DriveSignal signal = Robot.controllers.arcadeDrive();
 
-        if (Robot.controllers.useVision()) {
+        DriveSignal signal = controllers.arcadeDrive();
+
+        if (controllers.useVision()) {
             visionLoop();
         } else {
             setMotorPowerSignal(signal);
@@ -207,21 +218,22 @@ public class DriveTrain extends Subsystem {
     }
 
     public boolean isAimedAtTarget() {
-       if ((Math.abs(angleToTarget) <= 1) && change < 0.01) {
-           counterForVision++;
-       } else {
-           counterForVision = 0;
-       }
-       return counterForVision >= 3;
+        if ((Math.abs(angleToTarget) <= 1) && change < 0.01) {
+            counterForVision++;
+        } else {
+            counterForVision = 0;
+        }
+        return counterForVision >= 3;
     }
+
     public void straightLineLoop(double desiredAngle, double power) {
-            double currentAngle = gyro.getAngle();
-            double error = desiredAngle - currentAngle;
-            double p = 1.0 / 90.0;
-            double leftPower = -error * p + power;
-            double rightPower = error * p + power;
-            DriveSignal driveSignal = new DriveSignal(leftPower, rightPower * 1.03);
-            setMotorPowerSignal(driveSignal);
+        double currentAngle = gyro.getAngle();
+        double error = desiredAngle - currentAngle;
+        double p = 1.0 / 90.0;
+        double leftPower = -error * p + power;
+        double rightPower = error * p + power;
+        DriveSignal driveSignal = new DriveSignal(leftPower, rightPower * 1.03);
+        setMotorPowerSignal(driveSignal);
     }
 
 }

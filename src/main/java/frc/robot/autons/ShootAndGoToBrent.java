@@ -7,7 +7,6 @@
 
 package frc.robot.autons;
 
-import frc.robot.Constants;
 import frc.robot.tasks.DeployIntakeTrench;
 import frc.robot.tasks.DriveDistance;
 import frc.robot.tasks.IntakeComeBack;
@@ -23,16 +22,16 @@ public class ShootAndGoToBrent extends AutonBase {
 
     public ShootAndGoToBrent() {
         super("shootAndMoveLeft", new TaskBase[]{
-            new ZeroHoodMotor(),
-            new ShootFromAutonLine(),
-            new DeployIntakeTrench(),
-            new DriveDistance(-78 * 25.4, 0.5),
-            new NavXTurnDegrees(22.5),
-            new IntakeComeBack(),
-            //new DriveDistance(72 * 25.4, true, Constants.AUTOLINE_ORDER_66, Constants.AUTOLINE_DISTURBING_FORCE, -0.5),
-            //new DriveDistance(-, power)
-          
-            
+                new ZeroHoodMotor(),
+                new ShootFromAutonLine(),
+                new DeployIntakeTrench(),
+                new DriveDistance(-78 * 25.4, 0.5),
+                new NavXTurnDegrees(22.5),
+                new IntakeComeBack(),
+                //new DriveDistance(72 * 25.4, true, Constants.AUTOLINE_ORDER_66, Constants.AUTOLINE_DISTURBING_FORCE, -0.5),
+                //new DriveDistance(-, power)
+
+
         });
     }
 }

@@ -16,7 +16,7 @@ public class Order66 {
     public ControlType controlType;
     public double demand;
 
-    public Order66(ControlType controlType, double demand){
+    public Order66(ControlType controlType, double demand) {
         this.controlType = controlType;
         this.demand = demand;
     }

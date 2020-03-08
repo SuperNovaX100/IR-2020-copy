@@ -7,28 +7,29 @@
 
 package frc.robot.tasks;
 
-import frc.robot.Robot;
+import frc.robot.subsystems.Vader;
 
 import static frc.robot.Constants.*;
 
 /**
  * Add your docs here.
  */
-public class ZeroHoodMotor implements TaskBase{
+public class ZeroHoodMotor implements TaskBase {
+    private final Vader vader = Vader.getInstance();
 
     @Override
     public void start() {
-        Robot.vader.setVaderControlMode(ZEROING);
+        vader.setVaderControlMode(ZEROING);
     }
 
     @Override
     public boolean periodic() {
-        return Robot.vader.isZeroed();
+        return vader.isZeroed();
     }
 
     @Override
     public void done() {
         System.out.println("Finished Zeroing");
-        Robot.vader.setVaderControlMode(STOP_DISTURBING_FORCE);
+        vader.setVaderControlMode(STOP_DISTURBING_FORCE);
     }
 }

@@ -8,7 +8,9 @@
 package frc.robot.tasks;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
+import frc.robot.subsystems.Blinky;
+import frc.robot.subsystems.DeathStar;
+import frc.robot.subsystems.Vader;
 
 import static frc.robot.Constants.*;
 
@@ -19,24 +21,26 @@ public class ShootFromAutonLine implements TaskBase {
     private Timer timer;
     private Timer totalTimer;
     private boolean wasBlinkyEmpty;
+    private final DeathStar deathStar = DeathStar.getInstance();
+    private final Blinky blinky = Blinky.getInstance();
 
     @Override
     public void start() {
-        Robot.deathStar.setOrder66(AUTOLINE_ORDER_66);
-        Robot.vader.setVaderControlMode(AUTOLINE_DISTURBING_FORCE);
+        deathStar.setOrder66(AUTOLINE_ORDER_66);
+        Vader.getInstance().setVaderControlMode(AUTOLINE_DISTURBING_FORCE);
         timer = new Timer();
         totalTimer = new Timer();
         totalTimer.start();
-        Robot.blinky.wantToShoot = true;
+        blinky.wantToShoot = true;
     }
 
     @Override
     public boolean periodic() {
-        if (Robot.blinky.blinkyEmpty() && !wasBlinkyEmpty) {
+        if (blinky.blinkyEmpty() && !wasBlinkyEmpty) {
             timer.reset();
             timer.start();
             wasBlinkyEmpty = true;
-        } else if (!Robot.blinky.blinkyEmpty() && wasBlinkyEmpty) {
+        } else if (!blinky.blinkyEmpty() && wasBlinkyEmpty) {
             timer.stop();
             wasBlinkyEmpty = false;
         }
@@ -46,8 +50,8 @@ public class ShootFromAutonLine implements TaskBase {
     @Override
     public void done() {
         timer.stop();
-        Robot.deathStar.setOrder66(DONT_EXECUTE_ORDER_66);
-        Robot.blinky.wantToShoot = false;
+        deathStar.setOrder66(DONT_EXECUTE_ORDER_66);
+        blinky.wantToShoot = false;
 
     }
 

@@ -8,17 +8,18 @@
 package frc.robot.tasks;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * Add your docs here.
  */
 public class MoveOffLine implements TaskBase {
     Timer timer;
+    private final DriveTrain driveTrain = DriveTrain.getInstance();
 
     @Override
     public void start() {
-        Robot.driveTrain.setMotorPower(0.25, 0.25);
+        driveTrain.setMotorPower(0.25, 0.25);
         timer = new Timer();
         timer.reset();
         timer.start();
@@ -31,6 +32,6 @@ public class MoveOffLine implements TaskBase {
 
     @Override
     public void done() {
-        Robot.driveTrain.setMotorPower(0, 0);
+        driveTrain.setMotorPower(0, 0);
     }
 }

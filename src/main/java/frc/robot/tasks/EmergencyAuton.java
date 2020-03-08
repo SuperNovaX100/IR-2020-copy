@@ -12,14 +12,15 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * Add your docs here.
  */
-public class EmergencyAuton implements TaskBase{
+public class EmergencyAuton implements TaskBase {
     private TaskBase taskBeingRun;
     private double timeAlloted;
     private TaskBase alternateTask;
     private boolean isCancelled;
     private boolean callbackFinished;
-    private Timer timer; 
-    public EmergencyAuton(TaskBase taskBeingRun, double timeAlloted, TaskBase alternateTask){
+    private Timer timer;
+
+    public EmergencyAuton(TaskBase taskBeingRun, double timeAlloted, TaskBase alternateTask) {
         this.taskBeingRun = taskBeingRun;
         this.timeAlloted = timeAlloted;
         this.alternateTask = alternateTask;
@@ -38,7 +39,7 @@ public class EmergencyAuton implements TaskBase{
 
     @Override
     public boolean periodic() {
-        if (timer.get() <= timeAlloted){
+        if (timer.get() <= timeAlloted) {
             return taskBeingRun.periodic();
         } else if (!isCancelled) {
             taskBeingRun.done();

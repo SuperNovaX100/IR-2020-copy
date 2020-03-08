@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class StableSwitch {
     private DigitalInput digitalInput;
     private int counter = 0;
+
     public StableSwitch(int portNumber) {
         digitalInput = new DigitalInput(portNumber);
     }
