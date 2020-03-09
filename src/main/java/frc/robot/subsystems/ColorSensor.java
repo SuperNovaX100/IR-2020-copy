@@ -91,10 +91,10 @@ public class ColorSensor extends Subsystem {
 
         Color detectedColor = colorSensor.getColor();
         double IR = colorSensor.getIR();
-        SmartDashboard.putNumber("Color Sensor/Red", detectedColor.red);
-        SmartDashboard.putNumber("Color Sensor/Green", detectedColor.green);
-        SmartDashboard.putNumber("Color Sensor/Blue", detectedColor.blue);
-        SmartDashboard.putNumber("IR", IR);
+       // SmartDashboard.putNumber("Color Sensor/Red", detectedColor.red);
+        //SmartDashboard.putNumber("Color Sensor/Green", detectedColor.green);
+        //SmartDashboard.putNumber("Color Sensor/Blue", detectedColor.blue);
+        //SmartDashboard.putNumber("IR", IR);
         String colorString;
         char fieldColor = 'U';
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
@@ -116,8 +116,8 @@ public class ColorSensor extends Subsystem {
         } else {
             colorString = "Unknown";
         }
-        SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
-        SmartDashboard.putString("Color Sensor/Detected Color", colorString);
+        //SmartDashboard.putNumber("Color Sensor/Confidence", match.confidence);
+        //SmartDashboard.putString("Color Sensor/Detected Color", colorString);
         return fieldColor;
     }
 
@@ -134,7 +134,7 @@ public class ColorSensor extends Subsystem {
             colorWheelSolenoid.set(false);
         }
 
-        SmartDashboard.putNumber("Color Sensor/Changes", changes);
+      //  SmartDashboard.putNumber("Color Sensor/Changes", changes);
 
         if (controllers.bPressed()) {
             String gameSpecificMessage = DriverStation.getInstance().getGameSpecificMessage();

@@ -133,11 +133,11 @@ public class DriveTrain extends Subsystem {
         leftMotorFront.setInverted(true);
         setMotorPower(0, 0);
 
-        SmartDashboard.putNumber("DriveTrain P Values", 0);
-        SmartDashboard.putNumber("DriveTrain I Values", 0);
-        SmartDashboard.putNumber("DriveTrain D Values", 0);
-        SmartDashboard.putNumber("DriveTrain FF Values", 0);
-        SmartDashboard.putNumber("DriveTrain Iz Values", 0);
+       // SmartDashboard.putNumber("DriveTrain P Values", 0);
+        //SmartDashboard.putNumber("DriveTrain I Values", 0);
+        //SmartDashboard.putNumber("DriveTrain D Values", 0);
+        //SmartDashboard.putNumber("DriveTrain FF Values", 0);
+        //SmartDashboard.putNumber("DriveTrain Iz Values", 0);
     }
 
     double averageLeft = 0;
@@ -149,7 +149,7 @@ public class DriveTrain extends Subsystem {
      */
     @Override
     public void generalPeriodic() {
-        //System.out.println(gyro.getAngle());
+        /*System.out.println(gyro.getAngle());
         SmartDashboard.putNumber("DriveTrain/Left Front Encoder Value", leftEncoderFront.getPosition());
         SmartDashboard.putNumber("DriveTrain/Left Back Encoder Value", leftEncoderBack.getPosition());
         SmartDashboard.putNumber("DriveTrain/Right Front Encoder Value", rightEncoderFront.getPosition());
@@ -157,7 +157,7 @@ public class DriveTrain extends Subsystem {
         SmartDashboard.putNumber("DriveTrain/Left Front Velocity Value", leftEncoderFront.getVelocity());
         SmartDashboard.putNumber("DriveTrain/Left Back Velocity Value", leftEncoderBack.getVelocity());
         SmartDashboard.putNumber("DriveTrain/Right Front Velocity Value", rightEncoderFront.getVelocity());
-        SmartDashboard.putNumber("DriveTrain/Right Back Velocity Value", rightEncoderBack.getVelocity());
+        SmartDashboard.putNumber("DriveTrain/Right Back Velocity Value", rightEncoderBack.getVelocity()); */
     }
 
     @Override
@@ -193,7 +193,7 @@ public class DriveTrain extends Subsystem {
 
     public void goAboutThreeFeet() {
         leftMotorFrontPID.setReference(17, ControlType.kPosition);
-        SmartDashboard.putNumber("PID DriveTrain Encoders", 0);
+        //SmartDashboard.putNumber("PID DriveTrain Encoders", 0);
 
         leftMotorBackPID.setReference(17, ControlType.kPosition);
         rightMotorFrontPID.setReference(17, ControlType.kPosition);

@@ -27,18 +27,18 @@ public class AutonBase {
     public void start() {
         currentTask = 0;
         tasks[0].start();
-        System.out.println(tasks[0].getClass().getName() + " started");
+       // System.out.println(tasks[0].getClass().getName() + " started");
     }
 
     public void periodic() {
         //if (currentTask < tasks.length) System.out.println(tasks[currentTask].getClass().getName() + " periodic");
         if (currentTask < tasks.length && tasks[currentTask].periodic()) {
             tasks[currentTask].done();
-            System.out.println(tasks[currentTask].getClass().getName() + " finished");
+            //System.out.println(tasks[currentTask].getClass().getName() + " finished");
             currentTask += 1;
             if (currentTask < tasks.length) {
                 tasks[currentTask].start();
-                System.out.println(tasks[currentTask].getClass().getName() + " started");
+              //  System.out.println(tasks[currentTask].getClass().getName() + " started");
             }
         }
     }

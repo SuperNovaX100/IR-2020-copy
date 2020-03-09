@@ -81,7 +81,7 @@ public class DeathStar extends Subsystem {
 
     @Override
     public void generalInit() {
-        SmartDashboard.putNumber("ShooterDesiredRPM", 0);
+       // SmartDashboard.putNumber("ShooterDesiredRPM", 0);
         setOrder66(DONT_EXECUTE_ORDER_66);
         setMotorPowers(0, 0);
         shootRightMotor.setInverted(false);
@@ -96,12 +96,12 @@ public class DeathStar extends Subsystem {
     @Override
     public void generalPeriodic() {
         rpmError = Math.abs(order66.demand - shootLeftEncoder.getVelocity());
-        SmartDashboard.putNumber("Shooter/RPM Error", rpmError);
-        SmartDashboard.putNumber("Shooter/Left RPM", shootLeftEncoder.getVelocity());
-        SmartDashboard.putNumber("Shooter/Right RPM", shootRightEncoder.getVelocity());
+      //  SmartDashboard.putNumber("Shooter/RPM Error", rpmError);
+        //SmartDashboard.putNumber("Shooter/Left RPM", shootLeftEncoder.getVelocity());
+      //  SmartDashboard.putNumber("Shooter/Right RPM", shootRightEncoder.getVelocity());
         // Sets PID values based on the dashboard
-        SmartDashboard.putNumber("Left Shooter Motor Power", shootLeftMotor.get());
-        SmartDashboard.putNumber("Right Shooter Motor Power", shootRightMotor.get());
+       // SmartDashboard.putNumber("Left Shooter Motor Power", shootLeftMotor.get());
+        //SmartDashboard.putNumber("Right Shooter Motor Power", shootRightMotor.get());
         leftShootPidController.setReference(order66.demand, order66.controlType);
         rightShootPidController.setReference(order66.demand, order66.controlType);
         if (order66.controlType == ControlType.kVelocity && blinky.ballReadyToShoot() && rpmError < DEATH_STAR_TOLERANCE && vader.isToPosition()) {

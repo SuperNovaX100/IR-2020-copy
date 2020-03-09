@@ -5,31 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.tasks;
+package frc.robot.autons;
 
-import frc.robot.subsystems.Vader;
-
-import static frc.robot.Constants.*;
+import frc.robot.tasks.DriveDistance;
+import frc.robot.tasks.ShootFromAutonLine;
+import frc.robot.tasks.TaskBase;
+import frc.robot.tasks.ZeroHoodMotor;
 
 /**
  * Add your docs here.
  */
-public class ZeroHoodMotor implements TaskBase {
-    private final Vader vader = Vader.getInstance();
+public class ShootAndMoveForward extends AutonBase {
 
-    @Override
-    public void start() {
-        vader.setVaderControlMode(ZEROING);
+    public ShootAndMoveForward() {
+        super("ShootAndMoveForward", new TaskBase[]{
+            new ZeroHoodMotor(),
+            new ShootFromAutonLine(),
+            new DriveDistance(48 * 25.4, -0.4),
+        });
+        
     }
 
-    @Override
-    public boolean periodic() {
-        return vader.isZeroed();
-    }
-
-    @Override
-    public void done() {
-      //  System.out.println("Finished Zeroing");
-        vader.setVaderControlMode(STOP_DISTURBING_FORCE);
-    }
 }

@@ -7,29 +7,34 @@
 
 package frc.robot.tasks;
 
-import frc.robot.subsystems.Vader;
-
-import static frc.robot.Constants.*;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * Add your docs here.
  */
-public class ZeroHoodMotor implements TaskBase {
-    private final Vader vader = Vader.getInstance();
+public class DelayTask implements TaskBase{
+    private Timer timer;
+    private double delay;
+    public DelayTask(double delay){
+        this.delay = delay;
+        timer = new Timer();
+
+    }
 
     @Override
     public void start() {
-        vader.setVaderControlMode(ZEROING);
+        timer.reset();
+        timer.start();
     }
 
     @Override
     public boolean periodic() {
-        return vader.isZeroed();
+       return timer.get() >= delay;
     }
 
     @Override
     public void done() {
-      //  System.out.println("Finished Zeroing");
-        vader.setVaderControlMode(STOP_DISTURBING_FORCE);
+        timer.stop();
+
     }
 }

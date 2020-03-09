@@ -28,8 +28,13 @@ import frc.robot.subsystems.Vader;
 import frc.robot.autons.AutonBase;
 import frc.robot.autons.Default;
 import frc.robot.autons.DriveBackCalibration;
-import frc.robot.autons.ShootAndDriveToTrench;
-import frc.robot.autons.ShootAndGoToBrent;
+import frc.robot.autons.VisionShootAndDriveToTrench;
+import frc.robot.autons.VisionShootAndGoToBrent;
+import frc.robot.autons.VisionShootAndMoveFar;
+import frc.robot.autons.VisionShootAndMoveForward;
+import frc.robot.autons.VisionShootAndMoveOffLine;
+import frc.robot.autons.ShootAndMoveFar;
+import frc.robot.autons.ShootAndMoveForward;
 import frc.robot.subsystems.Blinky;
 
 public class Robot extends TimedRobot {
@@ -56,6 +61,13 @@ public class Robot extends TimedRobot {
     private static final String DRIVE_BACK_CALIBRATION = "DriveBackCalibration";
     private static final String SHOOT_AND_GO_TO_BRENT = "ShootAndGoToBrent";
     private static final String TURN_AUTON = "TurnAuton";
+    private static final String SHOOT_AND_MOVE_FORWARD = "ShootAndMoveForward";
+    private static final String SHOOT_AND_MOVE_FAR = "ShootAndMoveFar";
+    private static final String VISION_SHOOT_AND_DRIVE_TO_TRENCH = "VisionShootAndDriveToTrench";
+    private static final String VISION_SHOOT_AND_GO_TO_BRENT = "VisionShootAndGoToBrent";
+    private static final String VISION_SHOOT_AND_MOVE_FAR = "VisionShootAndMoveFar";
+    private static final String VISION_SHOOT_AND_MOVE_FORWARD = "VisionShootAndMoveForward";
+    private static final String VISION_SHOOT_AND_MOVE_OFF_LINE = "VisionShootAndMoveOffLine";
     private static final String DEFAULT = "Default";
 
     @Override
@@ -79,6 +91,13 @@ public class Robot extends TimedRobot {
         chooser.addOption("Shoot and drive to trench", SHOOT_AND_DRIVE_TO_TRENCH);
         chooser.addOption("Turn Auton", TURN_AUTON);
         chooser.addOption("Shoot and go to Brent", SHOOT_AND_GO_TO_BRENT);
+        chooser.addOption("Shoot and Move Forward", SHOOT_AND_MOVE_FORWARD);
+        chooser.addOption("Shoot and Move Far", SHOOT_AND_MOVE_FAR);
+        chooser.addOption("Vision Shoot and drive to trench", VISION_SHOOT_AND_DRIVE_TO_TRENCH);
+        chooser.addOption("Vision Shoot and go to Brent", VISION_SHOOT_AND_GO_TO_BRENT);
+        chooser.addOption("Vision Shoot and Move Far", VISION_SHOOT_AND_MOVE_FAR);
+        chooser.addOption("Vision Shoot and Move Forward", VISION_SHOOT_AND_MOVE_FORWARD);
+        chooser.addOption("Vision Shoot and move off line", VISION_SHOOT_AND_MOVE_OFF_LINE);
         chooser.addOption("Default", DEFAULT);
         SmartDashboard.putData("Auto choices", chooser);
 
@@ -101,7 +120,7 @@ public class Robot extends TimedRobot {
             subsystem.generalInit();
             double timeTaken = System.nanoTime() - startTime;
             String name = subsystem.getClass().getName();
-            SmartDashboard.putNumber("Performance/TeleopInit/" + name, timeTaken / 1000000);
+            //SmartDashboard.putNumber("Performance/TeleopInit/" + name, timeTaken / 1000000);
         }
     }
 
@@ -141,7 +160,7 @@ public class Robot extends TimedRobot {
             subsystem.generalPeriodic();
             double timeTaken = System.nanoTime() - startTime;
             String name = subsystem.getClass().getName();
-            SmartDashboard.putNumber("Performance/TeleopPeriodic/" + name, timeTaken / 1000000);
+           // SmartDashboard.putNumber("Performance/TeleopPeriodic/" + name, timeTaken / 1000000);
         }
         Limelight.getInstance().getDistance();
     }
@@ -158,7 +177,7 @@ public class Robot extends TimedRobot {
          */
         switch (autoSelected) {
             case SHOOT_AND_DRIVE_TO_TRENCH:
-                autonToRun = new ShootAndDriveToTrench();
+                autonToRun = new VisionShootAndDriveToTrench();
                 break;
             case SHOOT_AND_MOVE_OFF_LINE:
                 autonToRun = new ShootAndMoveOffLine();
@@ -170,7 +189,28 @@ public class Robot extends TimedRobot {
                 autonToRun = new TurnAuton();
                 break;
             case SHOOT_AND_GO_TO_BRENT:
-                autonToRun = new ShootAndGoToBrent();
+                autonToRun = new VisionShootAndGoToBrent();
+                break;
+            case SHOOT_AND_MOVE_FORWARD:
+                autonToRun = new ShootAndMoveForward();
+                break;
+            case SHOOT_AND_MOVE_FAR:
+                autonToRun = new ShootAndMoveFar();
+                break;
+            case VISION_SHOOT_AND_DRIVE_TO_TRENCH:
+                autonToRun = new VisionShootAndDriveToTrench();
+                break;
+            case VISION_SHOOT_AND_GO_TO_BRENT:
+                autonToRun = new VisionShootAndGoToBrent();
+                break;
+            case VISION_SHOOT_AND_MOVE_FAR:
+                autonToRun = new VisionShootAndMoveFar();
+                break;
+            case VISION_SHOOT_AND_MOVE_FORWARD:
+                autonToRun = new VisionShootAndMoveForward();
+                break;
+            case VISION_SHOOT_AND_MOVE_OFF_LINE:
+                autonToRun = new VisionShootAndMoveOffLine();
                 break;
             default:
                 autonToRun = new Default();
@@ -203,7 +243,7 @@ public class Robot extends TimedRobot {
             subsystem.generalPeriodic();
             double timeTaken = System.nanoTime() - startTime;
             String name = subsystem.getClass().getName();
-            SmartDashboard.putNumber("Performance/AutonomousPeriodic/" + name, timeTaken / 1000000);
+           // SmartDashboard.putNumber("Performance/AutonomousPeriodic/" + name, timeTaken / 1000000);
         }
     }
 }

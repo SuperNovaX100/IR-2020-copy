@@ -36,7 +36,7 @@ public class Vader extends Subsystem {
         vaderMotor.config_kD(0, 0.0);
         vaderMotor.config_kF(0, 0);
         vaderMotor.config_IntegralZone(0, 5000);
-        SmartDashboard.putNumber("Vader Demand", 0);
+        //SmartDashboard.putNumber("Vader Demand", 0);
     }
 
     public static Vader getInstance(){
@@ -61,13 +61,13 @@ public class Vader extends Subsystem {
             vaderMotor.configPeakOutputReverse(-1.0);
         }
 
-        SmartDashboard.putNumber("Vader Encoder Counts", vaderMotor.getSelectedSensorPosition());
+      //  SmartDashboard.putNumber("Vader Encoder Counts", vaderMotor.getSelectedSensorPosition());
     }
 
     public void setVaderControlMode(DisturbingForce disturbingForce) {
         vaderMotor.set(disturbingForce.controlMode, disturbingForce.demand);
         // System.out.println("New Demand : " + String.valueOf(disturbingForce.demand));
-        SmartDashboard.putNumber("Vader Demand", disturbingForce.demand);
+      //  SmartDashboard.putNumber("Vader Demand", disturbingForce.demand);
         pastDisturbingForce = disturbingForce;
     }
 
