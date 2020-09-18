@@ -62,6 +62,9 @@ public class Controllers {
     xInput = -MathUtil.clamp(xInput, -1.0, 1.0);
     xInput = applyDeadband(xInput, 0.09);
 
+    xInput = Math.copySign(xInput * xInput, xInput);
+    yInput = Math.copySign(yInput * yInput, yInput);
+
     if (closePosition(true) || autoLinePosition(true) || trenchPosition(true)) {
       yInput /= 2;
       xInput /= 2;
