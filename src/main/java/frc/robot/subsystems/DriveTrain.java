@@ -49,6 +49,7 @@ public class DriveTrain extends Subsystem {
     private final Controllers controllers = Controllers.getInstance();
     // Minimum amount of time to go from 0 to full throttle in open loop control
     private static final double OPEN_LOOP_TIME_TO_FULL = 0.08; 
+    private static final int SMART_CURRENT_LIMIT = 45; // Amps
 
     private DriveTrain() {
         gyro = new AHRS(SPI.Port.kMXP);
@@ -148,6 +149,10 @@ public class DriveTrain extends Subsystem {
         rightMotorBack.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
         leftMotorFront.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
         leftMotorBack.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
+        rightMotorFront.setSmartCurrentLimit(SMART_CURRENT_LIMIT);
+        rightMotorBack.setSmartCurrentLimit(SMART_CURRENT_LIMIT);
+        leftMotorFront.setSmartCurrentLimit(SMART_CURRENT_LIMIT);
+        leftMotorBack.setSmartCurrentLimit(SMART_CURRENT_LIMIT);
     }
     @Override
     public void autonomousInit() {
@@ -155,6 +160,10 @@ public class DriveTrain extends Subsystem {
         rightMotorBack.setOpenLoopRampRate(0);
         leftMotorFront.setOpenLoopRampRate(0);
         leftMotorBack.setOpenLoopRampRate(0);
+        rightMotorFront.setSmartCurrentLimit(200000);
+        rightMotorBack.setSmartCurrentLimit(200000);
+        leftMotorFront.setSmartCurrentLimit(200000);
+        leftMotorBack.setSmartCurrentLimit(200000);
     }
 
 
