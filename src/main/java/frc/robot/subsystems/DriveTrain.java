@@ -47,6 +47,8 @@ public class DriveTrain extends Subsystem {
     private int counterForVision;
     private static DriveTrain instance;
     private final Controllers controllers = Controllers.getInstance();
+    // Minimum amount of time to go from 0 to full throttle in open loop control
+    private static final double OPEN_LOOP_TIME_TO_FULL = 0.08; 
 
     private DriveTrain() {
         gyro = new AHRS(SPI.Port.kMXP);
@@ -140,6 +142,22 @@ public class DriveTrain extends Subsystem {
         //SmartDashboard.putNumber("DriveTrain Iz Values", 0);
     }
 
+    @Override
+    public void teleopInit() {
+        rightMotorFront.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
+        rightMotorBack.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
+        leftMotorFront.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
+        leftMotorBack.setOpenLoopRampRate(OPEN_LOOP_TIME_TO_FULL);
+    }
+    @Override
+    public void autonomousInit() {
+        rightMotorFront.setOpenLoopRampRate(0);
+        rightMotorBack.setOpenLoopRampRate(0);
+        leftMotorFront.setOpenLoopRampRate(0);
+        leftMotorBack.setOpenLoopRampRate(0);
+    }
+
+
     double averageLeft = 0;
     double averageRight = 0;
 
@@ -162,7 +180,7 @@ public class DriveTrain extends Subsystem {
 
     @Override
     public void teleopPeriodic() {
-
+        rightMotorBack.setOpenLoopRampRate(0.08);
         DriveSignal signal = controllers.arcadeDrive();
 
         if (controllers.useVision()) {
