@@ -57,10 +57,10 @@ public class Controllers {
     double xInput = joystick.getX();
 
     yInput = MathUtil.clamp(yInput, -1.0, 1.0);
-    yInput = applyDeadband(yInput, 0.09);
+    yInput = applyDeadband(yInput, 0.02);
 
     xInput = -MathUtil.clamp(xInput, -1.0, 1.0);
-    xInput = applyDeadband(xInput, 0.09);
+    xInput = applyDeadband(xInput, 0.02);
 
     xInput = Math.copySign(xInput * xInput, xInput);
     yInput = Math.copySign(yInput * yInput, yInput);
